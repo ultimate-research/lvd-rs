@@ -1,0 +1,12 @@
+[package]
+name = "smash-lvd"
+version = "0.1.0"
+authors = ["jam1garner <8260240+jam1garner@users.noreply.github.com>"]
+edition = "2018"
+
+[lib]
+name = "lvd"
+path = "src/lib.rs"
+
+[dependencies]
+binread = { path = "../binread", features = ["debug_template"] }
