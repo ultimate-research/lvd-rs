@@ -9,4 +9,4 @@ name = "lvd"
 path = "src/lib.rs"
 
 [dependencies]
-binread = { path = "../binread", features = ["debug_template"] }
+binread = { path = "../binread" }

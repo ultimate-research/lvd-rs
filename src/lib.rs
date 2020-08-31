@@ -2,16 +2,132 @@ use core::fmt;
 use binread::{prelude::*, punctuated::Punctuated, NullString};
 
 #[derive(BinRead, Debug)]
-#[br(big, magic = b"\x00\x00\x00\x01\x0D\x01\x4C\x56\x44\x31\x01")]
+#[br(big, magic = b"\x00\x00\x00\x01\x0D\x01\x4C\x56\x44\x31")]
 struct LvdFile {
-    collisions: CollisionSection,
+    collisions: Section<Collision>,
+    spawns: Section<Spawn>,
+    respawns: Section<Spawn>,
+    camera: Section<Bounds>,
+    blastzones: Section<Bounds>,
+    enemy_generators: UnsupportedSection,
+    unk1: UnsupportedSection,
+    unk2: UnsupportedSection,
+    unk3: UnsupportedSection,
+    fs_area_cam: UnsupportedSection,
+    fs_cam_limit: UnsupportedSection,
+    damage_shapes: UnsupportedSection,
+    item_spawners: Section<ItemSpawner>,
+    //ptrainer: UnsupportedSection,
+    //ptrainer_platform: UnsupportedSection,
+    //general_shapes: UnsupportedSection,
+    //general_points: UnsupportedSection,
+    //unk4: UnsupportedSection,
+    //unk5: UnsupportedSection,
+    //unk6: UnsupportedSection,
+    //unk7: UnsupportedSection,
+    //shrunk_cameras: UnsupportedSection,
+    //shrunk_blastzones: UnsupportedSection,
 }
 
 #[derive(BinRead, Debug)]
-struct CollisionSection {
+#[br(magic = b"\x01\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
+struct ItemSpawner {
+    entry: LvdEntry,
+    #[br(pad_before = 1)]
+    id: u32,
+    unk: u8,
+    #[br(pad_before = 1)]
+    section_count: u32,
+    #[br(pad_before = 1, parse_with = Punctuated::separated, count = section_count)]
+    sections: Punctuated<LvdShape, u8>,
+}
+
+#[derive(BinRead, Debug)]
+enum LvdShape {
+    #[br(magic = b"\x03\0\0\0\x01")]
+    Point {
+        x: f32,
+        y: f32,
+        #[br(pad_before = 8)]
+        unk: u8,
+        point_count: u32,
+    },
+    #[br(magic = b"\x03\0\0\0\x02")]
+    Circle {
+        x: f32,
+        y: f32,
+        r: f32,
+        #[br(pad_before = 4)]
+        unk: u8,
+        point_count: u32,
+    },
+    #[br(magic = b"\x03\0\0\0\x03")]
+    Rectangle {
+        left: f32,
+        right: f32,
+        bottom: f32,
+        top: f32,
+        unk: u8,
+        point_count: u32,
+    },
+    #[br(magic = b"\x03\0\0\0\x04")]
+    Path {
+        #[br(pad_before = 0x12)]
+        point_count: u32,
+        #[br(pad_before = 1, parse_with = Punctuated::separated, count = point_count)]
+        points: Punctuated<Vector2, u8>
+    },
+    Invalid {
+        magic: u32,
+    }
+}
+
+#[derive(BinRead, Debug)]
+#[br(assert(count == 0))]
+struct UnsupportedSection {
+    #[br(pad_before = 1)]
     count: u32,
-    #[br(count = dbg!(count))]
-    collisions: Vec<Collision>,
+}
+
+#[derive(BinRead, Debug)]
+struct Section<T: BinRead<Args=()>> {
+    #[br(pad_before = 1)]
+    count: u32,
+    #[br(count = count)]
+    data: Vec<T>,
+}
+
+impl<T: BinRead<Args = ()>> core::ops::Deref for Section<T> {
+    type Target = Vec<T>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.data
+    }
+}
+
+impl<T: BinRead<Args = ()>> core::ops::DerefMut for Section<T> {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.data
+    }
+}
+
+#[derive(BinRead, Debug)]
+#[br(magic = b"\x02\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
+struct Spawn {
+    entry: LvdEntry,
+    #[br(pad_before = 1)]
+    pos: Vector2
+}
+
+#[derive(BinRead, Debug)]
+#[br(magic = b"\x02\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
+struct Bounds {
+    entry: LvdEntry,
+    #[br(pad_before = 1)]
+    left: f32,
+    right: f32,
+    top: f32,
+    bottom: f32,
 }
 
 #[derive(BinRead)]
