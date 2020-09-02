@@ -17,16 +17,54 @@ struct LvdFile {
     fs_cam_limit: UnsupportedSection,
     damage_shapes: UnsupportedSection,
     item_spawners: Section<ItemSpawner>,
-    //ptrainer: UnsupportedSection,
-    //ptrainer_platform: UnsupportedSection,
-    //general_shapes: UnsupportedSection,
-    //general_points: UnsupportedSection,
-    //unk4: UnsupportedSection,
-    //unk5: UnsupportedSection,
-    //unk6: UnsupportedSection,
-    //unk7: UnsupportedSection,
-    //shrunk_cameras: UnsupportedSection,
-    //shrunk_blastzones: UnsupportedSection,
+    ptrainers: Section<PokemonTrainer>,
+    ptrainer_platform: Section<PokemonTrainerPlatform>,
+    general_shapes: UnsupportedSection,
+    general_points: Section<Point>,
+    unk4: UnsupportedSection,
+    unk5: UnsupportedSection,
+    unk6: UnsupportedSection,
+    unk7: UnsupportedSection,
+    shrunk_cameras: Section<Bounds>,
+    shrunk_blastzones: Section<Bounds>,
+}
+
+#[derive(BinRead, Debug)]
+#[br(magic = b"\x01\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
+struct Point {
+    entry: LvdEntry,
+    #[br(pad_before = 1)]
+    id: u32,
+    #[br(pad_before = 1)]
+    ty: u32,
+    #[br(pad_after = 0x10)]
+    pos: Vector3,
+}
+
+#[derive(BinRead, Debug)]
+#[br(magic = b"\x01\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
+struct PokemonTrainerPlatform {
+    entry: LvdEntry,
+    #[br(pad_before = 1)]
+    pos: Vector3,
+}
+
+#[derive(BinRead, Debug)]
+#[br(magic = b"\x04\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
+struct PokemonTrainer {
+    entry: LvdEntry,
+    #[br(pad_before = 1)]
+    boundary_min: Vector3,
+    #[br(pad_before = 1)]
+    boundary_max: Vector3,
+    #[br(pad_before = 1)]
+    trainer_count: u32,
+    #[br(pad_before = 1, parse_with = Punctuated::separated, count = trainer_count)]
+    trainers: Punctuated<Vector3, u8>,
+    #[br(pad_before = 1, pad_size_to = 0x40)]
+    platform_name: NullString,
+    #[br(pad_before = 1, pad_size_to = 0x40)]
+    sub_name: NullString,
 }
 
 #[derive(BinRead, Debug)]
