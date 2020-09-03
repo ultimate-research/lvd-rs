@@ -1,5 +1,5 @@
-use core::fmt;
 use binread::{prelude::*, punctuated::Punctuated, NullString};
+use core::fmt;
 
 #[derive(BinRead, Debug)]
 #[br(big, magic = b"\x00\x00\x00\x01\x0D\x01\x4C\x56\x44\x31")]
@@ -113,11 +113,11 @@ enum LvdShape {
         #[br(pad_before = 0x12)]
         point_count: u32,
         #[br(pad_before = 1, parse_with = Punctuated::separated, count = point_count)]
-        points: Punctuated<Vector2, u8>
+        points: Punctuated<Vector2, u8>,
     },
     Invalid {
         magic: u32,
-    }
+    },
 }
 
 #[derive(BinRead, Debug)]
@@ -128,7 +128,7 @@ struct UnsupportedSection {
 }
 
 #[derive(BinRead, Debug)]
-struct Section<T: BinRead<Args=()>> {
+struct Section<T: BinRead<Args = ()>> {
     #[br(pad_before = 1)]
     count: u32,
     #[br(count = count)]
@@ -154,7 +154,7 @@ impl<T: BinRead<Args = ()>> core::ops::DerefMut for Section<T> {
 struct Spawn {
     entry: LvdEntry,
     #[br(pad_before = 1)]
-    pos: Vector2
+    pos: Vector2,
 }
 
 #[derive(BinRead, Debug)]
@@ -193,10 +193,7 @@ struct Vector2 {
 
 impl fmt::Debug for Vector2 {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_tuple("Vec")
-            .field(&self.x)
-            .field(&self.y)
-            .finish()
+        f.debug_tuple("Vec").field(&self.x).field(&self.y).finish()
     }
 }
 
@@ -225,10 +222,14 @@ struct LvdEntry {
 
 #[derive(BinRead, Debug)]
 struct ColFlags {
-    #[br(map = cbool)] flag1: bool,
-    #[br(map = cbool)] rig_col: bool,
-    #[br(map = cbool)] flag3: bool,
-    #[br(map = cbool)] drop_through: bool,
+    #[br(map = cbool)]
+    flag1: bool,
+    #[br(map = cbool)]
+    rig_col: bool,
+    #[br(map = cbool)]
+    flag3: bool,
+    #[br(map = cbool)]
+    drop_through: bool,
 }
 
 type Material = [u8; 0xC];
