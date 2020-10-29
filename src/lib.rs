@@ -1,5 +1,7 @@
-use binread::{prelude::*, punctuated::Punctuated, NullString};
+use binread::{prelude::*, punctuated::Punctuated, NullString, derive_binread};
 use core::fmt;
+
+mod writer;
 
 #[derive(BinRead, Debug)]
 #[br(big, magic = b"\x00\x00\x00\x01\x0D\x01\x4C\x56\x44\x31")]
@@ -49,7 +51,8 @@ struct PokemonTrainerPlatform {
     pos: Vector3,
 }
 
-#[derive(BinRead, Debug)]
+#[derive_binread]
+#[derive(Debug)]
 #[br(magic = b"\x04\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
 struct PokemonTrainer {
     entry: LvdEntry,
@@ -57,7 +60,7 @@ struct PokemonTrainer {
     boundary_min: Vector3,
     #[br(pad_before = 1)]
     boundary_max: Vector3,
-    #[br(pad_before = 1)]
+    #[br(temp, pad_before = 1)]
     trainer_count: u32,
     #[br(pad_before = 1, parse_with = Punctuated::separated, count = trainer_count)]
     trainers: Punctuated<Vector3, u8>,
@@ -67,27 +70,30 @@ struct PokemonTrainer {
     sub_name: NullString,
 }
 
-#[derive(BinRead, Debug)]
+#[derive_binread]
+#[derive(Debug)]
 #[br(magic = b"\x01\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
 struct ItemSpawner {
     entry: LvdEntry,
     #[br(pad_before = 1)]
     id: u32,
     unk: u8,
-    #[br(pad_before = 1)]
+    #[br(temp, pad_before = 1)]
     section_count: u32,
     #[br(pad_before = 1, parse_with = Punctuated::separated, count = section_count)]
     sections: Punctuated<LvdShape, u8>,
 }
 
-#[derive(BinRead, Debug)]
+#[derive_binread]
+#[derive(Debug)]
 enum LvdShape {
     #[br(magic = b"\x03\0\0\0\x01")]
     Point {
         x: f32,
         y: f32,
-        #[br(pad_before = 8)]
+        #[br(temp, pad_before = 8)]
         unk: u8,
+        #[br(temp)]
         point_count: u32,
     },
     #[br(magic = b"\x03\0\0\0\x02")]
@@ -95,8 +101,9 @@ enum LvdShape {
         x: f32,
         y: f32,
         r: f32,
-        #[br(pad_before = 4)]
+        #[br(temp, pad_before = 4)]
         unk: u8,
+        #[br(temp)]
         point_count: u32,
     },
     #[br(magic = b"\x03\0\0\0\x03")]
@@ -105,12 +112,14 @@ enum LvdShape {
         right: f32,
         bottom: f32,
         top: f32,
+        #[br(temp)]
         unk: u8,
+        #[br(temp)]
         point_count: u32,
     },
     #[br(magic = b"\x03\0\0\0\x04")]
     Path {
-        #[br(pad_before = 0x12)]
+        #[br(temp, pad_before = 0x12)]
         point_count: u32,
         #[br(pad_before = 1, parse_with = Punctuated::separated, count = point_count)]
         points: Punctuated<Vector2, u8>,
@@ -127,9 +136,10 @@ struct UnsupportedSection {
     count: u32,
 }
 
-#[derive(BinRead, Debug)]
+#[derive_binread]
+#[derive(Debug)]
 struct Section<T: BinRead<Args = ()>> {
-    #[br(pad_before = 1)]
+    #[br(temp, pad_before = 1)]
     count: u32,
     #[br(count = count)]
     data: Vec<T>,
@@ -246,28 +256,29 @@ struct UnknownEntry {
     unk4: [u8; 8],
 }
 
-#[derive(BinRead, Debug)]
+#[derive_binread]
+#[derive(Debug)]
 #[br(magic = b"\x04\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
 struct Collision {
     entry: LvdEntry,
     col_flags: ColFlags,
-    #[br(pad_before = 1)]
+    #[br(temp, pad_before = 1)]
     vert_count: u32,
     #[br(pad_before = 1, parse_with = Punctuated::separated, count = vert_count)]
     verts: Punctuated<Vector2, u8>,
-    #[br(pad_before = 1)]
+    #[br(temp, pad_before = 1)]
     normal_count: u32,
     #[br(pad_before = 1, parse_with = Punctuated::separated, count = normal_count)]
     normals: Punctuated<Vector2, u8>,
-    #[br(pad_before = 1)]
+    #[br(temp, pad_before = 1)]
     cliff_count: u32,
     #[br(count = cliff_count)]
     cliffs: Vec<CollisionCliff>,
-    #[br(pad_before = 1)]
+    #[br(temp, pad_before = 1)]
     mat_count: u32,
     #[br(pad_before = 1, parse_with = Punctuated::separated, count = mat_count)]
     materials: Punctuated<Material, u8>,
-    #[br(pad_before = 1)]
+    #[br(temp, pad_before = 1)]
     unk_count: u32,
     #[br(count = unk_count)]
     unknowns: Vec<UnknownEntry>,
@@ -289,7 +300,7 @@ mod tests {
 
     #[test]
     fn test_parse() {
-        let mut f = std::fs::File::open("/home/jam/Downloads/village2_00.lvd").unwrap();
+        let mut f = std::fs::File::open("/home/jam/Downloads/forge.lvd").unwrap();
 
         let x: LvdFile = f.read_be().unwrap();
         dbg!(x);
