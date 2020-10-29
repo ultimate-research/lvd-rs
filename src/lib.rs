@@ -5,88 +5,88 @@ mod writer;
 
 #[derive(BinRead, Debug)]
 #[br(big, magic = b"\x00\x00\x00\x01\x0D\x01\x4C\x56\x44\x31")]
-struct LvdFile {
-    collisions: Section<Collision>,
-    spawns: Section<Spawn>,
-    respawns: Section<Spawn>,
-    camera: Section<Bounds>,
-    blastzones: Section<Bounds>,
-    enemy_generators: UnsupportedSection,
-    unk1: UnsupportedSection,
-    unk2: UnsupportedSection,
-    unk3: UnsupportedSection,
-    fs_area_cam: UnsupportedSection,
-    fs_cam_limit: UnsupportedSection,
-    damage_shapes: UnsupportedSection,
-    item_spawners: Section<ItemSpawner>,
-    ptrainers: Section<PokemonTrainer>,
-    ptrainer_platform: Section<PokemonTrainerPlatform>,
-    general_shapes: UnsupportedSection,
-    general_points: Section<Point>,
-    unk4: UnsupportedSection,
-    unk5: UnsupportedSection,
-    unk6: UnsupportedSection,
-    unk7: UnsupportedSection,
-    shrunk_cameras: Section<Bounds>,
-    shrunk_blastzones: Section<Bounds>,
+pub struct LvdFile {
+    pub collisions: Section<Collision>,
+    pub spawns: Section<Spawn>,
+    pub respawns: Section<Spawn>,
+    pub camera: Section<Bounds>,
+    pub blastzones: Section<Bounds>,
+    pub enemy_generators: UnsupportedSection,
+    pub unk1: UnsupportedSection,
+    pub unk2: UnsupportedSection,
+    pub unk3: UnsupportedSection,
+    pub fs_area_cam: UnsupportedSection,
+    pub fs_cam_limit: UnsupportedSection,
+    pub damage_shapes: UnsupportedSection,
+    pub item_spawners: Section<ItemSpawner>,
+    pub ptrainers: Section<PokemonTrainer>,
+    pub ptrainer_platform: Section<PokemonTrainerPlatform>,
+    pub general_shapes: UnsupportedSection,
+    pub general_points: Section<Point>,
+    pub unk4: UnsupportedSection,
+    pub unk5: UnsupportedSection,
+    pub unk6: UnsupportedSection,
+    pub unk7: UnsupportedSection,
+    pub shrunk_cameras: Section<Bounds>,
+    pub shrunk_blastzones: Section<Bounds>,
 }
 
 #[derive(BinRead, Debug)]
 #[br(magic = b"\x01\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
-struct Point {
-    entry: LvdEntry,
+pub struct Point {
+    pub entry: LvdEntry,
     #[br(pad_before = 1)]
-    id: u32,
+    pub id: u32,
     #[br(pad_before = 1)]
-    ty: u32,
+    pub ty: u32,
     #[br(pad_after = 0x10)]
-    pos: Vector3,
+    pub pos: Vector3,
 }
 
 #[derive(BinRead, Debug)]
 #[br(magic = b"\x01\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
-struct PokemonTrainerPlatform {
-    entry: LvdEntry,
+pub struct PokemonTrainerPlatform {
+    pub entry: LvdEntry,
     #[br(pad_before = 1)]
-    pos: Vector3,
+    pub pos: Vector3,
 }
 
 #[derive_binread]
 #[derive(Debug)]
 #[br(magic = b"\x04\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
-struct PokemonTrainer {
-    entry: LvdEntry,
+pub struct PokemonTrainer {
+    pub entry: LvdEntry,
     #[br(pad_before = 1)]
-    boundary_min: Vector3,
+    pub boundary_min: Vector3,
     #[br(pad_before = 1)]
-    boundary_max: Vector3,
+    pub boundary_max: Vector3,
     #[br(temp, pad_before = 1)]
-    trainer_count: u32,
+    pub trainer_count: u32,
     #[br(pad_before = 1, parse_with = Punctuated::separated, count = trainer_count)]
-    trainers: Punctuated<Vector3, u8>,
+    pub trainers: Punctuated<Vector3, u8>,
     #[br(pad_before = 1, pad_size_to = 0x40)]
-    platform_name: NullString,
+    pub platform_name: NullString,
     #[br(pad_before = 1, pad_size_to = 0x40)]
-    sub_name: NullString,
+    pub sub_name: NullString,
 }
 
 #[derive_binread]
 #[derive(Debug)]
 #[br(magic = b"\x01\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
-struct ItemSpawner {
-    entry: LvdEntry,
+pub struct ItemSpawner {
+    pub entry: LvdEntry,
     #[br(pad_before = 1)]
-    id: u32,
-    unk: u8,
+    pub id: u32,
+    pub unk: u8,
     #[br(temp, pad_before = 1)]
-    section_count: u32,
+    pub section_count: u32,
     #[br(pad_before = 1, parse_with = Punctuated::separated, count = section_count)]
-    sections: Punctuated<LvdShape, u8>,
+    pub sections: Punctuated<LvdShape, u8>,
 }
 
 #[derive_binread]
 #[derive(Debug)]
-enum LvdShape {
+pub enum LvdShape {
     #[br(magic = b"\x03\0\0\0\x01")]
     Point {
         x: f32,
@@ -131,18 +131,18 @@ enum LvdShape {
 
 #[derive(BinRead, Debug)]
 #[br(assert(count == 0))]
-struct UnsupportedSection {
+pub struct UnsupportedSection {
     #[br(pad_before = 1)]
-    count: u32,
+    pub count: u32,
 }
 
 #[derive_binread]
 #[derive(Debug)]
-struct Section<T: BinRead<Args = ()>> {
+pub struct Section<T: BinRead<Args = ()>> {
     #[br(temp, pad_before = 1)]
-    count: u32,
+    pub count: u32,
     #[br(count = count)]
-    data: Vec<T>,
+    pub data: Vec<T>,
 }
 
 impl<T: BinRead<Args = ()>> core::ops::Deref for Section<T> {
@@ -161,25 +161,25 @@ impl<T: BinRead<Args = ()>> core::ops::DerefMut for Section<T> {
 
 #[derive(BinRead, Debug)]
 #[br(magic = b"\x02\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
-struct Spawn {
-    entry: LvdEntry,
+pub struct Spawn {
+    pub entry: LvdEntry,
     #[br(pad_before = 1)]
-    pos: Vector2,
+    pub pos: Vector2,
 }
 
 #[derive(BinRead, Debug)]
 #[br(magic = b"\x02\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
-struct Bounds {
-    entry: LvdEntry,
+pub struct Bounds {
+    pub entry: LvdEntry,
     #[br(pad_before = 1)]
-    left: f32,
-    right: f32,
-    top: f32,
-    bottom: f32,
+    pub left: f32,
+    pub right: f32,
+    pub top: f32,
+    pub bottom: f32,
 }
 
 #[derive(BinRead)]
-struct Vector3 {
+pub struct Vector3 {
     pub x: f32,
     pub y: f32,
     pub z: f32,
@@ -196,7 +196,7 @@ impl fmt::Debug for Vector3 {
 }
 
 #[derive(BinRead)]
-struct Vector2 {
+pub struct Vector2 {
     pub x: f32,
     pub y: f32,
 }
@@ -212,26 +212,26 @@ fn cbool(x: u8) -> bool {
 }
 
 #[derive(BinRead, Debug)]
-struct LvdEntry {
+pub struct LvdEntry {
     #[br(pad_before = 1, pad_size_to = 0x38)]
-    name: NullString,
+    pub name: NullString,
     #[br(pad_before = 1, pad_size_to = 0x40)]
-    subname: NullString,
+    pub subname: NullString,
     #[br(pad_before = 1)]
-    start_pos: Vector3,
+    pub start_pos: Vector3,
     #[br(map = cbool)]
-    use_start: bool,
+    pub use_start: bool,
     #[br(pad_before = 1)]
-    unk: u32,
+    pub unk: u32,
     #[br(pad_before = 1)]
-    unk2: Vector3,
-    unk3: u32,
+    pub unk2: Vector3,
+    pub unk3: u32,
     #[br(pad_before = 1, pad_size_to = 0x40)]
-    bone_name: NullString,
+    pub bone_name: NullString,
 }
 
 #[derive(BinRead, Debug)]
-struct ColFlags {
+pub struct ColFlags {
     #[br(map = cbool)]
     flag1: bool,
     #[br(map = cbool)]
@@ -246,52 +246,52 @@ type Material = [u8; 0xC];
 
 #[derive(BinRead, Debug)]
 #[br(magic = b"\x02\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
-struct UnknownEntry {
-    entry: LvdEntry,
-    unk: u32,
+pub struct UnknownEntry {
+    pub entry: LvdEntry,
+    pub unk: u32,
     #[br(pad_before = 1, pad_size_to = 0x40)]
-    string: NullString,
-    unk2: Vector2,
-    unk3: Vector2,
-    unk4: [u8; 8],
+    pub string: NullString,
+    pub unk2: Vector2,
+    pub unk3: Vector2,
+    pub unk4: [u8; 8],
 }
 
 #[derive_binread]
 #[derive(Debug)]
 #[br(magic = b"\x04\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
-struct Collision {
-    entry: LvdEntry,
-    col_flags: ColFlags,
+pub struct Collision {
+    pub entry: LvdEntry,
+    pub col_flags: ColFlags,
     #[br(temp, pad_before = 1)]
-    vert_count: u32,
+    pub vert_count: u32,
     #[br(pad_before = 1, parse_with = Punctuated::separated, count = vert_count)]
-    verts: Punctuated<Vector2, u8>,
+    pub verts: Punctuated<Vector2, u8>,
     #[br(temp, pad_before = 1)]
-    normal_count: u32,
+    pub normal_count: u32,
     #[br(pad_before = 1, parse_with = Punctuated::separated, count = normal_count)]
-    normals: Punctuated<Vector2, u8>,
+    pub normals: Punctuated<Vector2, u8>,
     #[br(temp, pad_before = 1)]
-    cliff_count: u32,
+    pub cliff_count: u32,
     #[br(count = cliff_count)]
-    cliffs: Vec<CollisionCliff>,
+    pub cliffs: Vec<CollisionCliff>,
     #[br(temp, pad_before = 1)]
-    mat_count: u32,
+    pub mat_count: u32,
     #[br(pad_before = 1, parse_with = Punctuated::separated, count = mat_count)]
-    materials: Punctuated<Material, u8>,
+    pub materials: Punctuated<Material, u8>,
     #[br(temp, pad_before = 1)]
-    unk_count: u32,
+    pub unk_count: u32,
     #[br(count = unk_count)]
-    unknowns: Vec<UnknownEntry>,
+    pub unknowns: Vec<UnknownEntry>,
 }
 
 #[derive(BinRead, Debug)]
 #[br(magic = b"\x03\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
-struct CollisionCliff {
-    entry: LvdEntry,
+pub struct CollisionCliff {
+    pub entry: LvdEntry,
     #[br(pad_before = 1)]
-    pos: Vector2,
-    angle: f32,
-    line_index: i32,
+    pub pos: Vector2,
+    pub angle: f32,
+    pub line_index: i32,
 }
 
 #[cfg(test)]
