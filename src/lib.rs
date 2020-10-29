@@ -1,4 +1,5 @@
 use binread::{prelude::*, punctuated::Punctuated, NullString, derive_binread};
+use std::path::Path;
 use core::fmt;
 
 mod writer;
@@ -292,6 +293,14 @@ pub struct CollisionCliff {
     pub pos: Vector2,
     pub angle: f32,
     pub line_index: i32,
+}
+
+impl LvdFile {
+    pub fn open<P: AsRef<Path>>(path: P) -> BinResult<Self> {
+        let mut f = std::fs::File::open(path.as_ref())?;
+
+        f.read_be()
+    }
 }
 
 #[cfg(test)]
