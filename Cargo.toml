@@ -10,3 +10,4 @@ path = "src/lib.rs"
 
 [dependencies]
 binread = "1.4"
+binwrite = "0.2.1"

@@ -1,4 +1,5 @@
 use binread::{prelude::*, punctuated::Punctuated, NullString, derive_binread};
+use binwrite::BinWrite;
 use std::path::Path;
 use core::fmt;
 
@@ -142,6 +143,7 @@ pub struct UnsupportedSection {
 pub struct Section<T: BinRead<Args = ()>> {
     #[br(temp, pad_before = 1)]
     pub count: u32,
+
     #[br(count = count)]
     pub data: Vec<T>,
 }
@@ -179,7 +181,7 @@ pub struct Bounds {
     pub bottom: f32,
 }
 
-#[derive(BinRead)]
+#[derive(BinRead, BinWrite)]
 pub struct Vector3 {
     pub x: f32,
     pub y: f32,
@@ -196,7 +198,7 @@ impl fmt::Debug for Vector3 {
     }
 }
 
-#[derive(BinRead)]
+#[derive(BinRead, BinWrite)]
 pub struct Vector2 {
     pub x: f32,
     pub y: f32,
@@ -231,16 +233,25 @@ pub struct LvdEntry {
     pub bone_name: NullString,
 }
 
-#[derive(BinRead, Debug)]
+use writer::c_bool as to_c_bool;
+
+#[derive(BinRead, BinWrite, Debug)]
 pub struct ColFlags {
     #[br(map = cbool)]
-    flag1: bool,
+    #[binwrite(preprocessor(to_c_bool))]
+    pub flag1: bool,
+
     #[br(map = cbool)]
-    rig_col: bool,
+    #[binwrite(preprocessor(to_c_bool))]
+    pub rig_col: bool,
+
     #[br(map = cbool)]
-    flag3: bool,
+    #[binwrite(preprocessor(to_c_bool))]
+    pub flag3: bool,
+
     #[br(map = cbool)]
-    drop_through: bool,
+    #[binwrite(preprocessor(to_c_bool))]
+    pub drop_through: bool,
 }
 
 type Material = [u8; 0xC];
@@ -297,7 +308,7 @@ pub struct CollisionCliff {
 
 impl LvdFile {
     pub fn open<P: AsRef<Path>>(path: P) -> BinResult<Self> {
-        let mut f = std::fs::File::open(path.as_ref())?;
+        let mut f = std::io::BufReader::new(std::fs::File::open(path.as_ref())?);
 
         f.read_be()
     }
@@ -309,10 +320,10 @@ mod tests {
 
     #[test]
     fn test_parse() {
-        let mut f = std::fs::File::open("/home/jam/Downloads/forge.lvd").unwrap();
+        let mut f = std::fs::File::open("/home/jam/Downloads/param/pickel_world_00.lvd").unwrap();
 
         let x: LvdFile = f.read_be().unwrap();
-        dbg!(x);
+        //dbg!(x);
         //dbg!(&x.collisions.collisions[0].verts.seperators);
     }
 }
