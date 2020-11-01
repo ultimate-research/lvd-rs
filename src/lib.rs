@@ -1,4 +1,4 @@
-use binread::{prelude::*, punctuated::Punctuated, NullString, derive_binread};
+use binrw::{prelude::*, punctuated::Punctuated, NullString, derive_binread};
 use binwrite::BinWrite;
 use std::path::Path;
 use core::fmt;

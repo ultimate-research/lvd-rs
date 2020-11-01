@@ -9,5 +9,5 @@ name = "lvd"
 path = "src/lib.rs"
 
 [dependencies]
-binread = "1.4"
+binrw = { git = "https://github.com/jam1garner/binrw" }
 binwrite = "0.2.1"
