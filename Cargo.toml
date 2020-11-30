@@ -8,6 +8,22 @@ edition = "2018"
 name = "lvd"
 path = "src/lib.rs"
 
+[[bin]]
+name = "yamlvd"
+path = "src/main.rs"
+required-features = ["cli"]
+
 [dependencies]
-binread = "1.4"
+binrw = { git = "https://github.com/jam1garner/binrw" }
 binwrite = "0.2.1"
+
+# serde support
+serde = { version = "1", features = ["derive"], optional = true }
+
+# cli
+clap = { version = "3.0.0-beta", optional = true }
+serde_yaml = { version = "0.8", optional = true }
+
+[features]
+serde_support = ["serde"]
+cli = ["serde_support", "clap", "serde_yaml"]
