@@ -132,7 +132,7 @@ impl BinWrite for UnknownEntry {
             &self.entry,
             self.unk,
             1u8,
-            string38(self.string.clone().to_string()),
+            string38(&self.string),
             &self.unk2,
             &self.unk3,
             &self.unk3,
@@ -141,22 +141,22 @@ impl BinWrite for UnknownEntry {
 }
 
 #[derive(BinWrite)]
-struct String38 {
+struct String38<'a> {
     #[binwrite(cstr, align_after(0x38))]
-    s: String
+    s: &'a str
 }
 
-fn string38(s: String) -> String38 {
+fn string38(s: &str) -> String38 {
     String38 { s }
 }
 
 #[derive(BinWrite)]
-struct String40 {
+struct String40<'a> {
     #[binwrite(cstr, align_after(0x40))]
-    s: String
+    s: &'a str
 }
 
-fn string40(s: String) -> String40 {
+fn string40(s: &str) -> String40 {
     String40 { s }
 }
 
@@ -168,9 +168,9 @@ impl BinWrite for LvdEntry {
     fn write_options<W: Write>(&self, writer: &mut W, options: &WriterOption) -> io::Result<()> {
         (
             1u8,
-            string38(self.name.clone().into_string()),
+            string38(&self.name),
             1u8,
-            string40(self.subname.clone().into_string()),
+            string40(&self.subname),
             1u8,
             &self.start_pos,
             c_bool(&self.use_start),
@@ -180,7 +180,7 @@ impl BinWrite for LvdEntry {
             &self.unk2,
             self.unk3,
             1u8,
-            string40(self.bone_name.clone().into_string()),
+            string40(&self.bone_name),
         ).write_options(writer, options)
     }
 }
@@ -283,9 +283,9 @@ impl BinWrite for PokemonTrainer {
             1u8,
             LvdList(&self.trainers),
             1u8,
-            string40(self.platform_name.to_string()),
+            string40(&self.platform_name),
             1u8,
-            string40(self.sub_name.to_string()),
+            string40(&self.sub_name),
         ).write_options(writer, options)
     }
 }

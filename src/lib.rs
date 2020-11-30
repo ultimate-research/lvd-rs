@@ -1,10 +1,14 @@
-use binrw::{prelude::*, punctuated::Punctuated, NullString, derive_binread};
+use binrw::{prelude::*, helpers::Punctuated, NullString, derive_binread};
 use binwrite::BinWrite;
 use std::path::Path;
 use core::fmt;
 
+#[cfg(feature = "serde_support")]
+use serde::{Serialize, Deserialize};
+
 mod writer;
 
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 #[derive(BinRead, Debug)]
 #[br(big, magic = b"\x00\x00\x00\x01\x0D\x01\x4C\x56\x44\x31")]
 pub struct LvdFile {
@@ -33,6 +37,7 @@ pub struct LvdFile {
     pub shrunk_blastzones: Section<Bounds>,
 }
 
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 #[derive(BinRead, Debug)]
 #[br(magic = b"\x01\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
 pub struct Point {
@@ -45,6 +50,7 @@ pub struct Point {
     pub pos: Vector3,
 }
 
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 #[derive(BinRead, Debug)]
 #[br(magic = b"\x01\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
 pub struct PokemonTrainerPlatform {
@@ -55,6 +61,7 @@ pub struct PokemonTrainerPlatform {
 
 #[derive_binread]
 #[derive(Debug)]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 #[br(magic = b"\x04\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
 pub struct PokemonTrainer {
     pub entry: LvdEntry,
@@ -64,16 +71,17 @@ pub struct PokemonTrainer {
     pub boundary_max: Vector3,
     #[br(temp, pad_before = 1)]
     pub trainer_count: u32,
-    #[br(pad_before = 1, parse_with = Punctuated::separated, count = trainer_count)]
-    pub trainers: Punctuated<Vector3, u8>,
-    #[br(pad_before = 1, pad_size_to = 0x40)]
-    pub platform_name: NullString,
-    #[br(pad_before = 1, pad_size_to = 0x40)]
-    pub sub_name: NullString,
+    #[br(pad_before = 1, parse_with = Punctuated::<Vector3, u8>::separated, map = Punctuated::into_values, count = trainer_count)]
+    pub trainers: Vec<Vector3>,
+    #[br(pad_before = 1, pad_size_to = 0x40, map = NullString::into_string)]
+    pub platform_name: String,
+    #[br(pad_before = 1, pad_size_to = 0x40, map = NullString::into_string)]
+    pub sub_name: String,
 }
 
 #[derive_binread]
 #[derive(Debug)]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 #[br(magic = b"\x01\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
 pub struct ItemSpawner {
     pub entry: LvdEntry,
@@ -82,12 +90,13 @@ pub struct ItemSpawner {
     pub unk: u8,
     #[br(temp, pad_before = 1)]
     pub section_count: u32,
-    #[br(pad_before = 1, parse_with = Punctuated::separated, count = section_count)]
-    pub sections: Punctuated<LvdShape, u8>,
+    #[br(pad_before = 1, parse_with = Punctuated::<LvdShape, u8>::separated, map = Punctuated::into_values, count = section_count)]
+    pub sections: Vec<LvdShape>,
 }
 
 #[derive_binread]
 #[derive(Debug)]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub enum LvdShape {
     #[br(magic = b"\x03\0\0\0\x01")]
     Point {
@@ -123,8 +132,8 @@ pub enum LvdShape {
     Path {
         #[br(temp, pad_before = 0x12)]
         point_count: u32,
-        #[br(pad_before = 1, parse_with = Punctuated::separated, count = point_count)]
-        points: Punctuated<Vector2, u8>,
+        #[br(pad_before = 1, parse_with = Punctuated::<Vector2, u8>::separated, map = Punctuated::into_values, count = point_count)]
+        points: Vec<Vector2>,
     },
     Invalid {
         magic: u32,
@@ -133,6 +142,7 @@ pub enum LvdShape {
 
 #[derive(BinRead, Debug)]
 #[br(assert(count == 0))]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub struct UnsupportedSection {
     #[br(pad_before = 1)]
     pub count: u32,
@@ -140,6 +150,8 @@ pub struct UnsupportedSection {
 
 #[derive_binread]
 #[derive(Debug)]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde_support", serde(transparent))]
 pub struct Section<T: BinRead<Args = ()>> {
     #[br(temp, pad_before = 1)]
     pub count: u32,
@@ -164,6 +176,7 @@ impl<T: BinRead<Args = ()>> core::ops::DerefMut for Section<T> {
 
 #[derive(BinRead, Debug)]
 #[br(magic = b"\x02\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub struct Spawn {
     pub entry: LvdEntry,
     #[br(pad_before = 1)]
@@ -172,6 +185,7 @@ pub struct Spawn {
 
 #[derive(BinRead, Debug)]
 #[br(magic = b"\x02\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub struct Bounds {
     pub entry: LvdEntry,
     #[br(pad_before = 1)]
@@ -182,6 +196,7 @@ pub struct Bounds {
 }
 
 #[derive(BinRead, BinWrite)]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub struct Vector3 {
     pub x: f32,
     pub y: f32,
@@ -199,6 +214,7 @@ impl fmt::Debug for Vector3 {
 }
 
 #[derive(BinRead, BinWrite)]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub struct Vector2 {
     pub x: f32,
     pub y: f32,
@@ -215,11 +231,12 @@ fn cbool(x: u8) -> bool {
 }
 
 #[derive(BinRead, Debug)]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub struct LvdEntry {
-    #[br(pad_before = 1, pad_size_to = 0x38)]
-    pub name: NullString,
-    #[br(pad_before = 1, pad_size_to = 0x40)]
-    pub subname: NullString,
+    #[br(pad_before = 1, pad_size_to = 0x38, map = NullString::into_string)]
+    pub name: String,
+    #[br(pad_before = 1, pad_size_to = 0x40, map = NullString::into_string)]
+    pub subname: String,
     #[br(pad_before = 1)]
     pub start_pos: Vector3,
     #[br(map = cbool)]
@@ -229,13 +246,14 @@ pub struct LvdEntry {
     #[br(pad_before = 1)]
     pub unk2: Vector3,
     pub unk3: u32,
-    #[br(pad_before = 1, pad_size_to = 0x40)]
-    pub bone_name: NullString,
+    #[br(pad_before = 1, pad_size_to = 0x40, map = NullString::into_string)]
+    pub bone_name: String,
 }
 
 use writer::c_bool as to_c_bool;
 
 #[derive(BinRead, BinWrite, Debug)]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub struct ColFlags {
     #[br(map = cbool)]
     #[binwrite(preprocessor(to_c_bool))]
@@ -258,11 +276,12 @@ type Material = [u8; 0xC];
 
 #[derive(BinRead, Debug)]
 #[br(magic = b"\x02\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub struct UnknownEntry {
     pub entry: LvdEntry,
     pub unk: u32,
-    #[br(pad_before = 1, pad_size_to = 0x40)]
-    pub string: NullString,
+    #[br(pad_before = 1, pad_size_to = 0x40, map = NullString::into_string)]
+    pub string: String,
     pub unk2: Vector2,
     pub unk3: Vector2,
     pub unk4: [u8; 8],
@@ -271,25 +290,26 @@ pub struct UnknownEntry {
 #[derive_binread]
 #[derive(Debug)]
 #[br(magic = b"\x04\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub struct Collision {
     pub entry: LvdEntry,
     pub col_flags: ColFlags,
     #[br(temp, pad_before = 1)]
     pub vert_count: u32,
-    #[br(pad_before = 1, parse_with = Punctuated::separated, count = vert_count)]
-    pub verts: Punctuated<Vector2, u8>,
+    #[br(pad_before = 1, parse_with = Punctuated::<Vector2, u8>::separated, map = Punctuated::into_values, count = vert_count)]
+    pub verts: Vec<Vector2>,
     #[br(temp, pad_before = 1)]
     pub normal_count: u32,
-    #[br(pad_before = 1, parse_with = Punctuated::separated, count = normal_count)]
-    pub normals: Punctuated<Vector2, u8>,
+    #[br(pad_before = 1, parse_with = Punctuated::<Vector2, u8>::separated, map = Punctuated::into_values, count = normal_count)]
+    pub normals: Vec<Vector2>,
     #[br(temp, pad_before = 1)]
     pub cliff_count: u32,
     #[br(count = cliff_count)]
     pub cliffs: Vec<CollisionCliff>,
     #[br(temp, pad_before = 1)]
     pub mat_count: u32,
-    #[br(pad_before = 1, parse_with = Punctuated::separated, count = mat_count)]
-    pub materials: Punctuated<Material, u8>,
+    #[br(pad_before = 1, parse_with = Punctuated::<Material, u8>::separated, map = Punctuated::into_values, count = mat_count)]
+    pub materials: Vec<Material>,
     #[br(temp, pad_before = 1)]
     pub unk_count: u32,
     #[br(count = unk_count)]
@@ -298,6 +318,7 @@ pub struct Collision {
 
 #[derive(BinRead, Debug)]
 #[br(magic = b"\x03\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub struct CollisionCliff {
     pub entry: LvdEntry,
     #[br(pad_before = 1)]
