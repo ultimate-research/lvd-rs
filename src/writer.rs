@@ -82,6 +82,16 @@ impl<'a, T: BinWrite> BinWrite for LvdList<'a, T> {
     }
 }
 
+impl BinWrite for CollisionMaterial {
+    fn write_options<W: Write>(&self, writer: &mut W, options: &WriterOption) -> io::Result<()> {
+        (
+            self.line_material as u32,
+            0u32,
+            &self.line_flags,
+        ).write_options(writer, options)
+    }
+}
+
 impl BinWrite for Collision {
     fn write_options<W: Write>(&self, writer: &mut W, options: &WriterOption) -> io::Result<()> {
         (

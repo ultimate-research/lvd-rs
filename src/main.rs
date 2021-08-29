@@ -17,7 +17,7 @@ fn main() {
         Ok(lvd_file) => {
             fs::write(&args.out_file, serde_yaml::to_string(&lvd_file).unwrap()).unwrap();
         }
-        Err(binrw::Error::BadMagic { .. }) => {
+        Err(binrw::Error::BadMagic { pos: 0, .. }) => {
             // Magic doesn't match, is a yaml file
             let contents = fs::read_to_string(&args.in_file).unwrap();
             let lvd_file: LvdFile = serde_yaml::from_str(&contents).unwrap();

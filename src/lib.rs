@@ -8,6 +8,9 @@ use serde::{Serialize, Deserialize};
 
 mod writer;
 
+mod line_flags;
+pub use line_flags::LineFlags;
+
 #[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 #[derive(BinRead, Debug)]
 #[br(big, magic = b"\x00\x00\x00\x01\x0D\x01\x4C\x56\x44\x31")]
@@ -272,7 +275,63 @@ pub struct ColFlags {
     pub drop_through: bool,
 }
 
-type Material = [u8; 0xC];
+#[derive(BinRead, Debug)]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
+pub struct CollisionMaterial {
+    #[br(pad_after = 4)]
+    pub line_material: GroundCollAttr,
+    pub line_flags: LineFlags,
+}
+
+#[derive(BinRead, Debug, Clone, Copy)]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
+#[br(repr(u32))]
+pub enum GroundCollAttr {
+    None = 0,
+    Rock = 1,
+    Grass = 2,
+    Soil = 3,
+    Wood = 4,
+    Iron = 5,
+    Nibuiron = 6,
+    Carpet = 7,
+    Numenume = 8,
+    Creature = 9,
+    Asase = 10,
+    Soft = 11,
+    Turuturu = 12,
+    Snow = 13,
+    Ice = 14,
+    Gamewatch = 15,
+    Oil = 16,
+    Danbouru = 17,
+    Damage1 = 18,
+    Damage2 = 19,
+    Damage3 = 20,
+    Plankton = 21,
+    Cloud = 22,
+    Akuukan = 23,
+    Brick = 24,
+    NoAttr = 25,
+    Mario = 26,
+    WireNetting = 27,
+    Sand = 28,
+    Homerun = 29,
+    AsaseEarth = 30,
+    Death = 31,
+    Ringmat = 32,
+    Glass = 33,
+    Slipdx = 34,
+    SpPoison = 35,
+    SpFlame = 36,
+    SpElectricShock = 37,
+    SpSleep = 38,
+    SpFreezing = 39,
+    SpAdhesion = 40,
+    IceNoSlip = 41,
+    CloudNoThrough = 42,
+    JackMementoes = 43,
+}
 
 #[derive(BinRead, Debug)]
 #[br(magic = b"\x02\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
@@ -308,8 +367,8 @@ pub struct Collision {
     pub cliffs: Vec<CollisionCliff>,
     #[br(temp, pad_before = 1)]
     pub mat_count: u32,
-    #[br(pad_before = 1, parse_with = Punctuated::<Material, u8>::separated, map = Punctuated::into_values, count = mat_count)]
-    pub materials: Vec<Material>,
+    #[br(pad_before = 1, parse_with = Punctuated::<CollisionMaterial, u8>::separated, map = Punctuated::into_values, count = mat_count)]
+    pub materials: Vec<CollisionMaterial>,
     #[br(temp, pad_before = 1)]
     pub unk_count: u32,
     #[br(count = unk_count)]
