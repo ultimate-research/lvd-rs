@@ -19,8 +19,8 @@ impl LvdFile {
             &self.collisions,
             &self.spawns,
             &self.respawns,
-            &self.camera,
-            &self.blastzones,
+            &self.camera_boundary,
+            &self.blast_zone,
 
             (
                 &self.enemy_generators,
@@ -32,8 +32,8 @@ impl LvdFile {
             &self.fs_cam_limit, 
             &self.damage_shapes,
             &self.item_spawners,
-            &self.ptrainers,
-            &self.ptrainer_platform,
+            &self.ptrainer_ranges,
+            &self.ptrainer_platforms,
             &self.general_shapes,
             &self.general_points,
             (
@@ -42,8 +42,8 @@ impl LvdFile {
                 &self.unk6,
                 &self.unk7,
             ),
-            &self.shrunk_cameras,
-            &self.shrunk_blastzones,
+            &self.shrunken_camera_boundary,
+            &self.shrunken_blast_zone,
         ).write_options(writer, &binwrite::writer_option_new!(endian: binwrite::Endian::Big))
     }
 }
@@ -101,9 +101,9 @@ impl BinWrite for Collision {
                 &self.col_flags,
             ),
             1u8,
-            self.verts.len() as u32,
+            self.vertices.len() as u32,
             1u8,
-            LvdList(&self.verts),
+            LvdList(&self.vertices),
             1u8,
             self.normals.len() as u32,
             1u8,
@@ -138,14 +138,14 @@ impl BinWrite for CollisionCliff {
 impl BinWrite for UnknownEntry {
     fn write_options<W: Write>(&self, writer: &mut W, options: &WriterOption) -> io::Result<()> {
         (
-            b"\x04\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02",
+            b"\x02\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02",
             &self.entry,
             self.unk,
             1u8,
-            string38(&self.string),
+            string40(&self.string),
             &self.unk2,
             &self.unk3,
-            &self.unk3,
+            &self.unk4,
         ).write_options(writer, options)
     }
 }
@@ -247,11 +247,11 @@ impl BinWrite for LvdShape {
                 0u8,
                 0u32
             ).write_options(writer, options),
-            Self::Circle { x, y, r } => (
+            Self::Circle { x, y, radius } => (
                 b"\x03\0\0\0\x02",
                 x,
                 y,
-                r,
+                radius,
                 [0u8; 4],
                 0u8,
                 0u32
@@ -279,7 +279,7 @@ impl BinWrite for LvdShape {
     }
 }
 
-impl BinWrite for PokemonTrainer {
+impl BinWrite for PokemonTrainerRange {
     fn write_options<W: Write>(&self, writer: &mut W, options: &WriterOption) -> io::Result<()> {
         (
             b"\x04\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02",
