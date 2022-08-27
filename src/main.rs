@@ -2,9 +2,9 @@ use std::path::PathBuf;
 use std::fs;
 
 use lvd::LvdFile;
-use clap::Clap;
+use clap::Parser;
 
-#[derive(Clap)]
+#[derive(Parser)]
 struct Args {
     in_file: PathBuf,
     out_file: Option<PathBuf>,

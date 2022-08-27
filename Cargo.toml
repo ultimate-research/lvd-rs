@@ -22,7 +22,7 @@ binwrite = "0.2.1"
 serde = { version = "1", features = ["derive"], optional = true }
 
 # cli
-clap = { version = "3.0.0-beta", optional = true }
+clap = { version = "3.2.17", features = ["derive"], optional = true }
 serde_yaml = { version = "0.8", optional = true }
 
 [features]
