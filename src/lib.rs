@@ -1,9 +1,7 @@
-use binrw::{
-    binread, punctuated::Punctuated, BinRead, BinReaderExt, BinResult, NullString, VecArgs,
-};
-use binwrite::BinWrite;
+use binrw::{binread, prelude::*, punctuated::Punctuated, NullString, VecArgs};
 use core::fmt;
 use std::path::Path;
+use writer::c_bool;
 
 #[cfg(feature = "serde_support")]
 use serde::{Deserialize, Serialize};
@@ -99,25 +97,23 @@ pub struct Collision {
     pub unknowns: Vec<UnknownEntry>,
 }
 
-use writer::c_bool as to_c_bool;
-
 #[derive(BinRead, BinWrite, Debug)]
 #[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub struct ColFlags {
     #[br(map = cbool)]
-    #[binwrite(preprocessor(to_c_bool))]
+    #[binwrite(map(c_bool))]
     pub flag1: bool,
 
     #[br(map = cbool)]
-    #[binwrite(preprocessor(to_c_bool))]
+    #[binwrite(map(c_bool))]
     pub rig_col: bool,
 
     #[br(map = cbool)]
-    #[binwrite(preprocessor(to_c_bool))]
+    #[binwrite(map(c_bool))]
     pub flag3: bool,
 
     #[br(map = cbool)]
-    #[binwrite(preprocessor(to_c_bool))]
+    #[binwrite(map(c_bool))]
     pub drop_through: bool,
 }
 

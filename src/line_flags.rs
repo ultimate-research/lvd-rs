@@ -1,11 +1,11 @@
-use modular_bitfield::prelude::*;
-use binwrite::{BinWrite, WriterOption};
 use binrw::BinRead;
+use binrw::{BinWrite, WriteOptions};
+use modular_bitfield::prelude::*;
 
-use std::io::{Write, self};
+use std::io::Write;
 
 #[cfg(feature = "serde_support")]
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 fn from_bytes(mut x: [u8; 4]) -> LineFlags {
     x.reverse();
@@ -15,9 +15,10 @@ fn from_bytes(mut x: [u8; 4]) -> LineFlags {
 #[bitfield]
 #[derive(BinRead, Debug, Clone, Copy)]
 #[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "serde_support", serde(
-    from = "LineFlagsSerde", into = "LineFlagsSerde"
-))]
+#[cfg_attr(
+    feature = "serde_support",
+    serde(from = "LineFlagsSerde", into = "LineFlagsSerde")
+)]
 #[br(map = from_bytes)]
 pub struct LineFlags {
     pub length_zero: bool,
@@ -55,10 +56,17 @@ pub struct LineFlags {
 }
 
 impl BinWrite for LineFlags {
-    fn write_options<W: Write>(&self, writer: &mut W, _: &WriterOption) -> io::Result<()> {
+    type Args = ();
+
+    fn write_options<W: Write>(
+        &self,
+        writer: &mut W,
+        _: &WriteOptions,
+        _: Self::Args,
+    ) -> Result<(), binrw::Error> {
         let mut bytes = self.into_bytes();
         bytes.reverse();
-        writer.write_all(&bytes)
+        writer.write_all(&bytes).map_err(Into::into)
     }
 }
 
@@ -103,38 +111,38 @@ struct LineFlagsSerde {
 impl From<LineFlagsSerde> for LineFlags {
     fn from(lfs: LineFlagsSerde) -> Self {
         LineFlags::new()
-           .with_length_zero(lfs.length_zero)
-           .with_pacman_final_ignore(lfs.pacman_final_ignore)
-           .with_fall(lfs.fall)
-           .with_ignore_ray_check(lfs.ignore_ray_check)
-           .with_dive(lfs.dive)
-           .with_unpaintable(lfs.unpaintable)
-           .with_item(lfs.item)
-           .with_ignore_fighter_other(lfs.ignore_fighter_other)
-           .with_right(lfs.right)
-           .with_left(lfs.left)
-           .with_upper(lfs.upper)
-           .with_under(lfs.under)
-           .with_not_attach(lfs.not_attach)
-           .with_throughable(lfs.throughable)
-           .with_hang_l(lfs.hang_l)
-           .with_hang_r(lfs.hang_r)
-           .with_ignore_link_from_left(lfs.ignore_link_from_left)
-           .with_cloud(lfs.cloud)
-           .with_ignore_link_from_right(lfs.ignore_link_from_right)
-           .with_not_expand_near_search(lfs.not_expand_near_search)
-           .with_ignore(lfs.ignore)
-           .with_breakable(lfs.breakable)
-           .with_immediate_relanding_ban(lfs.immediate_relanding_ban)
-           .with_ignore_line_type1(lfs.ignore_line_type1)
-           .with_pickel_block(lfs.pickel_block)
-           .with_deceleration(lfs.deceleration)
-           .with_virtual_hit_line_up(lfs.virtual_hit_line_up)
-           .with_virtual_hit_line_left(lfs.virtual_hit_line_left)
-           .with_virtual_hit_line_right(lfs.virtual_hit_line_right)
-           .with_virtual_hit_line_down(lfs.virtual_hit_line_down)
-           .with_virtual_wall_hit_line(lfs.virtual_wall_hit_line)
-           .with_ignore_boss(lfs.ignore_boss)
+            .with_length_zero(lfs.length_zero)
+            .with_pacman_final_ignore(lfs.pacman_final_ignore)
+            .with_fall(lfs.fall)
+            .with_ignore_ray_check(lfs.ignore_ray_check)
+            .with_dive(lfs.dive)
+            .with_unpaintable(lfs.unpaintable)
+            .with_item(lfs.item)
+            .with_ignore_fighter_other(lfs.ignore_fighter_other)
+            .with_right(lfs.right)
+            .with_left(lfs.left)
+            .with_upper(lfs.upper)
+            .with_under(lfs.under)
+            .with_not_attach(lfs.not_attach)
+            .with_throughable(lfs.throughable)
+            .with_hang_l(lfs.hang_l)
+            .with_hang_r(lfs.hang_r)
+            .with_ignore_link_from_left(lfs.ignore_link_from_left)
+            .with_cloud(lfs.cloud)
+            .with_ignore_link_from_right(lfs.ignore_link_from_right)
+            .with_not_expand_near_search(lfs.not_expand_near_search)
+            .with_ignore(lfs.ignore)
+            .with_breakable(lfs.breakable)
+            .with_immediate_relanding_ban(lfs.immediate_relanding_ban)
+            .with_ignore_line_type1(lfs.ignore_line_type1)
+            .with_pickel_block(lfs.pickel_block)
+            .with_deceleration(lfs.deceleration)
+            .with_virtual_hit_line_up(lfs.virtual_hit_line_up)
+            .with_virtual_hit_line_left(lfs.virtual_hit_line_left)
+            .with_virtual_hit_line_right(lfs.virtual_hit_line_right)
+            .with_virtual_hit_line_down(lfs.virtual_hit_line_down)
+            .with_virtual_wall_hit_line(lfs.virtual_wall_hit_line)
+            .with_ignore_boss(lfs.ignore_boss)
     }
 }
 
