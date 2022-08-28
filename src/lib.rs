@@ -23,7 +23,7 @@ pub fn read_punctuated<T: BinRead<Args = ()>, R: binrw::io::Read + binrw::io::Se
 
 #[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 #[derive(BinRead, Debug)]
-#[br(big, magic = b"\x00\x00\x00\x01\x0D\x01\x4C\x56\x44\x31")]
+#[br(big, magic = b"\x00\x00\x00\x01\x0D\x01LVD\x31")]
 pub struct LvdFile {
     pub collisions: Section<Collision>,
     pub spawns: Section<Spawn>,
@@ -36,11 +36,11 @@ pub struct LvdFile {
     pub unk3: UnsupportedSection,
     pub fs_area_cam: UnsupportedSection,
     pub fs_cam_limit: UnsupportedSection,
-    pub damage_shapes: UnsupportedSection,
+    pub damage_shapes: Section<DamageShape>,
     pub item_spawners: Section<ItemSpawner>,
     pub ptrainer_ranges: Section<PokemonTrainerRange>, // version 13 only
     pub ptrainer_platforms: Section<PokemonTrainerPlatform>, // version 13 only
-    pub general_shapes: UnsupportedSection,
+    pub general_shapes: Section<GeneralShape>,
     pub general_points: Section<Point>,
     pub unk4: UnsupportedSection,
     pub unk5: UnsupportedSection,
@@ -192,6 +192,27 @@ pub enum GroundCollAttr {
 }
 
 #[derive(BinRead, Debug)]
+#[br(magic = b"\x01\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
+pub struct DamageShape {
+    pub entry: LvdEntry,
+    #[br(pad_before = 1)]
+    pub unk1: u32,
+    #[br(pad_after = 1)]
+    pub unk2: [f32; 8],
+}
+
+#[derive(BinRead, Debug)]
+#[br(magic = b"\x01\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
+#[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
+pub struct GeneralShape {
+    pub entry: LvdEntry,
+    #[br(pad_before = 1)]
+    pub unk1: u32,
+    pub shape: LvdShape,
+}
+
+#[derive(BinRead, Debug)]
 #[br(magic = b"\x02\x04\x01\x01\x77\x35\xBB\x75\x00\x00\x00\x02")]
 #[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
 pub struct UnknownEntry {
@@ -236,7 +257,7 @@ pub struct ItemSpawner {
     pub unk: u8,
     #[br(temp, pad_before = 1)]
     pub section_count: u32,
-    #[br(pad_before = 1, parse_with = read_punctuated, count = section_count)]
+    #[br(pad_before = if section_count > 0 { 1 } else  {0 }, parse_with = read_punctuated, count = section_count)]
     pub sections: Vec<LvdShape>,
 }
 
@@ -252,7 +273,7 @@ pub struct PokemonTrainerRange {
     pub boundary_max: Vector3,
     #[br(temp, pad_before = 1)]
     pub trainer_count: u32,
-    #[br(pad_before = 1, parse_with = read_punctuated, count = trainer_count)]
+    #[br(pad_before = if trainer_count > 0 { 1 } else { 0 }, parse_with = read_punctuated, count = trainer_count)]
     pub trainers: Vec<Vector3>,
     #[br(pad_before = 1, pad_size_to = 0x40, map = NullString::into_string)]
     pub platform_name: String,
@@ -292,7 +313,7 @@ pub enum LvdShape {
         y: f32,
         #[br(temp, pad_before = 8)]
         unk: u8,
-        #[br(temp)]
+        #[br(temp, pad_before = 1)]
         point_count: u32,
     },
     #[br(magic = b"\x03\0\0\0\x02")]
@@ -302,7 +323,7 @@ pub enum LvdShape {
         radius: f32,
         #[br(temp, pad_before = 4)]
         unk: u8,
-        #[br(temp)]
+        #[br(temp, pad_after = 1)]
         point_count: u32,
     },
     #[br(magic = b"\x03\0\0\0\x03")]
@@ -313,7 +334,7 @@ pub enum LvdShape {
         top: f32,
         #[br(temp)]
         unk: u8,
-        #[br(temp)]
+        #[br(temp, pad_before = 1)]
         point_count: u32,
     },
     #[br(magic = b"\x03\0\0\0\x04")]
