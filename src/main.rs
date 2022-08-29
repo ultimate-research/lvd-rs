@@ -1,8 +1,8 @@
-use std::path::PathBuf;
 use std::fs;
+use std::path::PathBuf;
 
-use lvd::LvdFile;
 use clap::Parser;
+use lvd::LvdFile;
 
 #[derive(Parser)]
 struct Args {
@@ -17,7 +17,7 @@ fn main() {
         match out_file.extension().map(|x| x.to_str()).flatten() {
             Some("lvd") => out_file.set_extension("yaml"),
             Some("yaml") | Some("yml") => out_file.set_extension("lvd"),
-            _ => true
+            _ => true,
         };
         out_file
     });
