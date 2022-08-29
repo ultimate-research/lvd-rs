@@ -1,8 +1,13 @@
 [package]
 name = "smash-lvd"
-version = "0.2.0"
-authors = ["jam1garner <8260240+jam1garner@users.noreply.github.com>"]
+version = "0.3.0"
+authors = ["jam1garner <jam@jam1.re>"]
 edition = "2018"
+description = "A Rust crate for working with Smash level data (`.lvd`) files from 3DS / Wii U and Ultimate."
+license = "MIT"
+documentation = "https://docs.rs/smash-lvd"
+readme = "./README.md"
+repository = "https://github.com/jam1garner/lvd-rs"
 
 [lib]
 name = "lvd"
