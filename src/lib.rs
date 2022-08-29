@@ -416,10 +416,18 @@ fn cbool(x: u8) -> bool {
 
 impl LvdFile {
     pub fn open<P: AsRef<Path>>(path: P) -> BinResult<Self> {
+        // TODO: make this binrw::io::BufReader
         let mut f = std::io::BufReader::new(std::fs::File::open(path.as_ref())?);
 
         f.read_be()
     }
+}
+
+pub fn open<P: AsRef<Path>>(path: P) -> BinResult<LvdFile> {
+    // TODO: make this binrw::io::BufReader
+    let mut f = std::io::BufReader::new(std::fs::File::open(path.as_ref())?);
+
+    f.read_be()
 }
 
 #[cfg(test)]
