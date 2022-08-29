@@ -1,6 +1,6 @@
 [package]
 name = "smash-lvd"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["jam1garner <jam@jam1.re>"]
 edition = "2018"
 description = "A Rust crate for working with Smash level data (`.lvd`) files from 3DS / Wii U and Ultimate."
