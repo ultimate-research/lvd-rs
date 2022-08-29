@@ -12,6 +12,8 @@ fn from_bytes(mut x: [u8; 4]) -> LineFlags {
     LineFlags::from_bytes(x)
 }
 
+/// The various properties of a given collision segment that affect gameplay in non-physics manner, such
+/// as whether it is breakable or whether wall clings work on the given segment.
 #[bitfield]
 #[derive(BinRead, Debug, Clone, Copy)]
 #[cfg_attr(feature = "serde_support", derive(Serialize, Deserialize))]
