@@ -20,7 +20,7 @@ collisions: !V1
           format_version: 2
         name: COL_00_Floor01
       dynamic_name: Ring
-      pivot: !V1
+      dynamic_offset: !V1
         x: 0.0
         y: 0.0
         z: 0.0

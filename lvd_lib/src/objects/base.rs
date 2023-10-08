@@ -24,7 +24,7 @@ pub enum Base {
     },
 
     /// `Base` version 2.
-    /// Adds [pivot](#variant.V2.field.pivot).
+    /// Adds [dynamic_offset](#variant.V2.field.dynamic_offset).
     #[br(pre_assert(version == 2))]
     V2 {
         /// Metadata for the object.
@@ -34,7 +34,7 @@ pub enum Base {
         dynamic_name: Versioned<LvdFixedString64>,
 
         /// Initial position of the object when flagged as dynamic.
-        pivot: Versioned<Vector3>,
+        dynamic_offset: Versioned<Vector3>,
     },
 
     /// `Base` version 3.
@@ -49,7 +49,7 @@ pub enum Base {
         dynamic_name: Versioned<LvdFixedString64>,
 
         /// Initial position of the object when flagged as dynamic.
-        pivot: Versioned<Vector3>,
+        dynamic_offset: Versioned<Vector3>,
 
         /// Boolean flag determining if the object is dynamic.
         is_dynamic: Bool,
@@ -73,7 +73,7 @@ pub enum Base {
         dynamic_name: Versioned<LvdFixedString64>,
 
         /// Initial position of the object when flagged as dynamic.
-        pivot: Versioned<Vector3>,
+        dynamic_offset: Versioned<Vector3>,
 
         /// Boolean flag determining if the object is dynamic.
         is_dynamic: Bool,
