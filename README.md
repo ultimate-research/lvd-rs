@@ -33,8 +33,8 @@ collisions: !V1
       joint_index: -1
       joint_name: ''
     flags:
-      is_dynamic: true
-      is_throughable: false
+      throughable: false
+      dynamic: true
     vertices: !V1
       elements:
       - !V1

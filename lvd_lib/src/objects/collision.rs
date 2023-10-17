@@ -1,13 +1,14 @@
 //! The `Collision` object stores data representing a two-dimensional polygonal collision.
 //! Extra data is stored to define properties of each edge in the collision.
 use binrw::binrw;
+use modular_bitfield::prelude::*;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 use crate::{
     objects::base::{Base, MetaInfo},
-    Bool, LvdArray, Vector2, Version, Versioned,
+    LvdArray, Vector2, Version, Versioned,
 };
 
 pub mod attribute;
@@ -126,15 +127,52 @@ impl Version for Collision {
 }
 
 /// Flags for a [`Collision`] representing the global attributes of a collision.
+#[bitfield]
 #[binrw]
+#[br(map = |f: u32| Self::from_bytes(f.to_le_bytes()))]
+#[bw(map = |f: &Self| u32::from_le_bytes(f.into_bytes()))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Debug)]
+#[cfg_attr(
+    feature = "serde",
+    serde(from = "CollisionDataFlags", into = "CollisionDataFlags")
+)]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub struct CollisionFlags {
     /// Boolean flag determining if the collision is dynamic.
-    #[brw(pad_before = 1)]
-    pub is_dynamic: Bool,
+    pub throughable: bool,
+
+    #[skip]
+    __: B15,
 
     /// Boolean flag determining if the collision can be dropped through.
-    #[brw(pad_before = 1)]
-    pub is_throughable: Bool,
+    pub dynamic: bool,
+
+    #[skip]
+    __: B15,
+}
+
+#[cfg(feature = "serde")]
+impl From<CollisionDataFlags> for CollisionFlags {
+    fn from(value: CollisionDataFlags) -> Self {
+        Self::new()
+            .with_throughable(value.throughable)
+            .with_dynamic(value.dynamic)
+    }
+}
+
+#[cfg(feature = "serde")]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+struct CollisionDataFlags {
+    throughable: bool,
+    dynamic: bool,
+}
+
+#[cfg(feature = "serde")]
+impl From<CollisionFlags> for CollisionDataFlags {
+    fn from(value: CollisionFlags) -> Self {
+        Self {
+            throughable: value.throughable(),
+            dynamic: value.dynamic(),
+        }
+    }
 }

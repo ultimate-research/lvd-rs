@@ -1,7 +1,5 @@
 //! The `CollisionAttribute` object stores data representing an edge's properties and attributes.
-use std::io::{Read, Seek, Write};
-
-use binrw::{binrw, BinRead, BinReaderExt, BinResult, BinWrite, Endian};
+use binrw::binrw;
 use modular_bitfield::prelude::*;
 
 #[cfg(feature = "serde")]
@@ -87,11 +85,14 @@ pub enum MaterialType {
 }
 
 /// Flags for enabling or disabling attributes of an edge.
-#[bitfield(bits = 64)]
+#[bitfield]
+#[binrw]
+#[br(map = |f: u64| Self::from_bytes(f.to_le_bytes()))]
+#[bw(map = |f: &Self| u64::from_le_bytes(f.into_bytes()))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(
     feature = "serde",
-    serde(from = "AttributeFlagsSerde", into = "AttributeFlagsSerde")
+    serde(from = "AttributeDataFlags", into = "AttributeDataFlags")
 )]
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub struct AttributeFlags {
@@ -132,41 +133,48 @@ pub struct AttributeFlags {
     __: B32,
 }
 
-impl BinRead for AttributeFlags {
-    type Args<'a> = ();
-
-    fn read_options<R: Read + Seek>(
-        reader: &mut R,
-        _endian: Endian,
-        _args: Self::Args<'_>,
-    ) -> BinResult<Self> {
-        let mut bytes = reader.read_be::<[u8; 8]>()?;
-
-        bytes.reverse();
-
-        Ok(Self::from_bytes(bytes))
-    }
-}
-
-impl BinWrite for AttributeFlags {
-    type Args<'a> = ();
-
-    fn write_options<W: Write + Seek>(
-        &self,
-        writer: &mut W,
-        _endian: Endian,
-        _args: Self::Args<'_>,
-    ) -> BinResult<()> {
-        let mut bytes = self.into_bytes();
-
-        bytes.reverse();
-        writer.write_all(&bytes).map_err(Into::into)
+#[cfg(feature = "serde")]
+impl From<AttributeDataFlags> for AttributeFlags {
+    fn from(value: AttributeDataFlags) -> Self {
+        Self::new()
+            .with_length0(value.length0)
+            .with_packman_final_ignore(value.packman_final_ignore)
+            .with_fall(value.fall)
+            .with_ignore_ray_check(value.ignore_ray_check)
+            .with_dive(value.dive)
+            .with_unpaintable(value.unpaintable)
+            .with_item(value.item)
+            .with_ignore_fighter_other(value.ignore_fighter_other)
+            .with_right(value.right)
+            .with_left(value.left)
+            .with_upper(value.upper)
+            .with_under(value.under)
+            .with_not_attach(value.not_attach)
+            .with_throughable(value.throughable)
+            .with_hang_l(value.hang_l)
+            .with_hang_r(value.hang_r)
+            .with_ignore_link_from_left(value.ignore_link_from_left)
+            .with_cloud(value.cloud)
+            .with_ignore_link_from_right(value.ignore_link_from_right)
+            .with_not_expand_near_search(value.not_expand_near_search)
+            .with_ignore(value.ignore)
+            .with_breakable(value.breakable)
+            .with_immediate_relanding_ban(value.immediate_relanding_ban)
+            .with_ignore_line_type1(value.ignore_line_type1)
+            .with_pickel_block(value.pickel_block)
+            .with_deceleration(value.deceleration)
+            .with_virtual_hit_line_up(value.virtual_hit_line_up)
+            .with_virtual_hit_line_left(value.virtual_hit_line_left)
+            .with_virtual_hit_line_right(value.virtual_hit_line_right)
+            .with_virtual_hit_line_down(value.virtual_hit_line_down)
+            .with_virtual_wall_hit_line(value.virtual_wall_hit_line)
+            .with_ignore_boss(value.ignore_boss)
     }
 }
 
 #[cfg(feature = "serde")]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-struct AttributeFlagsSerde {
+struct AttributeDataFlags {
     length0: bool,
     packman_final_ignore: bool,
     fall: bool,
@@ -202,80 +210,41 @@ struct AttributeFlagsSerde {
 }
 
 #[cfg(feature = "serde")]
-impl From<AttributeFlagsSerde> for AttributeFlags {
-    fn from(f: AttributeFlagsSerde) -> Self {
-        AttributeFlags::new()
-            .with_length0(f.length0)
-            .with_packman_final_ignore(f.packman_final_ignore)
-            .with_fall(f.fall)
-            .with_ignore_ray_check(f.ignore_ray_check)
-            .with_dive(f.dive)
-            .with_unpaintable(f.unpaintable)
-            .with_item(f.item)
-            .with_ignore_fighter_other(f.ignore_fighter_other)
-            .with_right(f.right)
-            .with_left(f.left)
-            .with_upper(f.upper)
-            .with_under(f.under)
-            .with_not_attach(f.not_attach)
-            .with_throughable(f.throughable)
-            .with_hang_l(f.hang_l)
-            .with_hang_r(f.hang_r)
-            .with_ignore_link_from_left(f.ignore_link_from_left)
-            .with_cloud(f.cloud)
-            .with_ignore_link_from_right(f.ignore_link_from_right)
-            .with_not_expand_near_search(f.not_expand_near_search)
-            .with_ignore(f.ignore)
-            .with_breakable(f.breakable)
-            .with_immediate_relanding_ban(f.immediate_relanding_ban)
-            .with_ignore_line_type1(f.ignore_line_type1)
-            .with_pickel_block(f.pickel_block)
-            .with_deceleration(f.deceleration)
-            .with_virtual_hit_line_up(f.virtual_hit_line_up)
-            .with_virtual_hit_line_left(f.virtual_hit_line_left)
-            .with_virtual_hit_line_right(f.virtual_hit_line_right)
-            .with_virtual_hit_line_down(f.virtual_hit_line_down)
-            .with_virtual_wall_hit_line(f.virtual_wall_hit_line)
-            .with_ignore_boss(f.ignore_boss)
-    }
-}
-
-#[cfg(feature = "serde")]
-impl From<AttributeFlags> for AttributeFlagsSerde {
-    fn from(f: AttributeFlags) -> Self {
-        AttributeFlagsSerde {
-            length0: f.length0(),
-            packman_final_ignore: f.packman_final_ignore(),
-            fall: f.fall(),
-            ignore_ray_check: f.ignore_ray_check(),
-            dive: f.dive(),
-            unpaintable: f.unpaintable(),
-            item: f.item(),
-            ignore_fighter_other: f.ignore_fighter_other(),
-            right: f.right(),
-            left: f.left(),
-            upper: f.upper(),
-            under: f.under(),
-            not_attach: f.not_attach(),
-            throughable: f.throughable(),
-            hang_l: f.hang_l(),
-            hang_r: f.hang_r(),
-            ignore_link_from_left: f.ignore_link_from_left(),
-            cloud: f.cloud(),
-            ignore_link_from_right: f.ignore_link_from_right(),
-            not_expand_near_search: f.not_expand_near_search(),
-            ignore: f.ignore(),
-            breakable: f.breakable(),
-            immediate_relanding_ban: f.immediate_relanding_ban(),
-            ignore_line_type1: f.ignore_line_type1(),
-            pickel_block: f.pickel_block(),
-            deceleration: f.deceleration(),
-            virtual_hit_line_up: f.virtual_hit_line_up(),
-            virtual_hit_line_left: f.virtual_hit_line_left(),
-            virtual_hit_line_right: f.virtual_hit_line_right(),
-            virtual_hit_line_down: f.virtual_hit_line_down(),
-            virtual_wall_hit_line: f.virtual_wall_hit_line(),
-            ignore_boss: f.ignore_boss(),
+impl From<AttributeFlags> for AttributeDataFlags {
+    fn from(value: AttributeFlags) -> Self {
+        Self {
+            length0: value.length0(),
+            packman_final_ignore: value.packman_final_ignore(),
+            fall: value.fall(),
+            ignore_ray_check: value.ignore_ray_check(),
+            dive: value.dive(),
+            unpaintable: value.unpaintable(),
+            item: value.item(),
+            ignore_fighter_other: value.ignore_fighter_other(),
+            right: value.right(),
+            left: value.left(),
+            upper: value.upper(),
+            under: value.under(),
+            not_attach: value.not_attach(),
+            throughable: value.throughable(),
+            hang_l: value.hang_l(),
+            hang_r: value.hang_r(),
+            ignore_link_from_left: value.ignore_link_from_left(),
+            cloud: value.cloud(),
+            ignore_link_from_right: value.ignore_link_from_right(),
+            not_expand_near_search: value.not_expand_near_search(),
+            ignore: value.ignore(),
+            breakable: value.breakable(),
+            immediate_relanding_ban: value.immediate_relanding_ban(),
+            ignore_line_type1: value.ignore_line_type1(),
+            pickel_block: value.pickel_block(),
+            deceleration: value.deceleration(),
+            virtual_hit_line_up: value.virtual_hit_line_up(),
+            virtual_hit_line_left: value.virtual_hit_line_left(),
+            virtual_hit_line_right: value.virtual_hit_line_right(),
+            virtual_hit_line_down: value.virtual_hit_line_down(),
+            virtual_wall_hit_line: value.virtual_wall_hit_line(),
+            ignore_boss: value.ignore_boss(),
         }
     }
 }
