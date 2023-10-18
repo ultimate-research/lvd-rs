@@ -46,7 +46,7 @@ pub enum LvdShape2 {
 
     /// Rectangle shape type.
     #[brw(magic = 3u32)]
-    Rectangle {
+    Rect {
         /// Coordinate of the rectangle's left edge.
         left: f32,
 
