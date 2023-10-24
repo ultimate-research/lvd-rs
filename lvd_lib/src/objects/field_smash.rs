@@ -9,7 +9,7 @@ use crate::{
     Id, LvdFixedString32, LvdPath, LvdShape2, LvdShape3, Rect, Tag, Vector2, Version, Versioned,
 };
 
-/// An LVD object representing a two-dimensional point where a stat boost or item can appear when in view.
+/// An LVD object representing a two-dimensional shape where a stat boost or item can appear when in view.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
