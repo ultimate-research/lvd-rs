@@ -14,8 +14,8 @@ use crate::{
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
-pub enum ItemPt {
-    /// `ItemPt` version 1.
+pub enum FsItem {
+    /// `FsItem` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
         /// Common data for the object.
@@ -29,7 +29,7 @@ pub enum ItemPt {
     },
 }
 
-impl Version for ItemPt {
+impl Version for FsItem {
     fn version(&self) -> u8 {
         match self {
             Self::V1 { .. } => 1,
