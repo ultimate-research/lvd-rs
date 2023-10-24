@@ -20,24 +20,29 @@ mod tag;
 mod util;
 
 pub use array::LvdArray;
-use objects::{
-    collision::Collision,
-    damage_shape::DamageShape,
-    enemy_generator::EnemyGenerator,
-    field_smash::{
-        AreaHint, AreaLight, FsAreaCam, FsAreaLock, FsCamLimit, FsItem, FsStartPoint, FsUnknown,
-        SplitArea,
-    },
-    general_shape::{GeneralShape2, GeneralShape3},
-    item_popup::ItemPopup,
-    point::Point,
-    ptrainer::{PTrainerFloatingFloor, PTrainerRange},
-    region::Region,
-};
 pub use shape::{LvdPath, LvdShape2, LvdShape2Array, LvdShape2Element, LvdShape3};
 pub use string::{LvdFixedString, LvdFixedString32, LvdFixedString56, LvdFixedString64};
 pub use tag::Tag;
 pub use util::{Rect, Vector2, Vector3};
+
+/// Common imports for working with LVD files.
+pub mod prelude {
+    pub use crate::objects::collision::Collision;
+    pub use crate::objects::damage_shape::DamageShape;
+    pub use crate::objects::enemy_generator::EnemyGenerator;
+    pub use crate::objects::field_smash::{
+        AreaHint, AreaLight, FsAreaCam, FsAreaLock, FsCamLimit, FsItem, FsStartPoint, FsUnknown,
+        SplitArea,
+    };
+    pub use crate::objects::general_shape::{GeneralShape2, GeneralShape3};
+    pub use crate::objects::item_popup::ItemPopup;
+    pub use crate::objects::point::Point;
+    pub use crate::objects::ptrainer::{PTrainerFloatingFloor, PTrainerRange};
+    pub use crate::objects::region::Region;
+    pub use crate::{Lvd, LvdFile};
+}
+
+use prelude::*;
 
 /// The container type for the various LVD file format versions.
 #[binrw]
