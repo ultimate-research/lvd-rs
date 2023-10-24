@@ -29,7 +29,7 @@ use objects::{
         SplitArea,
     },
     general_shape::{GeneralShape2, GeneralShape3},
-    item_popup_region::ItemPopupRegion,
+    item_popup::ItemPopup,
     point::Point,
     ptrainer::{PTrainerFloatingFloor, PTrainerRange},
     region::Region,
@@ -155,7 +155,7 @@ pub enum Lvd {
     },
 
     /// `Lvd` version 5.
-    /// Adds [item_popup_regions](#variant.V5.field.item_popup_regions).
+    /// Adds [item_popups](#variant.V5.field.item_popups).
     /// This version is not known to be used.
     #[br(pre_assert(version == 5))]
     V5 {
@@ -171,7 +171,7 @@ pub enum Lvd {
         fs_area_locks: Versioned<LvdArray<FsAreaLock>>,
         fs_cam_limits: Versioned<LvdArray<FsCamLimit>>,
         damage_shapes: Versioned<LvdArray<DamageShape>>,
-        item_popup_regions: Versioned<LvdArray<ItemPopupRegion>>,
+        item_popups: Versioned<LvdArray<ItemPopup>>,
     },
 
     /// `Lvd` version 6.
@@ -190,7 +190,7 @@ pub enum Lvd {
         fs_area_locks: Versioned<LvdArray<FsAreaLock>>,
         fs_cam_limits: Versioned<LvdArray<FsCamLimit>>,
         damage_shapes: Versioned<LvdArray<DamageShape>>,
-        item_popup_regions: Versioned<LvdArray<ItemPopupRegion>>,
+        item_popups: Versioned<LvdArray<ItemPopup>>,
         general_shapes_2d: Versioned<LvdArray<GeneralShape2>>,
         general_shapes_3d: Versioned<LvdArray<GeneralShape3>>,
     },
@@ -212,7 +212,7 @@ pub enum Lvd {
         fs_area_locks: Versioned<LvdArray<FsAreaLock>>,
         fs_cam_limits: Versioned<LvdArray<FsCamLimit>>,
         damage_shapes: Versioned<LvdArray<DamageShape>>,
-        item_popup_regions: Versioned<LvdArray<ItemPopupRegion>>,
+        item_popups: Versioned<LvdArray<ItemPopup>>,
         general_shapes_2d: Versioned<LvdArray<GeneralShape2>>,
         general_shapes_3d: Versioned<LvdArray<GeneralShape3>>,
         area_lights: Versioned<LvdArray<AreaLight>>,
@@ -234,7 +234,7 @@ pub enum Lvd {
         fs_area_locks: Versioned<LvdArray<FsAreaLock>>,
         fs_cam_limits: Versioned<LvdArray<FsCamLimit>>,
         damage_shapes: Versioned<LvdArray<DamageShape>>,
-        item_popup_regions: Versioned<LvdArray<ItemPopupRegion>>,
+        item_popups: Versioned<LvdArray<ItemPopup>>,
         general_shapes_2d: Versioned<LvdArray<GeneralShape2>>,
         general_shapes_3d: Versioned<LvdArray<GeneralShape3>>,
         area_lights: Versioned<LvdArray<AreaLight>>,
@@ -258,7 +258,7 @@ pub enum Lvd {
         fs_area_locks: Versioned<LvdArray<FsAreaLock>>,
         fs_cam_limits: Versioned<LvdArray<FsCamLimit>>,
         damage_shapes: Versioned<LvdArray<DamageShape>>,
-        item_popup_regions: Versioned<LvdArray<ItemPopupRegion>>,
+        item_popups: Versioned<LvdArray<ItemPopup>>,
         general_shapes_2d: Versioned<LvdArray<GeneralShape2>>,
         general_shapes_3d: Versioned<LvdArray<GeneralShape3>>,
         area_lights: Versioned<LvdArray<AreaLight>>,
@@ -282,7 +282,7 @@ pub enum Lvd {
         fs_area_locks: Versioned<LvdArray<FsAreaLock>>,
         fs_cam_limits: Versioned<LvdArray<FsCamLimit>>,
         damage_shapes: Versioned<LvdArray<DamageShape>>,
-        item_popup_regions: Versioned<LvdArray<ItemPopupRegion>>,
+        item_popups: Versioned<LvdArray<ItemPopup>>,
         general_shapes_2d: Versioned<LvdArray<GeneralShape2>>,
         general_shapes_3d: Versioned<LvdArray<GeneralShape3>>,
         area_lights: Versioned<LvdArray<AreaLight>>,
@@ -307,7 +307,7 @@ pub enum Lvd {
         fs_area_locks: Versioned<LvdArray<FsAreaLock>>,
         fs_cam_limits: Versioned<LvdArray<FsCamLimit>>,
         damage_shapes: Versioned<LvdArray<DamageShape>>,
-        item_popup_regions: Versioned<LvdArray<ItemPopupRegion>>,
+        item_popups: Versioned<LvdArray<ItemPopup>>,
         general_shapes_2d: Versioned<LvdArray<GeneralShape2>>,
         general_shapes_3d: Versioned<LvdArray<GeneralShape3>>,
         area_lights: Versioned<LvdArray<AreaLight>>,
@@ -334,7 +334,7 @@ pub enum Lvd {
         fs_area_locks: Versioned<LvdArray<FsAreaLock>>,
         fs_cam_limits: Versioned<LvdArray<FsCamLimit>>,
         damage_shapes: Versioned<LvdArray<DamageShape>>,
-        item_popup_regions: Versioned<LvdArray<ItemPopupRegion>>,
+        item_popups: Versioned<LvdArray<ItemPopup>>,
         ptrainer_ranges: Versioned<LvdArray<PTrainerRange>>,
         general_shapes_2d: Versioned<LvdArray<GeneralShape2>>,
         general_shapes_3d: Versioned<LvdArray<GeneralShape3>>,
@@ -362,7 +362,7 @@ pub enum Lvd {
         fs_area_locks: Versioned<LvdArray<FsAreaLock>>,
         fs_cam_limits: Versioned<LvdArray<FsCamLimit>>,
         damage_shapes: Versioned<LvdArray<DamageShape>>,
-        item_popup_regions: Versioned<LvdArray<ItemPopupRegion>>,
+        item_popups: Versioned<LvdArray<ItemPopup>>,
         ptrainer_ranges: Versioned<LvdArray<PTrainerRange>>,
         ptrainer_floating_floors: Versioned<LvdArray<PTrainerFloatingFloor>>,
         general_shapes_2d: Versioned<LvdArray<GeneralShape2>>,

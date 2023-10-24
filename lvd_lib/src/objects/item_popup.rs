@@ -1,4 +1,4 @@
-//! The `ItemPopupRegion` object stores data representing a collection of shapes where items will appear from.
+//! The `ItemPopup` object stores data representing a collection of shapes where items will appear from.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
@@ -11,8 +11,8 @@ use crate::{objects::base::Base, LvdShape2Array, Tag, Version, Versioned};
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
-pub enum ItemPopupRegion {
-    /// `ItemPopupRegion` version 1.
+pub enum ItemPopup {
+    /// `ItemPopup` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
         /// Common data for the object.
@@ -22,11 +22,11 @@ pub enum ItemPopupRegion {
         tag: Versioned<Tag>,
 
         /// Collection of shapes where items will appear from.
-        regions: Versioned<LvdShape2Array>,
+        shapes: Versioned<LvdShape2Array>,
     },
 }
 
-impl Version for ItemPopupRegion {
+impl Version for ItemPopup {
     fn version(&self) -> u8 {
         match self {
             Self::V1 { .. } => 1,
