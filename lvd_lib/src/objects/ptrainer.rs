@@ -20,10 +20,10 @@ pub enum PTrainerRange {
         base: Versioned<Base>,
 
         /// Minimum position that a Pokémon Trainer can travel to.
-        boundary_min: Versioned<Vector3>,
+        range_min: Versioned<Vector3>,
 
         /// Maximum position that a Pokémon Trainer can travel to.
-        boundary_max: Versioned<Vector3>,
+        range_max: Versioned<Vector3>,
 
         /// Collection of starting positions for each Pokémon Trainer in the range.
         trainers: Versioned<LvdArray<Vector3>>,
@@ -38,10 +38,10 @@ pub enum PTrainerRange {
         base: Versioned<Base>,
 
         /// Minimum position that a Pokémon Trainer can travel to.
-        boundary_min: Versioned<Vector3>,
+        range_min: Versioned<Vector3>,
 
         /// Maximum position that a Pokémon Trainer can travel to.
-        boundary_max: Versioned<Vector3>,
+        range_max: Versioned<Vector3>,
 
         /// Collection of starting positions for each Pokémon Trainer in the range.
         trainers: Versioned<LvdArray<Vector3>>,
