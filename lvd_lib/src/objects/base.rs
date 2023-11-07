@@ -33,7 +33,7 @@ pub enum Base {
         /// Name of the object as seen by the game when flagged as dynamic.
         dynamic_name: Versioned<LvdFixedString64>,
 
-        /// Initial position of the object when flagged as dynamic.
+        /// Positional offset of the object when flagged as dynamic.
         dynamic_offset: Versioned<Vector3>,
     },
 
@@ -48,7 +48,7 @@ pub enum Base {
         /// Name of the object as seen by the game when flagged as dynamic.
         dynamic_name: Versioned<LvdFixedString64>,
 
-        /// Initial position of the object when flagged as dynamic.
+        /// Positional offset of the object when flagged as dynamic.
         dynamic_offset: Versioned<Vector3>,
 
         /// Boolean flag determining if the object is dynamic.
@@ -57,10 +57,10 @@ pub enum Base {
         is_dynamic: bool,
 
         /// Numeric ID of the instanced object.
-        /// Must be nonzero for the object to be considered an instanced object.
+        /// Must be nonzero for the object to be classified as an instanced object.
         instance_id: Versioned<Id>,
 
-        // TODO: Field documentation.
+        /// Positional offset of the object when classified as an instanced object.
         instance_offset: Versioned<Vector3>,
     },
 
@@ -74,7 +74,7 @@ pub enum Base {
         /// Name of the object as seen by the game when flagged as dynamic.
         dynamic_name: Versioned<LvdFixedString64>,
 
-        /// Initial position of the object when flagged as dynamic.
+        /// Positional offset of the object when flagged as dynamic.
         dynamic_offset: Versioned<Vector3>,
 
         /// Boolean flag determining if the object is dynamic.
@@ -83,16 +83,16 @@ pub enum Base {
         is_dynamic: bool,
 
         /// Numeric ID of the instanced object.
-        /// Must be nonzero for the object to be considered an instanced object.
+        /// Must be nonzero for the object to be classified as an instanced object.
         instance_id: Versioned<Id>,
 
-        // TODO: Field documentation.
+        /// Positional offset of the object when classified as an instanced object.
         instance_offset: Versioned<Vector3>,
 
-        /// Index of a joint from the given [dynamic_name](#variant.V4.field.dynamic_name) which a dynamic object is parented to.
+        /// Index of the target joint from the parent model to parent the dynamic object to.
         joint_index: i32,
 
-        /// Name of a joint from the given [dynamic_name](#variant.V4.field.dynamic_name) which a dynamic object is parented to.
+        /// Name of the target joint from the parent model to parent the dynamic object to.
         joint_name: Versioned<LvdFixedString64>,
     },
 }
