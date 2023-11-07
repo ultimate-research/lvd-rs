@@ -4,7 +4,7 @@ use binrw::binrw;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use crate::{objects::base::Base, Bool, LvdShape3, Version, Versioned};
+use crate::{objects::base::Base, LvdShape3, Version, Versioned};
 
 /// An LVD object representing a three-dimensional damage or attack collision shape.
 #[binrw]
@@ -22,7 +22,9 @@ pub enum DamageShape {
         shape: Versioned<LvdShape3>,
 
         /// Boolean flag determining if the damage shape is an attack collision.
-        is_damager: Bool,
+        #[br(map = |b: u8| b != 0)]
+        #[bw(map = |b| u8::from(*b))]
+        is_damager: bool,
 
         // TODO: Field documentation.
         id: u32,

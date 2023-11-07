@@ -427,23 +427,6 @@ pub trait Version {
     fn version(&self) -> u8;
 }
 
-/// A wrapper for a [`bool`].
-#[binrw]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Debug)]
-pub struct Bool(
-    #[br(map = |b: u8| b != 0)]
-    #[bw(map = |&b: &bool| if b { 1u8 } else { 0u8 })]
-    bool,
-);
-
-impl Bool {
-    /// Returns the underlying [`bool`] value.
-    pub fn as_bool(&self) -> bool {
-        self.0
-    }
-}
-
 /// A numeric ID type.
 #[binrw]
 #[br(import(_version: u8))]

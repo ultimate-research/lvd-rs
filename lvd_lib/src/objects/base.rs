@@ -4,7 +4,7 @@ use binrw::binrw;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use crate::{Bool, Id, LvdFixedString56, LvdFixedString64, Vector3, Version, Versioned};
+use crate::{Id, LvdFixedString56, LvdFixedString64, Vector3, Version, Versioned};
 
 /// Common data for an LVD object.
 #[binrw]
@@ -52,7 +52,9 @@ pub enum Base {
         dynamic_offset: Versioned<Vector3>,
 
         /// Boolean flag determining if the object is dynamic.
-        is_dynamic: Bool,
+        #[br(map = |b: u8| b != 0)]
+        #[bw(map = |b| u8::from(*b))]
+        is_dynamic: bool,
 
         /// Numeric ID of the instanced object.
         /// Must be nonzero for the object to be considered an instanced object.
@@ -76,7 +78,9 @@ pub enum Base {
         dynamic_offset: Versioned<Vector3>,
 
         /// Boolean flag determining if the object is dynamic.
-        is_dynamic: Bool,
+        #[br(map = |b: u8| b != 0)]
+        #[bw(map = |b| u8::from(*b))]
+        is_dynamic: bool,
 
         /// Numeric ID of the instanced object.
         /// Must be nonzero for the object to be considered an instanced object.
