@@ -432,7 +432,7 @@ pub trait Version {
 #[br(import(_version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
-pub struct Id(u32);
+pub struct Id(pub u32);
 
 impl Version for Id {
     fn version(&self) -> u8 {
