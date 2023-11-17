@@ -1,0 +1,100 @@
+//! The `EnemyGenerator` object stores data representing a collection of shapes to generate enemies from.
+use binrw::binrw;
+
+#[cfg(feature = "serde")]
+use serde::{Deserialize, Serialize};
+
+use crate::{objects::base::Base, LvdArray, LvdShape2Array, Tag, Version, Versioned};
+
+/// An LVD object representing a collection of shapes to generate enemies from.
+#[binrw]
+#[br(import(version: u8))]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(Debug)]
+pub enum EnemyGenerator {
+    /// `EnemyGenerator` version 1.
+    /// This version is not known to be used.
+    #[br(pre_assert(version == 1))]
+    V1 {
+        /// Common data for the object.
+        base: Versioned<Base>,
+
+        /// Collection of shapes where enemies can appear from.
+        appear_shapes: Versioned<LvdShape2Array>,
+
+        /// Collection of shapes for responding to fighter presence.
+        trigger_shapes: Versioned<LvdShape2Array>,
+
+        // TODO: Field documentation.
+        unk1: Versioned<LvdShape2Array>,
+
+        /// Unique integer identifier for programmatic discovery.
+        tag: Versioned<Tag>,
+    },
+
+    /// `EnemyGenerator` version 2.
+    /// Adds [appear_tags](#variant.V2.field.appear_tags) and [unk2](#variant.V2.field.unk2).
+    /// This version is not known to be used.
+    #[br(pre_assert(version == 2))]
+    V2 {
+        /// Common data for the object.
+        base: Versioned<Base>,
+
+        /// Collection of shapes where enemies can appear from.
+        appear_shapes: Versioned<LvdShape2Array>,
+
+        /// Collection of shapes for responding to fighter presence.
+        trigger_shapes: Versioned<LvdShape2Array>,
+
+        // TODO: Field documentation.
+        unk1: Versioned<LvdShape2Array>,
+
+        /// Unique integer identifier for programmatic discovery.
+        tag: Versioned<Tag>,
+
+        /// Collection of unique integer identifiers for programmatically discovering appear regions.
+        appear_tags: Versioned<LvdArray<Tag>>,
+
+        // TODO: Field documentation.
+        unk2: Versioned<LvdArray<Tag>>,
+    },
+
+    /// `EnemyGenerator` version 3.
+    /// Adds [trigger_tags](#variant.V3.field.trigger_tags).
+    #[br(pre_assert(version == 3))]
+    V3 {
+        /// Common data for the object.
+        base: Versioned<Base>,
+
+        /// Collection of shapes where enemies can appear from.
+        appear_shapes: Versioned<LvdShape2Array>,
+
+        /// Collection of shapes for responding to fighter presence.
+        trigger_shapes: Versioned<LvdShape2Array>,
+
+        // TODO: Field documentation.
+        unk1: Versioned<LvdShape2Array>,
+
+        /// Unique integer identifier for programmatic discovery.
+        tag: Versioned<Tag>,
+
+        /// Collection of unique integer identifiers for programmatically discovering appear regions.
+        appear_tags: Versioned<LvdArray<Tag>>,
+
+        // TODO: Field documentation.
+        unk2: Versioned<LvdArray<Tag>>,
+
+        /// Collection of unique integer identifiers for programmatically discovering trigger regions.
+        trigger_tags: Versioned<LvdArray<Tag>>,
+    },
+}
+
+impl Version for EnemyGenerator {
+    fn version(&self) -> u8 {
+        match self {
+            Self::V1 { .. } => 1,
+            Self::V2 { .. } => 2,
+            Self::V3 { .. } => 3,
+        }
+    }
+}
