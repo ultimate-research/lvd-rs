@@ -18,12 +18,11 @@ struct Args {
 }
 
 fn read_data_write_yaml<P: AsRef<Path> + ToString>(input_path: P, output_path: Option<String>) {
-    let output_path = output_path
-        .map(PathBuf::from)
-        .unwrap_or_else(|| PathBuf::from(&(input_path.to_string() + ".yaml")));
-
-    match LvdFile::from_file(input_path) {
+    match LvdFile::from_file(&input_path) {
         Ok(lvd) => {
+            let output_path = output_path
+                .map(PathBuf::from)
+                .unwrap_or_else(|| PathBuf::from(input_path.to_string() + ".yaml"));
             let yaml = serde_yaml::to_string(&lvd).unwrap();
 
             fs::write(output_path, yaml).expect("failed to write YAML file");
