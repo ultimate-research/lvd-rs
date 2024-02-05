@@ -24,6 +24,19 @@ pub type LvdFixedString64 = LvdFixedString<64>;
 pub struct LvdFixedString<const N: usize>(#[br(parse_with = read_bytes)] [u8; N]);
 
 impl<const N: usize> LvdFixedString<N> {
+    /// Creates a new empty `LvdFixedString`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use lvd_lib::LvdFixedString;
+    ///
+    /// let s = LvdFixedString::<64>::new();
+    /// ```
+    pub const fn new() -> Self {
+        Self([0; N])
+    }
+
     /// Returns the length of the contained string.
     ///
     /// This length is in bytes, not [`char`]s or graphemes. In other words,
@@ -78,7 +91,7 @@ impl<const N: usize> LvdFixedString<N> {
     /// ```
     /// use lvd_lib::LvdFixedString;
     ///
-    /// let s = LvdFixedString::<64>::try_from("").unwrap();
+    /// let s = LvdFixedString::<64>::new();
     /// assert!(s.is_empty());
     ///
     /// let s = LvdFixedString::<64>::try_from("curve1").unwrap();
@@ -317,7 +330,7 @@ mod tests {
 
     #[test]
     fn write_lvd_fixed_string_empty() {
-        let value = LvdFixedString::<8>::from_str("").unwrap();
+        let value = LvdFixedString::<8>::new();
         let mut writer = Cursor::new(Vec::new());
 
         writer.write_be(&value).unwrap();
