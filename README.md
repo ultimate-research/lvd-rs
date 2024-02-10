@@ -47,7 +47,7 @@ collisions: !V1
 
 ### Usage
 
-The latest executable for Windows is available in the [Releases](https://github.com/jam1garner/lvd-rs/releases/latest).
+The latest executable for Windows is available in the [Releases](https://github.com/ultimate-research/lvd-rs/releases/latest).
 
 `yamlvd <input> [output]`<br>
 `yamlvd battlefield_00.lvd battlefield_00.yaml`<br>
