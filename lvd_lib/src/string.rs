@@ -135,28 +135,35 @@ impl<const N: usize> LvdFixedString<N> {
 }
 
 impl<const N: usize> FromStr for LvdFixedString<N> {
-    type Err = ToLvdFixedStringError;
+    type Err = FromStrError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if s.len() >= N {
-            return Err(ToLvdFixedStringError::BufferOverflow(N));
+        let bytes = s.as_bytes();
+
+        if bytes.len() >= N {
+            return Err(FromStrError::BufferOverflow(N));
         }
 
-        let bytes = s.as_bytes();
         let mut buffer = [0; N];
-        let mut index = 0;
 
-        while index != bytes.len() {
-            buffer[index] = bytes[index];
-            index += 1;
+        for (index, byte) in bytes.iter().enumerate() {
+            buffer[index] = *byte;
         }
 
         Ok(Self(buffer))
     }
 }
 
+impl<const N: usize> TryFrom<&String> for LvdFixedString<N> {
+    type Error = FromStrError;
+
+    fn try_from(value: &String) -> Result<Self, Self::Error> {
+        Self::from_str(value)
+    }
+}
+
 impl<const N: usize> TryFrom<&str> for LvdFixedString<N> {
-    type Error = ToLvdFixedStringError;
+    type Error = FromStrError;
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         Self::from_str(value)
@@ -164,18 +171,16 @@ impl<const N: usize> TryFrom<&str> for LvdFixedString<N> {
 }
 
 impl<const N: usize> TryFrom<String> for LvdFixedString<N> {
-    type Error = ToLvdFixedStringError;
+    type Error = FromStrError;
 
     fn try_from(value: String) -> Result<Self, Self::Error> {
         Self::from_str(&value)
     }
 }
 
-impl<const N: usize> TryFrom<&String> for LvdFixedString<N> {
-    type Error = ToLvdFixedStringError;
-
-    fn try_from(value: &String) -> Result<Self, Self::Error> {
-        Self::from_str(value)
+impl<const N: usize> PartialEq<&String> for LvdFixedString<N> {
+    fn eq(&self, other: &&String) -> bool {
+        &self.0[..self.len()] == other.as_bytes()
     }
 }
 
@@ -187,12 +192,6 @@ impl<const N: usize> PartialEq<&str> for LvdFixedString<N> {
 
 impl<const N: usize> PartialEq<String> for LvdFixedString<N> {
     fn eq(&self, other: &String) -> bool {
-        &self.0[..self.len()] == other.as_bytes()
-    }
-}
-
-impl<const N: usize> PartialEq<&String> for LvdFixedString<N> {
-    fn eq(&self, other: &&String) -> bool {
         &self.0[..self.len()] == other.as_bytes()
     }
 }
@@ -254,7 +253,7 @@ impl<const N: usize> Version for LvdFixedString<N> {
 
 /// The error type used when converting a string into a fixed-capacity byte buffer.
 #[derive(Debug, Error)]
-pub enum ToLvdFixedStringError {
+pub enum FromStrError {
     /// The nul-terminated string exceeds the buffer's capacity.
     #[error("nul-terminated string exceeds buffer capacity of {0} bytes")]
     BufferOverflow(usize),

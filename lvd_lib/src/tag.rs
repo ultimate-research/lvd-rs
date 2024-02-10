@@ -35,7 +35,7 @@ use crate::Version;
 /// - Must end with four digits.
 ///
 /// If one or more of these restrictions are not met on either end, the corresponding
-/// conversion methods may return erronous results.
+/// conversion methods may return erroneous results.
 #[binrw]
 #[br(import(version: u8), pre_assert(version == 1))]
 #[derive(Debug, Clone, Copy, Default, PartialEq)]
@@ -43,60 +43,52 @@ pub struct Tag(u32);
 
 impl Tag {
     const STRING_LEN: usize = 7;
-    const LETTER_PART_LEN: usize = 3;
-    const DIGIT_PART_LEN: usize = 4;
+    const LETTER_COUNT: usize = 3;
+    const LETTER_CHAR_MIN: u8 = b'A';
     const LETTER_MAX: u8 = 26;
+    const DIGIT_COUNT: usize = 4;
+    const DIGIT_CHAR_MIN: u8 = b'0';
     const DIGIT_MAX: u8 = 10;
-    // const CHAR_MIN: u8 = b'A';
-    // const CHAR_MAX: u8 = b'Z';
-    // const NUM_MAX: u32 = 9999;
 }
 
 impl FromStr for Tag {
     type Err = FromStrError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if s.len() != Self::STRING_LEN {
-            return Err(FromStrError::BadStringLength(s.len()));
+        let bytes = s.as_bytes();
+
+        if bytes.len() != Self::STRING_LEN {
+            return Err(FromStrError::BadStringLength(bytes.len()));
         }
 
-        let bytes = s.as_bytes();
-        let mut letters = [0; Self::LETTER_PART_LEN];
-        let mut digits = [0; Self::DIGIT_PART_LEN];
-        let mut index = 0;
+        let (letters_str, digits_str) = bytes.split_at(Self::LETTER_COUNT);
+        let mut letters = [0; Self::LETTER_COUNT];
+        let mut digits = [0; Self::DIGIT_COUNT];
 
-        while index != letters.len() {
-            let mut byte = bytes[index];
+        for (index, letter) in letters_str.iter().enumerate() {
+            let letter = *letter;
 
-            if u8::wrapping_sub(byte, b'A') < Self::LETTER_MAX {
-                byte -= b'A' - 1;
-            } else if byte == b'_' {
-                byte = 0;
+            if u8::wrapping_sub(letter, Self::LETTER_CHAR_MIN) < Self::LETTER_MAX {
+                letters[index] = letter - (Self::LETTER_CHAR_MIN - 1);
+            } else if letter == b'_' {
+                letters[index] = 0;
             } else {
-                return Err(FromStrError::LetterNotFound(byte as char));
+                return Err(FromStrError::LetterNotFound(letter as char));
             }
+        }
 
-            letters[index] = byte;
-            index += 1;
+        for (index, digit) in digits_str.iter().enumerate() {
+            let digit = *digit;
+
+            if u8::wrapping_sub(digit, Self::DIGIT_CHAR_MIN) < Self::DIGIT_MAX {
+                digits[index] = digit - Self::DIGIT_CHAR_MIN;
+            } else {
+                return Err(FromStrError::DigitNotFound(digit as char));
+            }
         }
 
         let word =
             (letters[0] as u32) << 24 | (letters[1] as u32) << 19 | (letters[2] as u32) << 14;
-        let mut index = 0;
-
-        while index != digits.len() {
-            let byte = bytes[Self::LETTER_PART_LEN + index];
-            let digit = u8::wrapping_sub(byte, b'0');
-
-            if digit < Self::DIGIT_MAX {
-                digits[index] = digit;
-            } else {
-                return Err(FromStrError::DigitNotFound(byte as char));
-            }
-
-            index += 1;
-        }
-
         let number = (digits[0] as u32) * 1000
             + (digits[1] as u32) * 100
             + (digits[2] as u32) * 10
@@ -106,26 +98,56 @@ impl FromStr for Tag {
     }
 }
 
+impl TryFrom<&String> for Tag {
+    type Error = FromStrError;
+
+    fn try_from(value: &String) -> Result<Self, Self::Error> {
+        Self::from_str(value)
+    }
+}
+
+impl TryFrom<&str> for Tag {
+    type Error = FromStrError;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        Self::from_str(value)
+    }
+}
+
+impl TryFrom<String> for Tag {
+    type Error = FromStrError;
+
+    fn try_from(value: String) -> Result<Self, Self::Error> {
+        Self::from_str(&value)
+    }
+}
+
 impl ToString for Tag {
     fn to_string(&self) -> String {
-        let char1 = match self.0 & 0b00011111_00000000_00000000_00000000 {
-            // SAFETY: The bit manipulations performed guarantee a valid char.
-            c if c != 0 => unsafe { char::from_u32_unchecked((c >> 24) + 0x40) },
+        let letter1 = match self.0 & 0b00011111_00000000_00000000_00000000 {
+            // SAFETY: The given bit manipulations guarantee a valid char.
+            c if c != 0 => unsafe {
+                char::from_u32_unchecked((c >> 24) + Self::LETTER_CHAR_MIN as u32 - 1)
+            },
             _ => '_',
         };
-        let char2 = match self.0 & 0b00000000_11111000_00000000_00000000 {
-            // SAFETY: The bit manipulations performed guarantee a valid char.
-            c if c != 0 => unsafe { char::from_u32_unchecked((c >> 19) + 0x40) },
+        let letter2 = match self.0 & 0b00000000_11111000_00000000_00000000 {
+            // SAFETY: The given bit manipulations guarantee a valid char.
+            c if c != 0 => unsafe {
+                char::from_u32_unchecked((c >> 19) + Self::LETTER_CHAR_MIN as u32 - 1)
+            },
             _ => '_',
         };
-        let char3 = match self.0 & 0b00000000_00000111_11000000_00000000 {
-            // SAFETY: The bit manipulations performed guarantee a valid char.
-            c if c != 0 => unsafe { char::from_u32_unchecked((c >> 14) + 0x40) },
+        let letter3 = match self.0 & 0b00000000_00000111_11000000_00000000 {
+            // SAFETY: The given bit manipulations guarantee a valid char.
+            c if c != 0 => unsafe {
+                char::from_u32_unchecked((c >> 14) + Self::LETTER_CHAR_MIN as u32 - 1)
+            },
             _ => '_',
         };
-        let num = format!("{:0>4}", self.0 & 0b00000000_00000000_00111111_11111111);
+        let number = self.0 & 0b00000000_00000000_00111111_11111111;
 
-        char1.to_string() + &char2.to_string() + &char3.to_string() + &num
+        format!("{}{}{}{:0>4}", letter1, letter2, letter3, number)
     }
 }
 
