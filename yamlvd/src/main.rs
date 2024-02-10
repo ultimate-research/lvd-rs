@@ -11,10 +11,10 @@ use lvd_lib::LvdFile;
 #[command(author, version, about, long_about = None)]
 struct Args {
     /// The input LVD or YAML file path
-    pub input: String,
+    input: String,
 
     /// The output LVD or YAML file path
-    pub output: Option<String>,
+    output: Option<String>,
 }
 
 fn read_data_write_yaml<P: AsRef<Path> + ToString>(input_path: P, output_path: Option<String>) {
