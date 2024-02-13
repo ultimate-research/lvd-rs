@@ -18,7 +18,7 @@ pub enum GeneralShape2 {
         /// Common data for the object.
         base: Versioned<Base>,
 
-        /// Unique integer identifier for programmatic discovery.
+        /// Identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
 
         /// Shape represented by the object.
@@ -46,7 +46,7 @@ pub enum GeneralShape3 {
         /// Common data for the object.
         base: Versioned<Base>,
 
-        /// Unique integer identifier for programmatic discovery.
+        /// Identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
 
         /// Shape represented by the object.

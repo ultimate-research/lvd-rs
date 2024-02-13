@@ -18,7 +18,7 @@ pub enum ItemPopup {
         /// Common data for the object.
         base: Versioned<Base>,
 
-        /// Unique integer identifier for programmatic discovery.
+        /// Identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
 
         /// Collection of shapes where items will appear from.

@@ -28,7 +28,7 @@ pub enum EnemyGenerator {
         // TODO: Field documentation.
         unk1: Versioned<LvdShape2Array>,
 
-        /// Unique integer identifier for programmatic discovery.
+        /// Identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
     },
 
@@ -49,10 +49,10 @@ pub enum EnemyGenerator {
         // TODO: Field documentation.
         unk1: Versioned<LvdShape2Array>,
 
-        /// Unique integer identifier for programmatic discovery.
+        /// Identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
 
-        /// Collection of unique integer identifiers for programmatically discovering appear regions.
+        /// Collection of identifiers for matching and filtering appear regions.
         appear_tags: Versioned<LvdArray<Tag>>,
 
         // TODO: Field documentation.
@@ -75,16 +75,16 @@ pub enum EnemyGenerator {
         // TODO: Field documentation.
         unk1: Versioned<LvdShape2Array>,
 
-        /// Unique integer identifier for programmatic discovery.
+        /// Identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
 
-        /// Collection of unique integer identifiers for programmatically discovering appear regions.
+        /// Collection of identifiers for matching and filtering appear regions.
         appear_tags: Versioned<LvdArray<Tag>>,
 
         // TODO: Field documentation.
         unk2: Versioned<LvdArray<Tag>>,
 
-        /// Collection of unique integer identifiers for programmatically discovering trigger regions.
+        /// Collection of identifiers for matching and filtering trigger regions.
         trigger_tags: Versioned<LvdArray<Tag>>,
     },
 }

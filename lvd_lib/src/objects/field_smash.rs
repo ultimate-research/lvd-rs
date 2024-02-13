@@ -24,7 +24,7 @@ pub enum FsItem {
         /// Shape represented by the object.
         shape: Versioned<LvdShape2>,
 
-        /// Unique integer identifier for programmatic discovery.
+        /// Identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
     },
 }
