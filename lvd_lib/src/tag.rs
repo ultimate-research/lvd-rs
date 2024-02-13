@@ -162,17 +162,13 @@ impl fmt::Display for Tag {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         use std::array;
 
-        let letters: [_; Self::LETTER_COUNT] = array::from_fn(|i| {
-            match self.0 & Self::LETTER_MASK[i] {
-                // SAFETY: The given operations guarantee a valid char.
-                c if c != 0 => unsafe {
-                    char::from_u32_unchecked(
-                        (c >> Self::LETTER_SHIFT[i]) + Self::LETTER_CHAR_MIN as u32 - 1,
-                    )
-                },
+        let letters: [_; Self::LETTER_COUNT] =
+            array::from_fn(|i| match self.0 & Self::LETTER_MASK[i] {
+                c if c != 0 => {
+                    ((c >> Self::LETTER_SHIFT[i]) as u8 + Self::LETTER_CHAR_MIN - 1) as char
+                }
                 _ => '_',
-            }
-        });
+            });
         let number = self.0 & Self::NUMBER_MASK;
 
         write!(f, "{}{}{}{:04}", letters[0], letters[1], letters[2], number)
