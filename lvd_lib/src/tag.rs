@@ -1,4 +1,4 @@
-use std::{str::FromStr, string::ToString};
+use std::{fmt, str::FromStr};
 
 use binrw::binrw;
 use thiserror::Error;
@@ -8,7 +8,7 @@ use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::Version;
 
-/// A unique integer identifier for an LVD object.
+/// An identifier for matching and filtering LVD objects.
 ///
 /// An example of a `Tag` represented as a string is as follows: `"IPP0001"`
 ///
@@ -27,7 +27,7 @@ use crate::Version;
 /// - Letter values must range from 0 to 26, inclusively.
 /// - Number must range from 0 to 9999, inclusively.
 ///
-/// Likewise, when converting from a string to a `Tag`'s native integer representation,
+/// Likewise, when converting from a string to a `Tag`'s native representation,
 /// the string should follow these restrictions:
 ///
 /// - Must have a length of seven characters.
@@ -42,13 +42,43 @@ use crate::Version;
 pub struct Tag(u32);
 
 impl Tag {
+    /// The number of characters in a tag.
     const STRING_LEN: usize = 7;
+
+    /// The number of letters in a tag.
     const LETTER_COUNT: usize = 3;
+
+    /// The minimum supported letter character in a tag.
     const LETTER_CHAR_MIN: u8 = b'A';
+
+    /// The maximum supported letter value in a tag.
     const LETTER_MAX: u8 = 26;
+
+    /// The bitmasks for each letter in a tag.
+    const LETTER_MASK: [u32; Self::LETTER_COUNT] = [
+        0b00011111_00000000_00000000_00000000,
+        0b00000000_11111000_00000000_00000000,
+        0b00000000_00000111_11000000_00000000,
+    ];
+
+    /// The bit shift operands for each letter in a tag.
+    const LETTER_SHIFT: [u32; Self::LETTER_COUNT] = [
+        Self::LETTER_MASK[0].trailing_zeros(),
+        Self::LETTER_MASK[1].trailing_zeros(),
+        Self::LETTER_MASK[2].trailing_zeros(),
+    ];
+
+    /// The number of digits in a tag.
     const DIGIT_COUNT: usize = 4;
+
+    /// The minimum supported digit character in a tag.
     const DIGIT_CHAR_MIN: u8 = b'0';
+
+    /// The maximum supported digit value in a tag.
     const DIGIT_MAX: u8 = 10;
+
+    /// The bitmask for the number in a tag.
+    const NUMBER_MASK: u32 = 0b00000000_00000000_00111111_11111111;
 }
 
 impl FromStr for Tag {
@@ -58,7 +88,7 @@ impl FromStr for Tag {
         let bytes = s.as_bytes();
 
         if bytes.len() != Self::STRING_LEN {
-            return Err(FromStrError::BadStringLength(bytes.len()));
+            return Err(Self::Err::InvalidStringLength(bytes.len()));
         }
 
         let (letters_str, digits_str) = bytes.split_at(Self::LETTER_COUNT);
@@ -68,13 +98,17 @@ impl FromStr for Tag {
         for (index, letter) in letters_str.iter().enumerate() {
             let letter = *letter;
 
+            if letter == b'_' {
+                letters[index] = 0;
+                continue;
+            }
+
             if u8::wrapping_sub(letter, Self::LETTER_CHAR_MIN) < Self::LETTER_MAX {
                 letters[index] = letter - (Self::LETTER_CHAR_MIN - 1);
-            } else if letter == b'_' {
-                letters[index] = 0;
-            } else {
-                return Err(FromStrError::LetterNotFound(letter as char));
+                continue;
             }
+
+            return Err(Self::Err::LetterNotFound(letter as char));
         }
 
         for (index, digit) in digits_str.iter().enumerate() {
@@ -82,13 +116,15 @@ impl FromStr for Tag {
 
             if u8::wrapping_sub(digit, Self::DIGIT_CHAR_MIN) < Self::DIGIT_MAX {
                 digits[index] = digit - Self::DIGIT_CHAR_MIN;
-            } else {
-                return Err(FromStrError::DigitNotFound(digit as char));
+                continue;
             }
+
+            return Err(Self::Err::DigitNotFound(digit as char));
         }
 
-        let word =
-            (letters[0] as u32) << 24 | (letters[1] as u32) << 19 | (letters[2] as u32) << 14;
+        let word = (letters[0] as u32) << Self::LETTER_SHIFT[0]
+            | (letters[1] as u32) << Self::LETTER_SHIFT[1]
+            | (letters[2] as u32) << Self::LETTER_SHIFT[2];
         let number = (digits[0] as u32) * 1000
             + (digits[1] as u32) * 100
             + (digits[2] as u32) * 10
@@ -122,32 +158,24 @@ impl TryFrom<String> for Tag {
     }
 }
 
-impl ToString for Tag {
-    fn to_string(&self) -> String {
-        let letter1 = match self.0 & 0b00011111_00000000_00000000_00000000 {
-            // SAFETY: The given bit manipulations guarantee a valid char.
-            c if c != 0 => unsafe {
-                char::from_u32_unchecked((c >> 24) + Self::LETTER_CHAR_MIN as u32 - 1)
-            },
-            _ => '_',
-        };
-        let letter2 = match self.0 & 0b00000000_11111000_00000000_00000000 {
-            // SAFETY: The given bit manipulations guarantee a valid char.
-            c if c != 0 => unsafe {
-                char::from_u32_unchecked((c >> 19) + Self::LETTER_CHAR_MIN as u32 - 1)
-            },
-            _ => '_',
-        };
-        let letter3 = match self.0 & 0b00000000_00000111_11000000_00000000 {
-            // SAFETY: The given bit manipulations guarantee a valid char.
-            c if c != 0 => unsafe {
-                char::from_u32_unchecked((c >> 14) + Self::LETTER_CHAR_MIN as u32 - 1)
-            },
-            _ => '_',
-        };
-        let number = self.0 & 0b00000000_00000000_00111111_11111111;
+impl fmt::Display for Tag {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        use std::array;
 
-        format!("{}{}{}{:0>4}", letter1, letter2, letter3, number)
+        let letters: [_; Self::LETTER_COUNT] = array::from_fn(|i| {
+            match self.0 & Self::LETTER_MASK[i] {
+                // SAFETY: The given operations guarantee a valid char.
+                c if c != 0 => unsafe {
+                    char::from_u32_unchecked(
+                        (c >> Self::LETTER_SHIFT[i]) + Self::LETTER_CHAR_MIN as u32 - 1,
+                    )
+                },
+                _ => '_',
+            }
+        });
+        let number = self.0 & Self::NUMBER_MASK;
+
+        write!(f, "{}{}{}{:04}", letters[0], letters[1], letters[2], number)
     }
 }
 
@@ -179,12 +207,12 @@ impl Version for Tag {
     }
 }
 
-/// The error type used when converting a string into the integer representation of a `Tag`.
+/// The error type used when converting a string into a `Tag`.
 #[derive(Debug, PartialEq, Error)]
 pub enum FromStrError {
-    /// The string's length did not equate to the expected length.
+    /// The string's length did not equal the expected length.
     #[error("expected string length {}, found length {0}", Tag::STRING_LEN)]
-    BadStringLength(usize),
+    InvalidStringLength(usize),
 
     /// An unexpected character was found in the alphabetical section of the string.
     #[error("expected uppercase letter or underscore, found {0}")]
@@ -214,6 +242,7 @@ mod tests {
         assert_eq!(Tag::from_str("C_Y0001"), Ok(Tag(50741249)));
         assert_eq!(Tag::from_str("SE_0001"), Ok(Tag(321388545)));
         assert_eq!(Tag::from_str("___0000"), Ok(Tag(0)));
+        assert_eq!(Tag::from_str("___0001"), Ok(Tag(1)));
     }
 
     #[test]
@@ -231,102 +260,111 @@ mod tests {
         assert_eq!(Tag(50741249).to_string(), "C_Y0001");
         assert_eq!(Tag(321388545).to_string(), "SE_0001");
         assert_eq!(Tag(0).to_string(), "___0000");
+        assert_eq!(Tag(1).to_string(), "___0001");
     }
 
     #[test]
-    fn use_bad_string_length() {
+    fn use_invalid_string_length() {
         assert_eq!(
             Tag::from_str(""),
-            Err(FromStrError::BadStringLength("".len()))
+            Err(FromStrError::InvalidStringLength("".len()))
         );
         assert_eq!(
             Tag::from_str("I"),
-            Err(FromStrError::BadStringLength("I".len()))
+            Err(FromStrError::InvalidStringLength("I".len()))
         );
         assert_eq!(
             Tag::from_str("IP"),
-            Err(FromStrError::BadStringLength("IP".len()))
+            Err(FromStrError::InvalidStringLength("IP".len()))
         );
         assert_eq!(
             Tag::from_str("IPP"),
-            Err(FromStrError::BadStringLength("IPP".len()))
+            Err(FromStrError::InvalidStringLength("IPP".len()))
         );
         assert_eq!(
             Tag::from_str("IPP0"),
-            Err(FromStrError::BadStringLength("IPP0".len()))
+            Err(FromStrError::InvalidStringLength("IPP0".len()))
         );
         assert_eq!(
             Tag::from_str("IPP00"),
-            Err(FromStrError::BadStringLength("IPP00".len()))
+            Err(FromStrError::InvalidStringLength("IPP00".len()))
         );
         assert_eq!(
             Tag::from_str("IPP000"),
-            Err(FromStrError::BadStringLength("IPP000".len()))
+            Err(FromStrError::InvalidStringLength("IPP000".len()))
         );
         assert_eq!(
             Tag::from_str("IPP00001"),
-            Err(FromStrError::BadStringLength("IPP00001".len()))
+            Err(FromStrError::InvalidStringLength("IPP00001".len()))
         );
     }
 
     #[test]
-    fn use_unsupported_character() {
+    fn use_unsupported_character_letter() {
         // Test lowercase letters
         assert_eq!(
-            Tag::from_str("iPP0001"),
-            Err(FromStrError::LetterNotFound('i'))
+            Tag::from_str("bLK0001"),
+            Err(FromStrError::LetterNotFound('b'))
         );
         assert_eq!(
-            Tag::from_str("IpP0001"),
-            Err(FromStrError::LetterNotFound('p'))
+            Tag::from_str("BlK0001"),
+            Err(FromStrError::LetterNotFound('l'))
         );
         assert_eq!(
-            Tag::from_str("IPp0001"),
-            Err(FromStrError::LetterNotFound('p'))
+            Tag::from_str("BLk0001"),
+            Err(FromStrError::LetterNotFound('k'))
         );
         // Test unsupported characters
         assert_eq!(
-            Tag::from_str("@AA0000"),
+            Tag::from_str("@LK0000"),
             Err(FromStrError::LetterNotFound('@'))
         );
         assert_eq!(
-            Tag::from_str("A[A0000"),
+            Tag::from_str("B[L0000"),
             Err(FromStrError::LetterNotFound('['))
         );
         // Test digits in alphabetical portion
         assert_eq!(
-            Tag::from_str("0000000"),
+            Tag::from_str("0LK0000"),
             Err(FromStrError::LetterNotFound('0'))
         );
         assert_eq!(
-            Tag::from_str("SE00000"),
-            Err(FromStrError::LetterNotFound('0'))
+            Tag::from_str("B1K0000"),
+            Err(FromStrError::LetterNotFound('1'))
+        );
+        assert_eq!(
+            Tag::from_str("BL20000"),
+            Err(FromStrError::LetterNotFound('2'))
         );
     }
 
     #[test]
-    fn use_unsupported_digit() {
+    fn use_unsupported_character_digit() {
         // Test unsupported characters
         assert_eq!(
-            Tag::from_str("IPP/001"),
+            Tag::from_str("RNG/001"),
             Err(FromStrError::DigitNotFound('/'))
         );
         assert_eq!(
-            Tag::from_str("IPP0:01"),
+            Tag::from_str("RNG0:01"),
             Err(FromStrError::DigitNotFound(':'))
         );
         // Test letters in numeric portion
         assert_eq!(
-            Tag::from_str("IPPA001"),
+            Tag::from_str("RNGA001"),
             Err(FromStrError::DigitNotFound('A'))
         );
         assert_eq!(
-            Tag::from_str("IPP000B"),
+            Tag::from_str("RNG0B00"),
             Err(FromStrError::DigitNotFound('B'))
         );
         assert_eq!(
-            Tag::from_str("CCCCCCC"),
+            Tag::from_str("RNG00C0"),
             Err(FromStrError::DigitNotFound('C'))
+        );
+        assert_eq!(
+            Tag::from_str("RNG000D"),
+            Err(FromStrError::DigitNotFound('D'))
         );
     }
 }
