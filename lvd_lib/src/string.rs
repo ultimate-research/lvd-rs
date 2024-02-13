@@ -135,13 +135,13 @@ impl<const N: usize> LvdFixedString<N> {
 }
 
 impl<const N: usize> FromStr for LvdFixedString<N> {
-    type Err = FromStrError;
+    type Err = FromStrError<N>;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let bytes = s.as_bytes();
 
         if bytes.len() >= N {
-            return Err(FromStrError::BufferOverflow(N));
+            return Err(Self::Err::BufferOverflow);
         }
 
         let mut buffer = [0; N];
@@ -155,7 +155,7 @@ impl<const N: usize> FromStr for LvdFixedString<N> {
 }
 
 impl<const N: usize> TryFrom<&String> for LvdFixedString<N> {
-    type Error = FromStrError;
+    type Error = FromStrError<N>;
 
     fn try_from(value: &String) -> Result<Self, Self::Error> {
         Self::from_str(value)
@@ -163,7 +163,7 @@ impl<const N: usize> TryFrom<&String> for LvdFixedString<N> {
 }
 
 impl<const N: usize> TryFrom<&str> for LvdFixedString<N> {
-    type Error = FromStrError;
+    type Error = FromStrError<N>;
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         Self::from_str(value)
@@ -171,10 +171,16 @@ impl<const N: usize> TryFrom<&str> for LvdFixedString<N> {
 }
 
 impl<const N: usize> TryFrom<String> for LvdFixedString<N> {
-    type Error = FromStrError;
+    type Error = FromStrError<N>;
 
     fn try_from(value: String) -> Result<Self, Self::Error> {
         Self::from_str(&value)
+    }
+}
+
+impl<const N: usize> PartialEq for LvdFixedString<N> {
+    fn eq(&self, other: &Self) -> bool {
+        self.0[..self.len()] == other.0[..other.len()]
     }
 }
 
@@ -251,12 +257,12 @@ impl<const N: usize> Version for LvdFixedString<N> {
     }
 }
 
-/// The error type used when converting a string into a fixed-capacity byte buffer.
-#[derive(Debug, Error)]
-pub enum FromStrError {
+/// The error type used when converting a string into an `LvdFixedString`.
+#[derive(Debug, PartialEq, Error)]
+pub enum FromStrError<const N: usize> {
     /// The nul-terminated string exceeds the buffer's capacity.
-    #[error("nul-terminated string exceeds buffer capacity of {0} bytes")]
-    BufferOverflow(usize),
+    #[error("nul-terminated string exceeds buffer capacity of {} bytes", N)]
+    BufferOverflow,
 }
 
 #[cfg(test)]
@@ -305,16 +311,19 @@ mod tests {
     #[test]
     fn lvd_fixed_string_from_str() {
         // Test empty string.
-        let value = LvdFixedString::<8>::from_str("").unwrap();
-        assert_eq!(value.to_string().unwrap(), "");
+        let s = "";
+        let value = LvdFixedString::<8>::from_str(s).unwrap();
+        assert_eq!(value.to_string().unwrap(), s);
 
         // Test in-bounds string.
-        let value = LvdFixedString::<16>::from_str("COL_curve1").unwrap();
-        assert_eq!(value.to_string().unwrap(), "COL_curve1");
+        let s = "COL_curve1";
+        let value = LvdFixedString::<16>::from_str(s).unwrap();
+        assert_eq!(value.to_string().unwrap(), s);
 
         // Test out-of-bounds string.
-        let value = LvdFixedString::<24>::from_str("GeneralPoint3D__tag____0000_Kir");
-        assert!(value.is_err());
+        let s = "GeneralPoint3D__tag____0000_Kir";
+        let value = LvdFixedString::<24>::from_str(s);
+        assert_eq!(value, Err(FromStrError::<24>::BufferOverflow));
     }
 
     #[test]
