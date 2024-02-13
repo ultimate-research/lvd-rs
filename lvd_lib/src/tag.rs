@@ -27,8 +27,7 @@ use crate::Version;
 /// - Letter values must range from 0 to 26, inclusively.
 /// - Number must range from 0 to 9999, inclusively.
 ///
-/// Likewise, when converting from a string to a `Tag`'s native representation,
-/// the string should follow these restrictions:
+/// Likewise, when converting from a string to a `Tag`, the string should follow these restrictions:
 ///
 /// - Must have a length of seven characters.
 /// - Must begin with three capital letters, underscores, or any combination of the two.
@@ -95,9 +94,7 @@ impl FromStr for Tag {
         let mut letters = [0; Self::LETTER_COUNT];
         let mut digits = [0; Self::DIGIT_COUNT];
 
-        for (index, letter) in letters_str.iter().enumerate() {
-            let letter = *letter;
-
+        for (index, letter) in letters_str.iter().cloned().enumerate() {
             if letter == b'_' {
                 letters[index] = 0;
                 continue;
@@ -111,9 +108,7 @@ impl FromStr for Tag {
             return Err(Self::Err::LetterNotFound(letter as char));
         }
 
-        for (index, digit) in digits_str.iter().enumerate() {
-            let digit = *digit;
-
+        for (index, digit) in digits_str.iter().cloned().enumerate() {
             if u8::wrapping_sub(digit, Self::DIGIT_CHAR_MIN) < Self::DIGIT_MAX {
                 digits[index] = digit - Self::DIGIT_CHAR_MIN;
                 continue;
