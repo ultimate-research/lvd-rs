@@ -138,16 +138,14 @@ impl<const N: usize> FromStr for LvdFixedString<N> {
     type Err = FromStrError<N>;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let bytes = s.as_bytes();
-
-        if bytes.len() >= N {
+        if s.len() >= N {
             return Err(Self::Err::BufferOverflow);
         }
 
         let mut buffer = [0; N];
 
-        for (index, byte) in bytes.iter().enumerate() {
-            buffer[index] = *byte;
+        for (index, byte) in s.as_bytes().iter().copied().enumerate() {
+            buffer[index] = byte;
         }
 
         Ok(Self(buffer))
