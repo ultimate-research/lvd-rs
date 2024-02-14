@@ -1,4 +1,4 @@
-use std::{fmt, str::FromStr};
+use std::{array, fmt, str::FromStr};
 
 use binrw::binrw;
 use thiserror::Error;
@@ -84,38 +84,37 @@ impl FromStr for Tag {
     type Err = FromStrError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let bytes = s.as_bytes();
-
-        if bytes.len() != Self::STRING_LEN {
-            return Err(Self::Err::InvalidStringLength(bytes.len()));
+        if s.len() != Self::STRING_LEN {
+            return Err(Self::Err::InvalidStringLength(s.len()));
         }
 
-        let (letters_str, digits_str) = bytes.split_at(Self::LETTER_COUNT);
-        let mut letters = [0; Self::LETTER_COUNT];
-        let mut digits = [0; Self::DIGIT_COUNT];
+        let (letters, digits) = s.as_bytes().split_at(Self::LETTER_COUNT);
 
-        for (index, letter) in letters_str.iter().cloned().enumerate() {
+        for letter in letters.iter().copied() {
             if letter == b'_' {
-                letters[index] = 0;
                 continue;
             }
 
             if u8::wrapping_sub(letter, Self::LETTER_CHAR_MIN) < Self::LETTER_MAX {
-                letters[index] = letter - (Self::LETTER_CHAR_MIN - 1);
                 continue;
             }
 
             return Err(Self::Err::LetterNotFound(letter as char));
         }
 
-        for (index, digit) in digits_str.iter().cloned().enumerate() {
+        for digit in digits.iter().copied() {
             if u8::wrapping_sub(digit, Self::DIGIT_CHAR_MIN) < Self::DIGIT_MAX {
-                digits[index] = digit - Self::DIGIT_CHAR_MIN;
                 continue;
             }
 
             return Err(Self::Err::DigitNotFound(digit as char));
         }
+
+        let letters: [_; Self::LETTER_COUNT] = array::from_fn(|i| match letters[i] {
+            b'_' => 0,
+            c => c - (Self::LETTER_CHAR_MIN - 1),
+        });
+        let digits: [_; Self::DIGIT_COUNT] = array::from_fn(|i| digits[i] - Self::DIGIT_CHAR_MIN);
 
         let word = (letters[0] as u32) << Self::LETTER_SHIFT[0]
             | (letters[1] as u32) << Self::LETTER_SHIFT[1]
@@ -155,14 +154,10 @@ impl TryFrom<String> for Tag {
 
 impl fmt::Display for Tag {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        use std::array;
-
         let letters: [_; Self::LETTER_COUNT] =
             array::from_fn(|i| match self.0 & Self::LETTER_MASK[i] {
-                c if c != 0 => {
-                    ((c >> Self::LETTER_SHIFT[i]) as u8 + Self::LETTER_CHAR_MIN - 1) as char
-                }
-                _ => '_',
+                0 => '_',
+                c => ((c >> Self::LETTER_SHIFT[i]) as u8 + Self::LETTER_CHAR_MIN - 1) as char,
             });
         let number = self.0 & Self::NUMBER_MASK;
 
