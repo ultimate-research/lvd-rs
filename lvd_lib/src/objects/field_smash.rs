@@ -7,10 +7,10 @@ use serde::{Deserialize, Serialize};
 use crate::{
     id::Id,
     objects::{base::Base, region::Region},
-    shape::{LvdPath, LvdShape2, LvdShape3},
+    shape::{LvdPath, LvdShape2, LvdShape3, Rect},
     string::LvdFixedString32,
     tag::Tag,
-    util::{Rect, Vector2},
+    util::Vector2,
     version::{Version, Versioned},
 };
 

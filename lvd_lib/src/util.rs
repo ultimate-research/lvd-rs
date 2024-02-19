@@ -1,6 +1,6 @@
 //! Basic vector types.
 //!
-//! This module contains the [`Vector2`] and [`Vector3`] types as well as the [`Rect`] type.
+//! This module contains the [`Vector2`] and [`Vector3`] types.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
@@ -54,37 +54,6 @@ pub enum Vector3 {
 }
 
 impl Version for Vector3 {
-    fn version(&self) -> u8 {
-        match self {
-            Self::V1 { .. } => 1,
-        }
-    }
-}
-
-/// A two-dimensional rectangle type.
-#[binrw]
-#[br(import(version: u8))]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub enum Rect {
-    /// `Rect` version 1.
-    #[br(pre_assert(version == 1))]
-    V1 {
-        /// Coordinate of the left edge.
-        left: f32,
-
-        /// Coordinate of the right edge.
-        right: f32,
-
-        /// Coordinate of the top edge.
-        top: f32,
-
-        /// Coordinate of the bottom edge.
-        bottom: f32,
-    },
-}
-
-impl Version for Rect {
     fn version(&self) -> u8 {
         match self {
             Self::V1 { .. } => 1,

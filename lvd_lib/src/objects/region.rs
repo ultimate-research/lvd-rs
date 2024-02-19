@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     objects::base::{Base, MetaInfo},
-    util::Rect,
+    shape::Rect,
     version::{Version, Versioned},
 };
 

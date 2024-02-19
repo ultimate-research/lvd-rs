@@ -1,7 +1,7 @@
 //! Basic shape types.
 //!
 //! This module contains the [`LvdShape2`], [`LvdShape2Array`] and [`LvdShape2Element`] types,
-//! the [`LvdShape3`] type, and the [`LvdPath`] type.
+//! the [`LvdShape3`] type, the [`LvdPath`] type, and the [`Rect`] type.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
@@ -231,6 +231,37 @@ pub enum LvdPath {
 }
 
 impl Version for LvdPath {
+    fn version(&self) -> u8 {
+        match self {
+            Self::V1 { .. } => 1,
+        }
+    }
+}
+
+/// A two-dimensional rectangle type.
+#[binrw]
+#[br(import(version: u8))]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum Rect {
+    /// `Rect` version 1.
+    #[br(pre_assert(version == 1))]
+    V1 {
+        /// Coordinate of the left edge.
+        left: f32,
+
+        /// Coordinate of the right edge.
+        right: f32,
+
+        /// Coordinate of the top edge.
+        top: f32,
+
+        /// Coordinate of the bottom edge.
+        bottom: f32,
+    },
+}
+
+impl Version for Rect {
     fn version(&self) -> u8 {
         match self {
             Self::V1 { .. } => 1,
