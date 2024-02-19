@@ -13,6 +13,7 @@ use binrw::{binrw, BinReaderExt, BinResult, BinWrite};
 use serde::{Deserialize, Serialize};
 
 mod array;
+mod id;
 pub mod objects;
 mod shape;
 mod string;
@@ -21,6 +22,7 @@ mod util;
 mod version;
 
 pub use array::LvdArray;
+pub use id::Id;
 pub use shape::{LvdPath, LvdShape2, LvdShape2Array, LvdShape2Element, LvdShape3};
 pub use string::{LvdFixedString, LvdFixedString32, LvdFixedString56, LvdFixedString64};
 pub use tag::Tag;
@@ -400,18 +402,5 @@ impl Version for Lvd {
             Self::V12 { .. } => 12,
             Self::V13 { .. } => 13,
         }
-    }
-}
-
-/// A numeric ID type.
-#[binrw]
-#[br(import(_version: u8))]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Debug)]
-pub struct Id(pub u32);
-
-impl Version for Id {
-    fn version(&self) -> u8 {
-        1
     }
 }
