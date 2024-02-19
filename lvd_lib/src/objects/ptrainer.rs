@@ -8,7 +8,7 @@ use crate::{
     array::LvdArray,
     objects::base::Base,
     string::LvdFixedString64,
-    util::Vector3,
+    vector::Vector3,
     version::{Version, Versioned},
 };
 

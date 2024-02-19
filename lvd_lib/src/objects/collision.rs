@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 use crate::{
     array::LvdArray,
     objects::base::{Base, MetaInfo},
-    util::Vector2,
+    vector::Vector2,
     version::{Version, Versioned},
 };
 

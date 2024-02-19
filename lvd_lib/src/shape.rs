@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     array::LvdArray,
-    util::Vector2,
+    vector::Vector2,
     version::{Version, Versioned},
 };
 

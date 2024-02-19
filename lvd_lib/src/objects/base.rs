@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 use crate::{
     id::Id,
     string::{LvdFixedString56, LvdFixedString64},
-    util::Vector3,
+    vector::Vector3,
     version::{Version, Versioned},
 };
 

@@ -18,7 +18,7 @@ pub mod objects;
 pub mod shape;
 pub mod string;
 pub mod tag;
-pub mod util;
+pub mod vector;
 pub mod version;
 
 use array::LvdArray;

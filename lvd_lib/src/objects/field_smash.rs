@@ -10,7 +10,7 @@ use crate::{
     shape::{LvdPath, LvdShape2, LvdShape3, Rect},
     string::LvdFixedString32,
     tag::Tag,
-    util::Vector2,
+    vector::Vector2,
     version::{Version, Versioned},
 };
 
