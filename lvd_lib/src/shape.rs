@@ -1,9 +1,17 @@
+//! Basic shape types.
+//!
+//! This module contains the [`LvdShape2`], [`LvdShape2Array`] and [`LvdShape2Element`] types,
+//! the [`LvdShape3`] type, and the [`LvdPath`] type.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use crate::{LvdArray, Vector2, Version, Versioned};
+use crate::{
+    array::LvdArray,
+    util::Vector2,
+    version::{Version, Versioned},
+};
 
 /// A two-dimensional shape type.
 #[binrw]

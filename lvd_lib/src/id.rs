@@ -1,9 +1,12 @@
+//! A numeric identifier for matching and filtering LVD objects.
+//!
+//! This module contains the [`Id`] type.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use crate::Version;
+use crate::version::Version;
 
 /// A numeric identifier for matching and filtering LVD objects.
 #[binrw]

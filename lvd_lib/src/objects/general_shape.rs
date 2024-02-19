@@ -1,10 +1,15 @@
-//! The `GeneralShape2` and `GeneralShape3` objects store data representing general-purpose shapes.
+//! The [`GeneralShape2`] and [`GeneralShape3`] objects store data representing general-purpose shapes.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use crate::{objects::base::Base, LvdShape2, LvdShape3, Tag, Version, Versioned};
+use crate::{
+    objects::base::Base,
+    shape::{LvdShape2, LvdShape3},
+    tag::Tag,
+    version::{Version, Versioned},
+};
 
 /// An LVD object representing a general-purpose two-dimensional shape.
 #[binrw]

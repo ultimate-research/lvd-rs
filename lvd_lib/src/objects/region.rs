@@ -1,4 +1,4 @@
-//! The `Region` object stores data representing a two-dimensional rectangle.
+//! The [`Region`] object stores data representing a two-dimensional rectangle.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
@@ -6,7 +6,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     objects::base::{Base, MetaInfo},
-    Rect, Version, Versioned,
+    util::Rect,
+    version::{Version, Versioned},
 };
 
 /// An LVD object representing a two-dimensional rectangle.

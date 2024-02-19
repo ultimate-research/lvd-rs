@@ -1,3 +1,4 @@
+//! Types and traits for working with versioned types.
 use binrw::{binrw, BinRead, BinWrite};
 
 #[cfg(feature = "serde")]

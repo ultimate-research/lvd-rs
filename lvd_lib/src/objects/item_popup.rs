@@ -1,10 +1,15 @@
-//! The `ItemPopup` object stores data representing a collection of shapes where items will appear from.
+//! The [`ItemPopup`] object stores data representing a collection of shapes where items will appear from.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use crate::{objects::base::Base, LvdShape2Array, Tag, Version, Versioned};
+use crate::{
+    objects::base::Base,
+    shape::LvdShape2Array,
+    tag::Tag,
+    version::{Version, Versioned},
+};
 
 /// An LVD object representing a collection of shapes where items will appear from.
 #[binrw]

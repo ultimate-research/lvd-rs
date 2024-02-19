@@ -1,9 +1,12 @@
+//! Basic vector types.
+//!
+//! This module contains the [`Vector2`] and [`Vector3`] types as well as the [`Rect`] type.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use crate::Version;
+use crate::version::Version;
 
 /// A two-dimensional vector type.
 #[binrw]

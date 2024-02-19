@@ -1,3 +1,6 @@
+//! A nul-terminated string with a fixed capacity.
+//!
+//! This module contains the [`LvdFixedString`] type, several type aliases for common capacities, and an error type that may result when converting from strings.
 use std::str::{self, FromStr};
 
 use binrw::{binrw, BinRead, BinResult};
@@ -6,7 +9,7 @@ use thiserror::Error;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
-use crate::Version;
+use crate::version::Version;
 
 /// A nul-terminated string with a fixed capacity of 32 bytes.
 pub type LvdFixedString32 = LvdFixedString<32>;
@@ -29,7 +32,7 @@ impl<const N: usize> LvdFixedString<N> {
     /// # Examples
     ///
     /// ```
-    /// use lvd_lib::LvdFixedString;
+    /// use lvd_lib::string::LvdFixedString;
     ///
     /// let s = LvdFixedString::<64>::new();
     /// ```
@@ -47,7 +50,7 @@ impl<const N: usize> LvdFixedString<N> {
     /// Basic usage:
     ///
     /// ```
-    /// use lvd_lib::LvdFixedString;
+    /// use lvd_lib::string::LvdFixedString;
     ///
     /// let s = LvdFixedString::<64>::try_from("COL_00_Floor01").unwrap();
     /// assert_eq!(s.len(), 14);
@@ -73,7 +76,7 @@ impl<const N: usize> LvdFixedString<N> {
     /// Basic usage:
     ///
     /// ```
-    /// use lvd_lib::LvdFixedString;
+    /// use lvd_lib::string::LvdFixedString;
     ///
     /// let s = LvdFixedString::<64>::try_from("COL_00_Platform01_through").unwrap();
     /// assert_eq!(s.capacity(), 64);
@@ -89,7 +92,7 @@ impl<const N: usize> LvdFixedString<N> {
     /// Basic usage:
     ///
     /// ```
-    /// use lvd_lib::LvdFixedString;
+    /// use lvd_lib::string::LvdFixedString;
     ///
     /// let s = LvdFixedString::<64>::new();
     /// assert!(s.is_empty());
@@ -108,7 +111,7 @@ impl<const N: usize> LvdFixedString<N> {
     /// Basic usage:
     ///
     /// ```
-    /// use lvd_lib::LvdFixedString;
+    /// use lvd_lib::string::LvdFixedString;
     ///
     /// let s = LvdFixedString::<64>::try_from("curve2").unwrap();
     /// assert_eq!(s.to_str().unwrap(), "curve2");
@@ -124,7 +127,7 @@ impl<const N: usize> LvdFixedString<N> {
     /// Basic usage:
     ///
     /// ```
-    /// use lvd_lib::LvdFixedString;
+    /// use lvd_lib::string::LvdFixedString;
     ///
     /// let s = LvdFixedString::<64>::try_from("curve3").unwrap();
     /// assert_eq!(s.to_string().unwrap(), "curve3".to_string());
@@ -255,7 +258,7 @@ impl<const N: usize> Version for LvdFixedString<N> {
     }
 }
 
-/// The error type used when converting a string into an `LvdFixedString`.
+/// The error type used when converting a string into an [`LvdFixedString`].
 #[derive(Debug, PartialEq, Error)]
 pub enum FromStrError<const N: usize> {
     /// The nul-terminated string exceeds the buffer's capacity.

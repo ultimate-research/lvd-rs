@@ -1,10 +1,16 @@
-//! The `EnemyGenerator` object stores data representing a collection of shapes to generate enemies from.
+//! The [`EnemyGenerator`] object stores data representing a collection of shapes to generate enemies from.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use crate::{objects::base::Base, LvdArray, LvdShape2Array, Tag, Version, Versioned};
+use crate::{
+    array::LvdArray,
+    objects::base::Base,
+    shape::LvdShape2Array,
+    tag::Tag,
+    version::{Version, Versioned},
+};
 
 /// An LVD object representing a collection of shapes to generate enemies from.
 #[binrw]

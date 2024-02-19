@@ -1,10 +1,15 @@
-//! The `Base`, `MetaInfo`, and `VersionInfo` types store common data for an LVD object.
+//! The [`Base`] and [`MetaInfo`] types store common data for an LVD object.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use crate::{Id, LvdFixedString56, LvdFixedString64, Vector3, Version, Versioned};
+use crate::{
+    id::Id,
+    string::{LvdFixedString56, LvdFixedString64},
+    util::Vector3,
+    version::{Version, Versioned},
+};
 
 /// Common data for an LVD object.
 #[binrw]

@@ -1,10 +1,14 @@
-//! The `CollisionCliff` object stores data representing a grabbable edge.
+//! The [`CollisionCliff`] object stores data representing a grabbable edge.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use crate::{objects::base::Base, Vector2, Version, Versioned};
+use crate::{
+    objects::base::Base,
+    util::Vector2,
+    version::{Version, Versioned},
+};
 
 /// An LVD subobject to [`Collision`](crate::objects::collision::Collision) representing a grabbable edge.
 #[binrw]

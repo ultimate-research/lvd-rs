@@ -1,10 +1,14 @@
-//! The `CollisionSpiritsFloor` object stores data representing hazardous floors in spirit battles.
+//! The [`CollisionSpiritsFloor`] object stores data representing hazardous floors in spirit battles.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use crate::{objects::base::Base, LvdFixedString64, Version, Versioned};
+use crate::{
+    objects::base::Base,
+    string::LvdFixedString64,
+    version::{Version, Versioned},
+};
 
 /// An LVD subobject to [`Collision`](crate::objects::collision::Collision) representing hazardous floors in spirit battles.
 #[binrw]

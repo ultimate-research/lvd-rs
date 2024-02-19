@@ -12,22 +12,18 @@ use binrw::{binrw, BinReaderExt, BinResult, BinWrite};
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-mod array;
-mod id;
+pub mod array;
+pub mod id;
 pub mod objects;
-mod shape;
-mod string;
-mod tag;
-mod util;
-mod version;
+pub mod shape;
+pub mod string;
+pub mod tag;
+pub mod util;
+pub mod version;
 
-pub use array::LvdArray;
-pub use id::Id;
-pub use shape::{LvdPath, LvdShape2, LvdShape2Array, LvdShape2Element, LvdShape3};
-pub use string::{LvdFixedString, LvdFixedString32, LvdFixedString56, LvdFixedString64};
-pub use tag::Tag;
-pub use util::{Rect, Vector2, Vector3};
-pub use version::{Version, Versioned};
+use array::LvdArray;
+use objects::*;
+use version::{Version, Versioned};
 
 /// Common imports for working with LVD files.
 pub mod prelude {

@@ -1,4 +1,4 @@
-//! The `Collision` object stores data representing a two-dimensional polygonal collision.
+//! The [`Collision`] object stores data representing a two-dimensional polygonal collision.
 //! Extra data is stored to define properties of each edge in the collision.
 use binrw::binrw;
 
@@ -6,8 +6,10 @@ use binrw::binrw;
 use serde::{Deserialize, Serialize};
 
 use crate::{
+    array::LvdArray,
     objects::base::{Base, MetaInfo},
-    LvdArray, Vector2, Version, Versioned,
+    util::Vector2,
+    version::{Version, Versioned},
 };
 
 pub mod attribute;
@@ -15,10 +17,10 @@ pub mod cliff;
 pub mod flags;
 pub mod spirits_floor;
 
-use attribute::CollisionAttribute;
-use cliff::CollisionCliff;
-use flags::CollisionFlags;
-use spirits_floor::CollisionSpiritsFloor;
+pub use attribute::CollisionAttribute;
+pub use cliff::CollisionCliff;
+pub use flags::CollisionFlags;
+pub use spirits_floor::CollisionSpiritsFloor;
 
 /// An LVD object representing a two-dimensional polygonal collision.
 #[binrw]

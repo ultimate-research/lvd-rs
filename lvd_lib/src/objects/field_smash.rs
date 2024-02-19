@@ -1,12 +1,17 @@
-//! Objects exclusive to Smash Run in Super Smash Bros. for Nintendo 3DS.
+//! The objects exclusive to Smash Run in Super Smash Bros. for Nintendo 3DS.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 use crate::{
+    id::Id,
     objects::{base::Base, region::Region},
-    Id, LvdFixedString32, LvdPath, LvdShape2, LvdShape3, Rect, Tag, Vector2, Version, Versioned,
+    shape::{LvdPath, LvdShape2, LvdShape3},
+    string::LvdFixedString32,
+    tag::Tag,
+    util::{Rect, Vector2},
+    version::{Version, Versioned},
 };
 
 /// An LVD object representing a two-dimensional shape where a stat boost or item can appear when in view.

@@ -1,10 +1,16 @@
-//! The `PTrainerRange` and `PTrainerFloatingFloor` objects store data representing locations or objects where one or more Pokémon Trainers can reside.
+//! The [`PTrainerRange`] and [`PTrainerFloatingFloor`] objects store data representing locations or objects where one or more Pokémon Trainers can reside.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use crate::{objects::base::Base, LvdArray, LvdFixedString64, Vector3, Version, Versioned};
+use crate::{
+    array::LvdArray,
+    objects::base::Base,
+    string::LvdFixedString64,
+    util::Vector3,
+    version::{Version, Versioned},
+};
 
 /// An LVD object representing the range in which one or more Pokémon Trainers can move around within.
 #[binrw]

@@ -1,9 +1,12 @@
+//! A fixed-size collection of contiguous versioned elements.
+//!
+//! This module contains the [`LvdArray`] type.
 use binrw::{binrw, BinRead, BinWrite};
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use crate::{Version, Versioned};
+use crate::version::{Version, Versioned};
 
 /// A fixed-size collection of contiguous versioned elements.
 #[binrw]

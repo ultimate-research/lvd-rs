@@ -1,11 +1,11 @@
-//! The `CollisionAttribute` object stores data representing an edge's properties and attributes.
+//! The [`CollisionAttribute`] object stores data representing an edge's properties and attributes.
 use binrw::binrw;
 use modular_bitfield::prelude::*;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use crate::Version;
+use crate::version::Version;
 
 /// An LVD subobject to [`Collision`](crate::objects::collision::Collision) representing an edge's properties and attributes.
 #[binrw]

@@ -1,10 +1,14 @@
-//! The `DamageShape` object stores data representing a three-dimensional damage or attack collision shape.
+//! The [`DamageShape`] object stores data representing a three-dimensional damage or attack collision shape.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-use crate::{objects::base::Base, LvdShape3, Version, Versioned};
+use crate::{
+    objects::base::Base,
+    shape::LvdShape3,
+    version::{Version, Versioned},
+};
 
 /// An LVD object representing a three-dimensional damage or attack collision shape.
 #[binrw]

@@ -1,4 +1,4 @@
-//! The `Point` object stores data representing a two-dimensional point.
+//! The [`Point`] object stores data representing a two-dimensional point.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
@@ -6,7 +6,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     objects::base::{Base, MetaInfo},
-    Vector2, Version, Versioned,
+    util::Vector2,
+    version::{Version, Versioned},
 };
 
 /// An LVD object representing a two-dimensional point.

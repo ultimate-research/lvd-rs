@@ -1,3 +1,6 @@
+//! An identifier for matching and filtering LVD objects.
+//!
+//! This module contains the [`Tag`] type and an error type that may result when converting from strings.
 use std::{array, fmt, str::FromStr};
 
 use binrw::binrw;
@@ -6,7 +9,7 @@ use thiserror::Error;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
-use crate::Version;
+use crate::version::Version;
 
 /// An identifier for matching and filtering LVD objects.
 ///
@@ -193,7 +196,7 @@ impl Version for Tag {
     }
 }
 
-/// The error type used when converting a string into a `Tag`.
+/// The error type used when converting a string into a [`Tag`].
 #[derive(Debug, PartialEq, Error)]
 pub enum FromStrError {
     /// The string's length did not equal the expected length.
