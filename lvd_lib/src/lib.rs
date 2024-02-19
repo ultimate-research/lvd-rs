@@ -7,7 +7,7 @@ use std::{
     path::Path,
 };
 
-use binrw::{binrw, BinRead, BinReaderExt, BinResult, BinWrite};
+use binrw::{binrw, BinReaderExt, BinResult, BinWrite};
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
@@ -18,12 +18,14 @@ mod shape;
 mod string;
 mod tag;
 mod util;
+mod version;
 
 pub use array::LvdArray;
 pub use shape::{LvdPath, LvdShape2, LvdShape2Array, LvdShape2Element, LvdShape3};
 pub use string::{LvdFixedString, LvdFixedString32, LvdFixedString56, LvdFixedString64};
 pub use tag::Tag;
 pub use util::{Rect, Vector2, Vector3};
+pub use version::{Version, Versioned};
 
 /// Common imports for working with LVD files.
 pub mod prelude {
@@ -399,32 +401,6 @@ impl Version for Lvd {
             Self::V13 { .. } => 13,
         }
     }
-}
-
-/// A versioned non-primitive type.
-#[binrw]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "serde", serde(transparent))]
-#[derive(Debug)]
-pub struct Versioned<T>
-where
-    T: BinRead + BinWrite + Version,
-    T: for<'a> BinRead<Args<'a> = (u8,)>,
-    T: for<'a> BinWrite<Args<'a> = ()>,
-{
-    #[br(temp)]
-    #[bw(calc = data.version())]
-    version: u8,
-
-    /// Associated data for the type's version.
-    #[br(args(version))]
-    pub data: T,
-}
-
-/// A trait for determining a type's version.
-pub trait Version {
-    /// Returns a type's version.
-    fn version(&self) -> u8;
 }
 
 /// A numeric ID type.
