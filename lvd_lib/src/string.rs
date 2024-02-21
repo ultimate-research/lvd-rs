@@ -275,7 +275,7 @@ mod tests {
     use binrw::{io::Cursor, BinReaderExt, BinWriterExt};
 
     #[test]
-    fn read_lvd_fixed_string() {
+    fn read_fixed_string() {
         // Test initialized string buffer.
         let mut reader = Cursor::new(b"COL_00_Floor01\0\0");
         let value = reader.read_be_args::<FixedString<16>>((1,)).unwrap();
@@ -290,7 +290,7 @@ mod tests {
     }
 
     #[test]
-    fn read_lvd_fixed_string_empty() {
+    fn read_fixed_string_empty() {
         // Test initialized string buffer.
         let mut reader = Cursor::new(b"\0\0\0\0\0\0\0\0");
         let value = reader.read_be_args::<FixedString<8>>((1,)).unwrap();
@@ -305,7 +305,7 @@ mod tests {
     }
 
     #[test]
-    fn read_lvd_fixed_string_missing_nul() {
+    fn read_fixed_string_missing_nul() {
         let mut reader = Cursor::new(b"DEATH_00");
         let result = reader.read_be_args::<FixedString<8>>((1,));
 
@@ -313,7 +313,7 @@ mod tests {
     }
 
     #[test]
-    fn lvd_fixed_string_from_str() {
+    fn fixed_string_from_str() {
         // Test empty string.
         let s = "";
         let value = FixedString::<8>::from_str(s).unwrap();
@@ -331,7 +331,7 @@ mod tests {
     }
 
     #[test]
-    fn write_lvd_fixed_string() {
+    fn write_fixed_string() {
         let value = FixedString::<8>::from_str("curve1").unwrap();
         let mut writer = Cursor::new(Vec::new());
 
@@ -341,7 +341,7 @@ mod tests {
     }
 
     #[test]
-    fn write_lvd_fixed_string_empty() {
+    fn write_fixed_string_empty() {
         let value = FixedString::<8>::new();
         let mut writer = Cursor::new(Vec::new());
 
