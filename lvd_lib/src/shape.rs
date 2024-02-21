@@ -87,23 +87,8 @@ impl Version for Shape2 {
     }
 }
 
-// TODO: Why is this type necessary for arrays?
-/// An element type for a [`ShapeArray2`].
-#[binrw]
-#[br(import(_version: u8))]
-#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[cfg_attr(feature = "serde", serde(transparent))]
-#[derive(Debug)]
-pub struct ShapeArrayElement2(Versioned<Shape2>);
-
-impl Version for ShapeArrayElement2 {
-    fn version(&self) -> u8 {
-        1
-    }
-}
-
-// TODO: Why is this type necessary for collections of two-dimensional shapes?
-/// A collection of two-dimensional shapes.
+// TODO: Why is this type used for an array of two-dimensional shapes?
+/// A fixed-size collection of two-dimensional shapes.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -122,6 +107,21 @@ impl Version for ShapeArray2 {
         match self {
             Self::V1 { .. } => 1,
         }
+    }
+}
+
+// TODO: Why is this type used as the element type for an array of two-dimensional shapes?
+/// The element type for a [`ShapeArray2`].
+#[binrw]
+#[br(import(_version: u8))]
+#[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
+#[derive(Debug)]
+pub struct ShapeArrayElement2(Versioned<Shape2>);
+
+impl Version for ShapeArrayElement2 {
+    fn version(&self) -> u8 {
+        1
     }
 }
 
