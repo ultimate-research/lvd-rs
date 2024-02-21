@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 use crate::{
     array::LvdArray,
     objects::base::Base,
-    string::LvdFixedString64,
+    string::FixedString64,
     vector::Vector3,
     version::{Version, Versioned},
 };
@@ -53,10 +53,10 @@ pub enum PTrainerRange {
         trainers: Versioned<LvdArray<Vector3>>,
 
         /// Name of a model for the range to inherit select transformations from.
-        parent_model_name: Versioned<LvdFixedString64>,
+        parent_model_name: Versioned<FixedString64>,
 
         /// Name of a joint from the parent model for the range to inherit select transformations from.
-        parent_joint_name: Versioned<LvdFixedString64>,
+        parent_joint_name: Versioned<FixedString64>,
     },
 }
 

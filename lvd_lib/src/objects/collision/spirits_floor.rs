@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     objects::base::Base,
-    string::LvdFixedString64,
+    string::FixedString64,
     version::{Version, Versioned},
 };
 
@@ -27,7 +27,7 @@ pub enum CollisionSpiritsFloor {
         line_index: u32,
 
         /// Name of the line group that the object is associated with.
-        line_group: Versioned<LvdFixedString64>,
+        line_group: Versioned<FixedString64>,
     },
 
     /// `CollisionSpiritsFloor` version 2.
@@ -41,7 +41,7 @@ pub enum CollisionSpiritsFloor {
         line_index: u32,
 
         /// Name of the line group that the object is associated with.
-        line_group: Versioned<LvdFixedString64>,
+        line_group: Versioned<FixedString64>,
 
         // TODO: Field documentation. Usually 1.0. Unused?
         unk1: f32,

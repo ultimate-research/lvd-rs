@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     id::Id,
-    string::{LvdFixedString56, LvdFixedString64},
+    string::{FixedString56, FixedString64},
     vector::Vector3,
     version::{Version, Versioned},
 };
@@ -25,7 +25,7 @@ pub enum Base {
         meta_info: Versioned<MetaInfo>,
 
         /// Name of the object as seen by the game when flagged as dynamic.
-        dynamic_name: Versioned<LvdFixedString64>,
+        dynamic_name: Versioned<FixedString64>,
     },
 
     /// `Base` version 2.
@@ -36,7 +36,7 @@ pub enum Base {
         meta_info: Versioned<MetaInfo>,
 
         /// Name of the object as seen by the game when flagged as dynamic.
-        dynamic_name: Versioned<LvdFixedString64>,
+        dynamic_name: Versioned<FixedString64>,
 
         /// Positional offset of the object when flagged as dynamic.
         dynamic_offset: Versioned<Vector3>,
@@ -51,7 +51,7 @@ pub enum Base {
         meta_info: Versioned<MetaInfo>,
 
         /// Name of the object as seen by the game when flagged as dynamic.
-        dynamic_name: Versioned<LvdFixedString64>,
+        dynamic_name: Versioned<FixedString64>,
 
         /// Positional offset of the object when flagged as dynamic.
         dynamic_offset: Versioned<Vector3>,
@@ -77,7 +77,7 @@ pub enum Base {
         meta_info: Versioned<MetaInfo>,
 
         /// Name of the object as seen by the game when flagged as dynamic.
-        dynamic_name: Versioned<LvdFixedString64>,
+        dynamic_name: Versioned<FixedString64>,
 
         /// Positional offset of the object when flagged as dynamic.
         dynamic_offset: Versioned<Vector3>,
@@ -98,7 +98,7 @@ pub enum Base {
         joint_index: i32,
 
         /// Name of the target joint from the parent model to parent the dynamic object to.
-        joint_name: Versioned<LvdFixedString64>,
+        joint_name: Versioned<FixedString64>,
     },
 }
 
@@ -126,7 +126,7 @@ pub enum MetaInfo {
         version_info: Versioned<VersionInfo>,
 
         /// Name of the object.
-        name: Versioned<LvdFixedString56>,
+        name: Versioned<FixedString56>,
     },
 }
 

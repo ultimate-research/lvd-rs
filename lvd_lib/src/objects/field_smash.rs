@@ -8,7 +8,7 @@ use crate::{
     id::Id,
     objects::{base::Base, region::Region},
     shape::{LvdPath, Rect, Shape2, Shape3},
-    string::LvdFixedString32,
+    string::FixedString32,
     tag::Tag,
     vector::Vector2,
     version::{Version, Versioned},
@@ -221,10 +221,10 @@ pub enum AreaLight {
         shape: Versioned<Shape2>,
 
         // TODO: Field documentation.
-        unk1: Versioned<LvdFixedString32>,
+        unk1: Versioned<FixedString32>,
 
         // TODO: Field documentation.
-        unk2: Versioned<LvdFixedString32>,
+        unk2: Versioned<FixedString32>,
     },
 }
 
