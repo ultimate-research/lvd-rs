@@ -24,7 +24,10 @@ pub type LvdFixedString64 = LvdFixedString<64>;
 #[binrw]
 #[br(import(version: u8), pre_assert(version == 1))]
 #[derive(Debug)]
-pub struct LvdFixedString<const N: usize>(#[br(parse_with = read_bytes)] [u8; N]);
+pub struct LvdFixedString<const N: usize> {
+    #[br(parse_with = read_bytes)]
+    inner: [u8; N],
+}
 
 impl<const N: usize> LvdFixedString<N> {
     /// Creates a new empty `LvdFixedString`.
@@ -37,7 +40,7 @@ impl<const N: usize> LvdFixedString<N> {
     /// let s = LvdFixedString::<64>::new();
     /// ```
     pub const fn new() -> Self {
-        Self([0; N])
+        Self { inner: [0; N] }
     }
 
     /// Returns the length of the contained string.
@@ -59,7 +62,7 @@ impl<const N: usize> LvdFixedString<N> {
         let mut len = 0;
 
         while len != self.capacity() {
-            if self.0[len] == 0 {
+            if self.inner[len] == 0 {
                 break;
             }
 
@@ -82,7 +85,7 @@ impl<const N: usize> LvdFixedString<N> {
     /// assert_eq!(s.capacity(), 64);
     /// ```
     pub const fn capacity(&self) -> usize {
-        self.0.len()
+        self.inner.len()
     }
 
     /// Returns `true` if the contained string has a length of zero, and `false` otherwise.
@@ -101,7 +104,7 @@ impl<const N: usize> LvdFixedString<N> {
     /// assert!(!s.is_empty());
     /// ```
     pub const fn is_empty(&self) -> bool {
-        self.0[0] == 0
+        self.inner[0] == 0
     }
 
     /// Converts the underlying buffer to a string slice if it contains valid UTF-8.
@@ -117,7 +120,7 @@ impl<const N: usize> LvdFixedString<N> {
     /// assert_eq!(s.to_str().unwrap(), "curve2");
     /// ```
     pub fn to_str(&self) -> Result<&str, str::Utf8Error> {
-        str::from_utf8(&self.0[..self.len()])
+        str::from_utf8(&self.inner[..self.len()])
     }
 
     /// Converts the underlying buffer to a [`String`] if it contains valid UTF-8.
@@ -151,7 +154,7 @@ impl<const N: usize> FromStr for LvdFixedString<N> {
             buffer[index] = byte;
         }
 
-        Ok(Self(buffer))
+        Ok(Self { inner: buffer })
     }
 }
 
@@ -181,25 +184,25 @@ impl<const N: usize> TryFrom<String> for LvdFixedString<N> {
 
 impl<const N: usize> PartialEq for LvdFixedString<N> {
     fn eq(&self, other: &Self) -> bool {
-        self.0[..self.len()] == other.0[..other.len()]
+        self.inner[..self.len()] == other.inner[..other.len()]
     }
 }
 
 impl<const N: usize> PartialEq<&String> for LvdFixedString<N> {
     fn eq(&self, other: &&String) -> bool {
-        &self.0[..self.len()] == other.as_bytes()
+        &self.inner[..self.len()] == other.as_bytes()
     }
 }
 
 impl<const N: usize> PartialEq<&str> for LvdFixedString<N> {
     fn eq(&self, other: &&str) -> bool {
-        &self.0[..self.len()] == other.as_bytes()
+        &self.inner[..self.len()] == other.as_bytes()
     }
 }
 
 impl<const N: usize> PartialEq<String> for LvdFixedString<N> {
     fn eq(&self, other: &String) -> bool {
-        &self.0[..self.len()] == other.as_bytes()
+        &self.inner[..self.len()] == other.as_bytes()
     }
 }
 
