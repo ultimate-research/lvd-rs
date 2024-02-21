@@ -117,7 +117,7 @@ impl Version for ShapeArray2 {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(Debug)]
-pub struct ShapeArrayElement2(Versioned<Shape2>);
+pub struct ShapeArrayElement2(pub Versioned<Shape2>);
 
 impl Version for ShapeArrayElement2 {
     fn version(&self) -> u8 {
