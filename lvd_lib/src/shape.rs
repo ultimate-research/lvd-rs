@@ -1,7 +1,7 @@
 //! Basic shape types.
 //!
-//! This module contains the [`LvdShape2`], [`LvdShape2Array`] and [`LvdShape2Element`] types,
-//! the [`LvdShape3`] type, the [`LvdPath`] type, and the [`Rect`] type.
+//! This module contains the [`Shape2`], [`ShapeArray2`] and [`ShapeArrayElement2`] types,
+//! the [`Shape3`] type, the [`LvdPath`] type, and the [`Rect`] type.
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
@@ -18,7 +18,7 @@ use crate::{
 #[br(import(_version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
-pub enum LvdShape2 {
+pub enum Shape2 {
     /// Point shape type.
     #[brw(magic = 1u32)]
     Point {
@@ -81,42 +81,43 @@ pub enum LvdShape2 {
     },
 }
 
-impl Version for LvdShape2 {
+impl Version for Shape2 {
     fn version(&self) -> u8 {
         3
     }
 }
 
 // TODO: Why is this type necessary for arrays?
-/// An element type for a [`LvdShape2Array`].
+/// An element type for a [`ShapeArray2`].
 #[binrw]
 #[br(import(_version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(Debug)]
-pub struct LvdShape2Element(Versioned<LvdShape2>);
+pub struct ShapeArrayElement2(Versioned<Shape2>);
 
-impl Version for LvdShape2Element {
+impl Version for ShapeArrayElement2 {
     fn version(&self) -> u8 {
         1
     }
 }
 
+// TODO: Why is this type necessary for collections of two-dimensional shapes?
 /// A collection of two-dimensional shapes.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
-pub enum LvdShape2Array {
-    /// `LvdShape2Array` version 1.
+pub enum ShapeArray2 {
+    /// `ShapeArray2` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
         /// Collection of two-dimensional shapes.
-        shapes: Versioned<LvdArray<LvdShape2Element>>,
+        shapes: Versioned<LvdArray<ShapeArrayElement2>>,
     },
 }
 
-impl Version for LvdShape2Array {
+impl Version for ShapeArray2 {
     fn version(&self) -> u8 {
         match self {
             Self::V1 { .. } => 1,
@@ -129,7 +130,7 @@ impl Version for LvdShape2Array {
 #[br(import(_version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
-pub enum LvdShape3 {
+pub enum Shape3 {
     /// Box shape type.
     #[brw(magic = 1u32)]
     Box {
@@ -210,7 +211,7 @@ pub enum LvdShape3 {
     },
 }
 
-impl Version for LvdShape3 {
+impl Version for Shape3 {
     fn version(&self) -> u8 {
         1
     }

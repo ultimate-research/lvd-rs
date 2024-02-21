@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 use crate::{
     id::Id,
     objects::{base::Base, region::Region},
-    shape::{LvdPath, LvdShape2, LvdShape3, Rect},
+    shape::{LvdPath, Rect, Shape2, Shape3},
     string::LvdFixedString32,
     tag::Tag,
     vector::Vector2,
@@ -27,7 +27,7 @@ pub enum FsItem {
         base: Versioned<Base>,
 
         /// Shape represented by the object.
-        shape: Versioned<LvdShape2>,
+        shape: Versioned<Shape2>,
 
         /// Identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
@@ -207,7 +207,7 @@ pub enum AreaLight {
         base: Versioned<Base>,
 
         /// Shape represented by the object.
-        shape: Versioned<LvdShape2>,
+        shape: Versioned<Shape2>,
     },
 
     /// `AreaLight` version 2.
@@ -218,7 +218,7 @@ pub enum AreaLight {
         base: Versioned<Base>,
 
         /// Shape represented by the object.
-        shape: Versioned<LvdShape2>,
+        shape: Versioned<Shape2>,
 
         // TODO: Field documentation.
         unk1: Versioned<LvdFixedString32>,
@@ -279,7 +279,7 @@ pub enum AreaHint {
         base: Versioned<Base>,
 
         /// Shape represented by the object.
-        shape: Versioned<LvdShape3>,
+        shape: Versioned<Shape3>,
 
         // TODO: Field documentation.
         unk1: i32,
@@ -303,7 +303,7 @@ pub enum AreaHint {
         base: Versioned<Base>,
 
         /// Shape represented by the object.
-        shape: Versioned<LvdShape3>,
+        shape: Versioned<Shape3>,
 
         // TODO: Field documentation.
         unk1: i32,
@@ -329,7 +329,7 @@ pub enum AreaHint {
         base: Versioned<Base>,
 
         /// Shape represented by the object.
-        shape: Versioned<LvdShape3>,
+        shape: Versioned<Shape3>,
 
         // TODO: Field documentation.
         unk1: i32,
@@ -377,7 +377,7 @@ pub enum SplitArea {
         base: Versioned<Base>,
 
         /// Shape represented by the object.
-        shape: Versioned<LvdShape3>,
+        shape: Versioned<Shape3>,
     },
 }
 

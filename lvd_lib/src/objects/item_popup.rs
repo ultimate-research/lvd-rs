@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     objects::base::Base,
-    shape::LvdShape2Array,
+    shape::ShapeArray2,
     tag::Tag,
     version::{Version, Versioned},
 };
@@ -27,7 +27,7 @@ pub enum ItemPopup {
         tag: Versioned<Tag>,
 
         /// Collection of shapes where items will appear from.
-        shapes: Versioned<LvdShape2Array>,
+        shapes: Versioned<ShapeArray2>,
     },
 }
 

@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     objects::base::Base,
-    shape::{LvdShape2, LvdShape3},
+    shape::{Shape2, Shape3},
     tag::Tag,
     version::{Version, Versioned},
 };
@@ -27,7 +27,7 @@ pub enum GeneralShape2 {
         tag: Versioned<Tag>,
 
         /// Shape represented by the object.
-        shape: Versioned<LvdShape2>,
+        shape: Versioned<Shape2>,
     },
 }
 
@@ -55,7 +55,7 @@ pub enum GeneralShape3 {
         tag: Versioned<Tag>,
 
         /// Shape represented by the object.
-        shape: Versioned<LvdShape3>,
+        shape: Versioned<Shape3>,
     },
 }
 

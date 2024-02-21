@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 use crate::{
     array::LvdArray,
     objects::base::Base,
-    shape::LvdShape2Array,
+    shape::ShapeArray2,
     tag::Tag,
     version::{Version, Versioned},
 };
@@ -26,13 +26,13 @@ pub enum EnemyGenerator {
         base: Versioned<Base>,
 
         /// Collection of shapes where enemies can appear from.
-        appear_shapes: Versioned<LvdShape2Array>,
+        appear_shapes: Versioned<ShapeArray2>,
 
         /// Collection of shapes for responding to fighter presence.
-        trigger_shapes: Versioned<LvdShape2Array>,
+        trigger_shapes: Versioned<ShapeArray2>,
 
         // TODO: Field documentation.
-        unk1: Versioned<LvdShape2Array>,
+        unk1: Versioned<ShapeArray2>,
 
         /// Identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
@@ -47,13 +47,13 @@ pub enum EnemyGenerator {
         base: Versioned<Base>,
 
         /// Collection of shapes where enemies can appear from.
-        appear_shapes: Versioned<LvdShape2Array>,
+        appear_shapes: Versioned<ShapeArray2>,
 
         /// Collection of shapes for responding to fighter presence.
-        trigger_shapes: Versioned<LvdShape2Array>,
+        trigger_shapes: Versioned<ShapeArray2>,
 
         // TODO: Field documentation.
-        unk1: Versioned<LvdShape2Array>,
+        unk1: Versioned<ShapeArray2>,
 
         /// Identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
@@ -73,13 +73,13 @@ pub enum EnemyGenerator {
         base: Versioned<Base>,
 
         /// Collection of shapes where enemies can appear from.
-        appear_shapes: Versioned<LvdShape2Array>,
+        appear_shapes: Versioned<ShapeArray2>,
 
         /// Collection of shapes for responding to fighter presence.
-        trigger_shapes: Versioned<LvdShape2Array>,
+        trigger_shapes: Versioned<ShapeArray2>,
 
         // TODO: Field documentation.
-        unk1: Versioned<LvdShape2Array>,
+        unk1: Versioned<ShapeArray2>,
 
         /// Identifier for matching and filtering like objects.
         tag: Versioned<Tag>,

@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     objects::base::Base,
-    shape::LvdShape3,
+    shape::Shape3,
     version::{Version, Versioned},
 };
 
@@ -23,7 +23,7 @@ pub enum DamageShape {
         base: Versioned<Base>,
 
         /// Shape represented by the object.
-        shape: Versioned<LvdShape3>,
+        shape: Versioned<Shape3>,
 
         /// Boolean flag determining if the damage shape is an attack collision.
         #[br(map = |b: u8| b != 0)]
