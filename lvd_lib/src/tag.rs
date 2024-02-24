@@ -254,37 +254,52 @@ mod tests {
 
     #[test]
     fn use_invalid_string_length() {
+        let s = "";
         assert_eq!(
-            Tag::from_str(""),
-            Err(FromStrError::InvalidStringLength("".len()))
+            Tag::from_str(s),
+            Err(FromStrError::InvalidStringLength(s.len()))
         );
+
+        let s = "I";
         assert_eq!(
-            Tag::from_str("I"),
-            Err(FromStrError::InvalidStringLength("I".len()))
+            Tag::from_str(s),
+            Err(FromStrError::InvalidStringLength(s.len()))
         );
+
+        let s = "IP";
         assert_eq!(
-            Tag::from_str("IP"),
-            Err(FromStrError::InvalidStringLength("IP".len()))
+            Tag::from_str(s),
+            Err(FromStrError::InvalidStringLength(s.len()))
         );
+
+        let s = "IPP";
         assert_eq!(
-            Tag::from_str("IPP"),
-            Err(FromStrError::InvalidStringLength("IPP".len()))
+            Tag::from_str(s),
+            Err(FromStrError::InvalidStringLength(s.len()))
         );
+
+        let s = "IPP0";
         assert_eq!(
-            Tag::from_str("IPP0"),
-            Err(FromStrError::InvalidStringLength("IPP0".len()))
+            Tag::from_str(s),
+            Err(FromStrError::InvalidStringLength(s.len()))
         );
+
+        let s = "IPP00";
         assert_eq!(
-            Tag::from_str("IPP00"),
-            Err(FromStrError::InvalidStringLength("IPP00".len()))
+            Tag::from_str(s),
+            Err(FromStrError::InvalidStringLength(s.len()))
         );
+
+        let s = "IPP000";
         assert_eq!(
-            Tag::from_str("IPP000"),
-            Err(FromStrError::InvalidStringLength("IPP000".len()))
+            Tag::from_str(s),
+            Err(FromStrError::InvalidStringLength(s.len()))
         );
+
+        let s = "IPP00001";
         assert_eq!(
-            Tag::from_str("IPP00001"),
-            Err(FromStrError::InvalidStringLength("IPP00001".len()))
+            Tag::from_str(s),
+            Err(FromStrError::InvalidStringLength(s.len()))
         );
     }
 
