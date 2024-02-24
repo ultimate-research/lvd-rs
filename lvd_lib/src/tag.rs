@@ -23,20 +23,20 @@ use crate::version::Version;
 /// |-----------------|--------|--------|--------|--------|--------|
 /// | **Designation** | Unused | Letter | Letter | Letter | Number |
 ///
-/// # Restrictions
+/// # Guidelines
 ///
-/// When converting from a `Tag` to a string, the underlying binary data should follow these restrictions:
+/// When converting from a `Tag` to a string, the underlying binary data should follow these guidelines:
 ///
 /// - Letter values must range from 0 to 26, inclusively.
 /// - Number must range from 0 to 9999, inclusively.
 ///
-/// Likewise, when converting from a string to a `Tag`, the string should follow these restrictions:
+/// Likewise, when converting from a string to a `Tag`, the string should follow these guidelines:
 ///
-/// - Must have a length of seven characters.
+/// - Must have a length of seven bytes.
 /// - Must begin with three capital letters, underscores, or any combination of the two.
 /// - Must end with four digits.
 ///
-/// If one or more of these restrictions are not met on either end, the corresponding
+/// If one or more of these guidelines are not met, the corresponding
 /// conversion methods may return erroneous results.
 #[binrw]
 #[br(import(version: u8), pre_assert(version == 1))]
