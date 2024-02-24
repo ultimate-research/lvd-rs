@@ -261,7 +261,7 @@ impl<const N: usize> Version for FixedString<N> {
     }
 }
 
-/// The error type used when converting a string into an [`FixedString`].
+/// The error type used when converting a string into a [`FixedString`].
 #[derive(Debug, PartialEq, Error)]
 pub enum FromStrError<const N: usize> {
     /// The nul-terminated string exceeds the buffer's capacity.
