@@ -1,6 +1,6 @@
 //! An identifier for matching and filtering LVD objects.
 //!
-//! This module contains the [`Tag`] type and an error type that may result when converting from strings.
+//! This module contains the [`Tag`] type and an error type that may result when converting from a string.
 use std::{array, fmt, str::FromStr};
 
 use binrw::binrw;

@@ -1,6 +1,7 @@
 //! A nul-terminated string with a fixed capacity.
 //!
-//! This module contains the [`FixedString`] type, several type aliases for common capacities, and an error type that may result when converting from strings.
+//! This module contains the [`FixedString`] type, several type aliases for common
+//! capacities, and an error type that may result when converting from a string.
 use std::str::{self, FromStr};
 
 use binrw::{binrw, BinRead, BinResult};
