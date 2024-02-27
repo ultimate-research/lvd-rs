@@ -83,11 +83,11 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: yamlvd_macos_${{matrix.desc}}
-        path: target/${{matrix.target}}/yamlvd_macos_${{matrix.desc}}.zip
+        path: target/${{matrix.target}}/release/yamlvd_macos_${{matrix.desc}}.zip
     - name: Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: target/${{matrix.target}}/yamlvd_macos_${{matrix.desc}}.zip
+        files: target/${{matrix.target}}/release/yamlvd_macos_${{matrix.desc}}.zip
       env:
         GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
