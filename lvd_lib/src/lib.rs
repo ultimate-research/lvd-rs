@@ -42,17 +42,14 @@ pub struct LvdFile {
 impl LvdFile {
     /// Reads the data from the given file path.
     pub fn from_file<P: AsRef<Path>>(path: P) -> BinResult<Self> {
-        let mut file = Cursor::new(fs::read(path)?);
-        let lvd = file.read_be::<Self>()?;
+        let mut cursor = Cursor::new(fs::read(path)?);
 
-        Ok(lvd)
+        Self::read(&mut cursor)
     }
 
     /// Reads the data from the given reader.
     pub fn read<R: Read + Seek>(reader: &mut R) -> BinResult<Self> {
-        let lvd = reader.read_be::<Self>()?;
-
-        Ok(lvd)
+        reader.read_be()
     }
 
     /// Writes the data to the given writer.
@@ -64,7 +61,7 @@ impl LvdFile {
     pub fn write_to_file<P: AsRef<Path>>(&self, path: P) -> BinResult<()> {
         let mut cursor = Cursor::new(Vec::new());
 
-        self.write_be(&mut cursor)?;
+        self.write(&mut cursor)?;
         fs::write(path, cursor.get_mut())?;
 
         Ok(())
