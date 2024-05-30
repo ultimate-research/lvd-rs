@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
     feature = "serde",
     serde(from = "CollisionDataFlags", into = "CollisionDataFlags")
 )]
-#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(Debug, Clone, Copy, Default, Eq, PartialEq)]
 pub struct CollisionFlags {
     /// Boolean flag determining if the collision can be dropped through.
     pub throughable: bool,

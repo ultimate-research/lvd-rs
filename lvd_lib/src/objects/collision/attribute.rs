@@ -94,7 +94,7 @@ pub enum MaterialType {
     feature = "serde",
     serde(from = "AttributeDataFlags", into = "AttributeDataFlags")
 )]
-#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+#[derive(Debug, Clone, Copy, Default, Eq, PartialEq)]
 pub struct AttributeFlags {
     pub length0: bool,
     pub packman_final_ignore: bool,

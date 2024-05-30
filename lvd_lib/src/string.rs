@@ -2,7 +2,7 @@
 //!
 //! This module contains the [`FixedString`] type, several type aliases for common
 //! capacities, and an error type that may result when converting from a string.
-use std::str::{self, FromStr};
+use std::str::{self, FromStr, Utf8Error};
 
 use binrw::{binrw, BinRead, BinResult};
 use thiserror::Error;
@@ -120,7 +120,7 @@ impl<const N: usize> FixedString<N> {
     /// let s = FixedString::<64>::try_from("curve2").unwrap();
     /// assert_eq!(s.to_str().unwrap(), "curve2");
     /// ```
-    pub fn to_str(&self) -> Result<&str, str::Utf8Error> {
+    pub fn to_str(&self) -> Result<&str, Utf8Error> {
         str::from_utf8(&self.inner[..self.len()])
     }
 
@@ -138,6 +138,12 @@ impl<const N: usize> FixedString<N> {
     /// ```
     pub fn to_string(&self) -> Result<String, str::Utf8Error> {
         self.to_str().map(|s| s.to_string())
+    }
+}
+
+impl<const N: usize> Default for FixedString<N> {
+    fn default() -> Self {
+        Self::new()
     }
 }
 
