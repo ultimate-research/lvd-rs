@@ -20,7 +20,7 @@ where
     #[bw(calc = data.version())]
     version: u8,
 
-    /// Associated data for the type's version.
+    /// The associated data for the type's version.
     #[br(args(version))]
     pub data: T,
 }

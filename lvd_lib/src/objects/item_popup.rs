@@ -21,13 +21,13 @@ pub enum ItemPopup {
     /// `ItemPopup` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Identifier for matching and filtering like objects.
+        /// The identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
 
-        /// Collection of shapes where items will appear from.
+        /// The collection of shapes where items will appear from.
         shapes: Versioned<ShapeArray2>,
     },
 }

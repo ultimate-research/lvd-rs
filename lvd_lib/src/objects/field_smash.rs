@@ -24,13 +24,13 @@ pub enum FsItem {
     /// `FsItem` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Shape represented by the object.
+        /// The shape represented by the object.
         shape: Versioned<Shape2>,
 
-        /// Identifier for matching and filtering like objects.
+        /// The identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
     },
 }
@@ -53,7 +53,7 @@ pub enum FsUnknown {
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
         // TODO: Field documentation.
@@ -64,11 +64,12 @@ pub enum FsUnknown {
     },
 
     /// `FsUnknown` version 2.
-    /// Adds [unk3](#variant.V2.field.unk3).
+    ///
+    /// Adds [`unk3`](#variant.V2.field.unk3).
     /// This version is not known to be used.
     #[br(pre_assert(version == 2))]
     V2 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
         // TODO: Field documentation.
@@ -123,16 +124,17 @@ impl Version for FsAreaCam {
 #[derive(Debug)]
 pub enum FsAreaLock {
     /// `FsAreaLock` version 1.
+    ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Edge coordinates of the region for restricted camera movement.
+        /// The edge coordinates of the region for restricted camera movement.
         camera_region: Versioned<Rect>,
 
-        /// Edge coordinates of the trigger region for activating the restricted camera movement.
+        /// The edge coordinates of the trigger region for activating the restricted camera movement.
         trigger_region: Versioned<Rect>,
 
         // TODO: Field documentation.
@@ -140,16 +142,17 @@ pub enum FsAreaLock {
     },
 
     /// `FsAreaLock` version 2.
-    /// Adds [unk2](#variant.V2.field.unk2).
+    ///
+    /// Adds [`unk2`](#variant.V2.field.unk2).
     #[br(pre_assert(version == 2))]
     V2 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Edge coordinates of the region for restricted camera movement.
+        /// The edge coordinates of the region for restricted camera movement.
         camera_region: Versioned<Rect>,
 
-        /// Edge coordinates of the trigger region for activating the restricted camera movement.
+        /// The edge coordinates of the trigger region for activating the restricted camera movement.
         trigger_region: Versioned<Rect>,
 
         // TODO: Field documentation.
@@ -178,10 +181,10 @@ pub enum FsCamLimit {
     /// `FsCamLimit` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Path shape forming the camera limit region.
+        /// The path shape forming the camera limit region.
         path: Versioned<LvdPath>,
     },
 }
@@ -201,24 +204,26 @@ impl Version for FsCamLimit {
 #[derive(Debug)]
 pub enum AreaLight {
     /// `AreaLight` version 1.
+    ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Shape represented by the object.
+        /// The shape represented by the object.
         shape: Versioned<Shape2>,
     },
 
     /// `AreaLight` version 2.
-    /// Adds [unk1](#variant.V2.field.unk1) and [unk2](#variant.V2.field.unk2).
+    ///
+    /// Adds [`unk1`](#variant.V2.field.unk1) and [`unk2`](#variant.V2.field.unk2).
     #[br(pre_assert(version == 2))]
     V2 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Shape represented by the object.
+        /// The shape represented by the object.
         shape: Versioned<Shape2>,
 
         // TODO: Field documentation.
@@ -247,10 +252,10 @@ pub enum FsStartPoint {
     /// `FsStartPoint` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Position of the point.
+        /// The position of the point.
         pos: Versioned<Vector2>,
 
         // TODO: Field documentation.
@@ -273,13 +278,14 @@ impl Version for FsStartPoint {
 #[derive(Debug)]
 pub enum AreaHint {
     /// `AreaHint` version 1.
+    ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Shape represented by the object.
+        /// The shape represented by the object.
         shape: Versioned<Shape3>,
 
         // TODO: Field documentation.
@@ -296,14 +302,15 @@ pub enum AreaHint {
     },
 
     /// `AreaHint` version 2.
-    /// Adds [unk5](#variant.V2.field.unk5).
+    ///
+    /// Adds [`unk5`](#variant.V2.field.unk5).
     /// This version is not known to be used.
     #[br(pre_assert(version == 2))]
     V2 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Shape represented by the object.
+        /// The shape represented by the object.
         shape: Versioned<Shape3>,
 
         // TODO: Field documentation.
@@ -323,13 +330,14 @@ pub enum AreaHint {
     },
 
     /// `AreaHint` version 3.
-    /// Adds [unk6](#variant.V3.field.unk6) and [unk7](#variant.V3.field.unk7).
+    ///
+    /// Adds [`unk6`](#variant.V3.field.unk6) and [`unk7`](#variant.V3.field.unk7).
     #[br(pre_assert(version == 3))]
     V3 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Shape represented by the object.
+        /// The shape represented by the object.
         shape: Versioned<Shape3>,
 
         // TODO: Field documentation.
@@ -374,10 +382,10 @@ pub enum SplitArea {
     /// `SplitArea` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Shape represented by the object.
+        /// The shape represented by the object.
         shape: Versioned<Shape3>,
     },
 }

@@ -137,7 +137,7 @@ impl<const N: usize> FixedString<N> {
     /// let s = FixedString::<64>::try_from("curve3").unwrap();
     /// assert_eq!(s.to_string().unwrap(), "curve3".to_string());
     /// ```
-    pub fn to_string(&self) -> Result<String, str::Utf8Error> {
+    pub fn to_string(&self) -> Result<String, Utf8Error> {
         self.to_str().map(|s| s.to_string())
     }
 }

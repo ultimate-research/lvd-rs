@@ -18,10 +18,10 @@ pub enum Vector2 {
     /// `Vector2` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Component along the x-axis.
+        /// The component along the x-axis.
         x: f32,
 
-        /// Component along the y-axis.
+        /// The component along the y-axis.
         y: f32,
     },
 }
@@ -43,13 +43,13 @@ pub enum Vector3 {
     /// `Vector3` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Component along the x-axis.
+        /// The component along the x-axis.
         x: f32,
 
-        /// Component along the y-axis.
+        /// The component along the y-axis.
         y: f32,
 
-        /// Component along the z-axis.
+        /// The component along the z-axis.
         z: f32,
     },
 }

@@ -20,43 +20,45 @@ use crate::{
 #[derive(Debug)]
 pub enum PTrainerRange {
     /// `PTrainerRange` version 1.
+    ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Minimum position that a Pokémon Trainer can travel to.
+        /// The minimum position that a Pokémon Trainer can travel to.
         range_min: Versioned<Vector3>,
 
-        /// Maximum position that a Pokémon Trainer can travel to.
+        /// The maximum position that a Pokémon Trainer can travel to.
         range_max: Versioned<Vector3>,
 
-        /// Collection of starting positions for each Pokémon Trainer in the range.
+        /// The collection of starting positions for each Pokémon Trainer in the range.
         trainers: Versioned<LvdArray<Vector3>>,
     },
 
     /// `PTrainerRange` version 4.
-    /// Adds [parent_model_name](#variant.V4.field.parent_model_name) and [parent_joint_name](#variant.V4.field.parent_joint_name).
+    ///
+    /// Adds [`parent_model_name`](#variant.V4.field.parent_model_name) and [`parent_joint_name`](#variant.V4.field.parent_joint_name).
     /// Versions 2 and 3 do not formally exist.
     #[br(pre_assert(version == 4))]
     V4 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Minimum position that a Pokémon Trainer can travel to.
+        /// The minimum position that a Pokémon Trainer can travel to.
         range_min: Versioned<Vector3>,
 
-        /// Maximum position that a Pokémon Trainer can travel to.
+        /// The maximum position that a Pokémon Trainer can travel to.
         range_max: Versioned<Vector3>,
 
-        /// Collection of starting positions for each Pokémon Trainer in the range.
+        /// The collection of starting positions for each Pokémon Trainer in the range.
         trainers: Versioned<LvdArray<Vector3>>,
 
-        /// Name of a model for the range to inherit select transformations from.
+        /// The name of a model for the range to inherit select transformations from.
         parent_model_name: Versioned<FixedString64>,
 
-        /// Name of a joint from the parent model for the range to inherit select transformations from.
+        /// The name of a joint from the parent model for the range to inherit select transformations from.
         parent_joint_name: Versioned<FixedString64>,
     },
 }
@@ -79,10 +81,10 @@ pub enum PTrainerFloatingFloor {
     /// `PTrainerFloatingFloor` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Position of the floating platform.
+        /// The position of the floating platform.
         pos: Versioned<Vector3>,
     },
 }

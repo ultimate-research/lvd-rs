@@ -1,4 +1,5 @@
 //! The [`Collision`] object stores data representing a two-dimensional polygonal collision.
+//!
 //! Extra data is stored to define properties of each edge in the collision.
 
 use binrw::binrw;
@@ -30,91 +31,95 @@ pub use spirits_floor::CollisionSpiritsFloor;
 #[derive(Debug)]
 pub enum Collision {
     /// `Collision` version 1.
+    ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Metadata for the object.
+        /// The metadata for the object.
         meta_info: Versioned<MetaInfo>,
 
-        /// Flags representing the global attributes of the collision.
+        /// The flags representing the global attributes of the collision.
         flags: CollisionFlags,
 
-        /// Collection of vertices forming the geometry of the collision.
+        /// The collection of vertices forming the geometry of the collision.
         vertices: Versioned<LvdArray<Vector2>>,
 
-        /// Collection of unit normal vectors defining the tangible side of each edge.
+        /// The collection of unit normal vectors defining the tangible side of each edge.
         normals: Versioned<LvdArray<Vector2>>,
 
-        /// Collection of extra data for edges flagged as grabbable.
+        /// The collection of extra data for edges flagged as grabbable.
         cliffs: Versioned<LvdArray<CollisionCliff>>,
     },
 
     /// `Collision` version 2.
-    /// Replaces [meta_info](#variant.V1.field.meta_info) with [base](#variant.V2.field.base).
+    ///
+    /// Replaces [`meta_info`](#variant.V1.field.meta_info) with [`base`](#variant.V2.field.base).
     #[br(pre_assert(version == 2))]
     V2 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Flags representing the global attributes of the collision.
+        /// The flags representing the global attributes of the collision.
         flags: CollisionFlags,
 
-        /// Collection of vertices forming the geometry of the collision.
+        /// The collection of vertices forming the geometry of the collision.
         vertices: Versioned<LvdArray<Vector2>>,
 
-        /// Collection of unit normal vectors defining the tangible side of each edge.
+        /// The collection of unit normal vectors defining the tangible side of each edge.
         normals: Versioned<LvdArray<Vector2>>,
 
-        /// Collection of extra data for edges flagged as grabbable.
+        /// The collection of extra data for edges flagged as grabbable.
         cliffs: Versioned<LvdArray<CollisionCliff>>,
     },
 
     /// `Collision` version 3.
-    /// Adds [attributes](#variant.V3.field.attributes).
+    ///
+    /// Adds [`attributes`](#variant.V3.field.attributes).
     #[br(pre_assert(version == 3))]
     V3 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Flags representing the global attributes of the collision.
+        /// The flags representing the global attributes of the collision.
         flags: CollisionFlags,
 
-        /// Collection of vertices forming the geometry of the collision.
+        /// The collection of vertices forming the geometry of the collision.
         vertices: Versioned<LvdArray<Vector2>>,
 
-        /// Collection of unit normal vectors defining the tangible side of each edge.
+        /// The collection of unit normal vectors defining the tangible side of each edge.
         normals: Versioned<LvdArray<Vector2>>,
 
-        /// Collection of extra data for edges flagged as grabbable.
+        /// The collection of extra data for edges flagged as grabbable.
         cliffs: Versioned<LvdArray<CollisionCliff>>,
 
-        /// Collection of material presets and flags for each edge in the collision.
+        /// The collection of material presets and flags for each edge in the collision.
         attributes: Versioned<LvdArray<CollisionAttribute>>,
     },
 
     /// `Collision` version 4.
-    /// Adds [spirits_floors](#variant.V4.field.spirits_floors).
+    ///
+    /// Adds [`spirits_floors`](#variant.V4.field.spirits_floors).
     #[br(pre_assert(version == 4))]
     V4 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Flags representing the global attributes of the collision.
+        /// The flags representing the global attributes of the collision.
         flags: CollisionFlags,
 
-        /// Collection of vertices forming the geometry of the collision.
+        /// The collection of vertices forming the geometry of the collision.
         vertices: Versioned<LvdArray<Vector2>>,
 
-        /// Collection of unit normal vectors defining the tangible side of each edge.
+        /// The collection of unit normal vectors defining the tangible side of each edge.
         normals: Versioned<LvdArray<Vector2>>,
 
-        /// Collection of extra data for edges flagged as grabbable.
+        /// The collection of extra data for edges flagged as grabbable.
         cliffs: Versioned<LvdArray<CollisionCliff>>,
 
-        /// Collection of properties and attributes for each edge in the collision.
+        /// The collection of properties and attributes for each edge in the collision.
         attributes: Versioned<LvdArray<CollisionAttribute>>,
 
-        /// Collection of entries related to hazardous floors in spirit battles.
+        /// The collection of entries related to hazardous floors in spirit battles.
         spirits_floors: Versioned<LvdArray<CollisionSpiritsFloor>>,
     },
 }

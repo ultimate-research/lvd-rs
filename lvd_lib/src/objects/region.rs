@@ -18,24 +18,26 @@ use crate::{
 #[derive(Debug)]
 pub enum Region {
     /// `Region` version 1.
+    ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Metadata for the object.
+        /// The metadata for the object.
         meta_info: Versioned<MetaInfo>,
 
-        /// Edge coordinates of the region.
+        /// The edge coordinates of the region.
         rect: Versioned<Rect>,
     },
 
     /// `Region` version 2.
-    /// Replaces [meta_info](#variant.V1.field.meta_info) with [base](#variant.V2.field.base).
+    ///
+    /// Replaces [`meta_info`](#variant.V1.field.meta_info) with [`base`](#variant.V2.field.base).
     #[br(pre_assert(version == 2))]
     V2 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Edge coordinates of the region.
+        /// The edge coordinates of the region.
         rect: Versioned<Rect>,
     },
 }

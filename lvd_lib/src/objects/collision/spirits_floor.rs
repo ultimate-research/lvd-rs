@@ -18,30 +18,33 @@ use crate::{
 #[derive(Debug)]
 pub enum CollisionSpiritsFloor {
     /// `CollisionSpiritsFloor` version 1.
+    ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Index of the edge in the associated collision to link the object with.
+        /// The index of the edge in the associated collision to link the object with.
         line_index: u32,
 
-        /// Name of the line group that the object is associated with.
+        /// The name of the line group that the object is associated with.
         line_group: Versioned<FixedString64>,
     },
 
     /// `CollisionSpiritsFloor` version 2.
-    /// Adds [unk1](#variant.V2.field.unk1), [unk2](#variant.V2.field.unk2), [unk3](#variant.V2.field.unk3), [unk4](#variant.V2.field.unk4), [unk5](#variant.V2.field.unk5), and [unk6](#variant.V2.field.unk6).
+    ///
+    /// Adds [`unk1`](#variant.V2.field.unk1), [`unk2`](#variant.V2.field.unk2), [`unk3`](#variant.V2.field.unk3),
+    /// [`unk4`](#variant.V2.field.unk4), [`unk5`](#variant.V2.field.unk5), and [`unk6`](#variant.V2.field.unk6).
     #[br(pre_assert(version == 2))]
     V2 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Index of the edge in the associated collision to link the object with.
+        /// The index of the edge in the associated collision to link the object with.
         line_index: u32,
 
-        /// Name of the line group that the object is associated with.
+        /// The name of the line group that the object is associated with.
         line_group: Versioned<FixedString64>,
 
         // TODO: Field documentation. Usually 1.0. Unused?

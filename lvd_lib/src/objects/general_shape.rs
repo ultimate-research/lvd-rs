@@ -21,13 +21,13 @@ pub enum GeneralShape2 {
     /// `GeneralShape2` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Identifier for matching and filtering like objects.
+        /// The identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
 
-        /// Shape represented by the object.
+        /// The shape represented by the object.
         shape: Versioned<Shape2>,
     },
 }
@@ -49,13 +49,13 @@ pub enum GeneralShape3 {
     /// `GeneralShape3` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Identifier for matching and filtering like objects.
+        /// The identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
 
-        /// Shape represented by the object.
+        /// The shape represented by the object.
         shape: Versioned<Shape3>,
     },
 }

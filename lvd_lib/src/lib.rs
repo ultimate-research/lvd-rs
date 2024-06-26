@@ -36,7 +36,7 @@ pub struct LvdFile {
     #[bw(calc = 1u32)]
     _unk: u32,
 
-    /// Associated data for each LVD file format version.
+    /// The associated data for each LVD file format version.
     pub data: Versioned<Lvd>,
 }
 
@@ -77,6 +77,7 @@ impl LvdFile {
 #[derive(Debug)]
 pub enum Lvd {
     /// `Lvd` version 1.
+    ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
@@ -89,7 +90,8 @@ pub enum Lvd {
     },
 
     /// `Lvd` version 2.
-    /// Adds [fs_items](#variant.V2.field.fs_items).
+    ///
+    /// Adds [`fs_items`](#variant.V2.field.fs_items).
     /// This version is not known to be used.
     #[br(pre_assert(version == 2))]
     V2 {
@@ -103,7 +105,8 @@ pub enum Lvd {
     },
 
     /// `Lvd` version 3.
-    /// Adds [fs_unknown](#variant.V3.field.fs_unknown), [fs_area_cams](#variant.V3.field.fs_area_cams), [fs_area_locks](#variant.V3.field.fs_area_locks), and [fs_cam_limits](#variant.V3.field.fs_cam_limits).
+    ///
+    /// Adds [`fs_unknown`](#variant.V3.field.fs_unknown), [`fs_area_cams`](#variant.V3.field.fs_area_cams), [`fs_area_locks`](#variant.V3.field.fs_area_locks), and [`fs_cam_limits`](#variant.V3.field.fs_cam_limits).
     /// This version is not known to be used.
     #[br(pre_assert(version == 3))]
     V3 {
@@ -121,7 +124,8 @@ pub enum Lvd {
     },
 
     /// `Lvd` version 4.
-    /// Adds [damage_shapes](#variant.V4.field.damage_shapes).
+    ///
+    /// Adds [`damage_shapes`](#variant.V4.field.damage_shapes).
     #[br(pre_assert(version == 4))]
     V4 {
         collisions: Versioned<LvdArray<Collision>>,
@@ -139,7 +143,8 @@ pub enum Lvd {
     },
 
     /// `Lvd` version 5.
-    /// Adds [item_popups](#variant.V5.field.item_popups).
+    ///
+    /// Adds [`item_popups`](#variant.V5.field.item_popups).
     /// This version is not known to be used.
     #[br(pre_assert(version == 5))]
     V5 {
@@ -159,7 +164,8 @@ pub enum Lvd {
     },
 
     /// `Lvd` version 6.
-    /// Adds [general_shapes2](#variant.V6.field.general_shapes2) and [general_shapes3](#variant.V6.field.general_shapes3).
+    ///
+    /// Adds [`general_shapes2`](#variant.V6.field.general_shapes2) and [`general_shapes3`](#variant.V6.field.general_shapes3).
     #[br(pre_assert(version == 6))]
     V6 {
         collisions: Versioned<LvdArray<Collision>>,
@@ -180,7 +186,8 @@ pub enum Lvd {
     },
 
     /// `Lvd` version 7.
-    /// Adds [area_lights](#variant.V7.field.area_lights).
+    ///
+    /// Adds [`area_lights`](#variant.V7.field.area_lights).
     /// This version is not known to be used.
     #[br(pre_assert(version == 7))]
     V7 {
@@ -203,7 +210,8 @@ pub enum Lvd {
     },
 
     /// `Lvd` version 8.
-    /// Adds [fs_start_points](#variant.V8.field.fs_start_points).
+    ///
+    /// Adds [`fs_start_points`](#variant.V8.field.fs_start_points).
     #[br(pre_assert(version == 8))]
     V8 {
         collisions: Versioned<LvdArray<Collision>>,
@@ -226,7 +234,8 @@ pub enum Lvd {
     },
 
     /// `Lvd` version 9.
-    /// Adds [area_hints](#variant.V9.field.area_hints).
+    ///
+    /// Adds [`area_hints`](#variant.V9.field.area_hints).
     /// This version is not known to be used.
     #[br(pre_assert(version == 9))]
     V9 {
@@ -251,7 +260,8 @@ pub enum Lvd {
     },
 
     /// `Lvd` version 10.
-    /// Adds [split_areas](#variant.V10.field.split_areas).
+    ///
+    /// Adds [`split_areas`](#variant.V10.field.split_areas).
     #[br(pre_assert(version == 10))]
     V10 {
         collisions: Versioned<LvdArray<Collision>>,
@@ -276,7 +286,8 @@ pub enum Lvd {
     },
 
     /// `Lvd` version 11.
-    /// Adds [shrinked_camera_regions](#variant.V11.field.shrinked_camera_regions) and [shrinked_death_regions](#variant.V11.field.shrinked_death_regions).
+    ///
+    /// Adds [`shrinked_camera_regions`](#variant.V11.field.shrinked_camera_regions) and [`shrinked_death_regions`](#variant.V11.field.shrinked_death_regions).
     #[br(pre_assert(version == 11))]
     V11 {
         collisions: Versioned<LvdArray<Collision>>,
@@ -303,7 +314,8 @@ pub enum Lvd {
     },
 
     /// `Lvd` version 12.
-    /// Adds [ptrainer_ranges](#variant.V12.field.ptrainer_ranges).
+    ///
+    /// Adds [`ptrainer_ranges`](#variant.V12.field.ptrainer_ranges).
     #[br(pre_assert(version == 12))]
     V12 {
         collisions: Versioned<LvdArray<Collision>>,
@@ -331,7 +343,8 @@ pub enum Lvd {
     },
 
     /// `Lvd` version 13.
-    /// Adds [ptrainer_floating_floors](#variant.V13.field.ptrainer_floating_floors).
+    ///
+    /// Adds [`ptrainer_floating_floors`](#variant.V13.field.ptrainer_floating_floors).
     #[br(pre_assert(version == 13))]
     V13 {
         collisions: Versioned<LvdArray<Collision>>,

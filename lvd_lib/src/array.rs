@@ -27,7 +27,7 @@ where
         #[bw(calc = elements.len() as u32)]
         count: u32,
 
-        /// Collection of contiguous versioned elements.
+        /// The collection of contiguous versioned elements.
         #[br(count = count)]
         elements: Vec<Versioned<T>>,
     },

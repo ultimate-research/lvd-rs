@@ -20,13 +20,13 @@ pub enum DamageShape {
     /// `DamageShape` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Shape represented by the object.
+        /// The shape represented by the object.
         shape: Versioned<Shape3>,
 
-        /// Boolean flag determining if the damage shape is an attack collision.
+        /// Determines if the damage shape is an attack collision.
         #[br(map = |b: u8| b != 0)]
         #[bw(map = |b| u8::from(*b))]
         is_damager: bool,

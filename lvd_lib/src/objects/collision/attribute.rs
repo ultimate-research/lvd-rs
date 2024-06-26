@@ -17,10 +17,10 @@ pub enum CollisionAttribute {
     /// `CollisionAttribute` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Material preset ID defining how an edge is visually, audibly, and physically interacted with.
+        /// The material preset representing how an edge is visually, audibly, and physically interacted with.
         material: MaterialType,
 
-        /// Flags for enabling or disabling the corresponding edge's attributes.
+        /// The flags for enabling or disabling the corresponding edge's attributes.
         flags: AttributeFlags,
     },
 }
@@ -33,7 +33,7 @@ impl Version for CollisionAttribute {
     }
 }
 
-/// Material preset IDs defining how an edge is visually, audibly, and physically interacted with.
+/// Material presets representing how an edge is visually, audibly, and physically interacted with.
 #[binrw]
 #[brw(repr(u32))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

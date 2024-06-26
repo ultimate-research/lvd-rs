@@ -18,50 +18,58 @@ use crate::{
 #[derive(Debug)]
 pub enum CollisionCliff {
     /// `CollisionCliff` version 1.
+    ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// Position of the cliff.
+        /// The position of the cliff.
+        ///
         /// This should be equal to the position of the corresponding vertex.
         pos: Versioned<Vector2>,
 
-        /// Facing direction of the cliff.
-        /// -1.0 corresponds to the left and 1.0 corresponds to the right.
+        /// The facing direction of the cliff.
+        /// `-1.0` corresponds to the left and `1.0` corresponds to the right.
         lr: f32,
     },
 
     /// `CollisionCliff` version 2.
-    /// Adds [base](#variant.V2.field.base).
+    ///
+    /// Adds [`base`](#variant.V2.field.base).
     #[br(pre_assert(version == 2))]
     V2 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Position of the cliff.
+        /// The position of the cliff.
+        ///
         /// This should be equal to the position of the corresponding vertex.
         pos: Versioned<Vector2>,
 
-        /// Facing direction of the cliff.
-        /// -1.0 corresponds to the left and 1.0 corresponds to the right.
+        /// The facing direction of the cliff.
+        ///
+        /// `-1.0` corresponds to the left and `1.0` corresponds to the right.
         lr: f32,
     },
 
     /// `CollisionCliff` version 3.
-    /// Adds [line_index](#variant.V3.field.line_index).
+    ///
+    /// Adds [`line_index`](#variant.V3.field.line_index).
     #[br(pre_assert(version == 3))]
     V3 {
-        /// Common data for the object.
+        /// The common data for the object.
         base: Versioned<Base>,
 
-        /// Position of the cliff.
+        /// The position of the cliff.
+        ///
         /// This should be equal to the position of the corresponding vertex.
         pos: Versioned<Vector2>,
 
-        /// Facing direction of the cliff.
-        /// -1.0 corresponds to the left and 1.0 corresponds to the right.
+        /// The facing direction of the cliff.
+        ///
+        /// `-1.0` corresponds to the left and `1.0` corresponds to the right.
         lr: f32,
 
-        /// Index of the edge in the associated collision to link the object with.
+        /// The index of the edge in the associated collision to link the object with.
         line_index: u32,
     },
 }
