@@ -1,4 +1,5 @@
 //! The [`CollisionAttribute`] object stores data representing an edge's properties and attributes.
+
 use binrw::binrw;
 use modular_bitfield::prelude::*;
 

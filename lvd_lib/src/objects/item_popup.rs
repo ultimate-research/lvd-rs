@@ -1,4 +1,5 @@
 //! The [`ItemPopup`] object stores data representing a collection of shapes where items will appear from.
+
 use binrw::binrw;
 
 #[cfg(feature = "serde")]

@@ -1,4 +1,5 @@
 //! The [`DamageShape`] object stores data representing a three-dimensional damage or attack collision shape.
+
 use binrw::binrw;
 
 #[cfg(feature = "serde")]

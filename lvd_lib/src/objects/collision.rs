@@ -1,5 +1,6 @@
 //! The [`Collision`] object stores data representing a two-dimensional polygonal collision.
 //! Extra data is stored to define properties of each edge in the collision.
+
 use binrw::binrw;
 
 #[cfg(feature = "serde")]

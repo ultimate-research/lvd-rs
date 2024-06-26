@@ -1,4 +1,5 @@
 //! The [`CollisionSpiritsFloor`] object stores data representing hazardous floors in spirit battles.
+
 use binrw::binrw;
 
 #[cfg(feature = "serde")]

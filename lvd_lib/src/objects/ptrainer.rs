@@ -1,4 +1,5 @@
 //! The [`PTrainerRange`] and [`PTrainerFloatingFloor`] objects store data representing locations or objects where one or more Pokémon Trainers can reside.
+
 use binrw::binrw;
 
 #[cfg(feature = "serde")]

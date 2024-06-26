@@ -1,4 +1,5 @@
 //! The [`EnemyGenerator`] object stores data representing a collection of shapes to generate enemies from.
+
 use binrw::binrw;
 
 #[cfg(feature = "serde")]

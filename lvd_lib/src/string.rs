@@ -2,6 +2,7 @@
 //!
 //! This module contains the [`FixedString`] type, several type aliases for common
 //! capacities, and an error type that may result when converting from a string.
+
 use std::str::{self, FromStr, Utf8Error};
 
 use binrw::{binrw, BinRead, BinResult};

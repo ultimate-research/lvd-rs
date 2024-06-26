@@ -1,6 +1,7 @@
 //! A fixed-size collection of contiguous versioned elements.
 //!
 //! This module contains the [`LvdArray`] type.
+
 use binrw::{binrw, BinRead, BinWrite};
 
 #[cfg(feature = "serde")]

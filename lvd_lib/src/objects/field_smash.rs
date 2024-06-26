@@ -1,4 +1,5 @@
 //! The objects exclusive to Smash Run in Super Smash Bros. for Nintendo 3DS.
+
 use binrw::binrw;
 
 #[cfg(feature = "serde")]

@@ -1,6 +1,7 @@
 //! Basic vector types.
 //!
 //! This module contains the [`Vector2`] and [`Vector3`] types.
+
 use binrw::binrw;
 
 #[cfg(feature = "serde")]

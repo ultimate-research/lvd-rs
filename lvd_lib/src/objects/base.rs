@@ -1,4 +1,5 @@
 //! The [`Base`] and [`MetaInfo`] types store common data for an LVD object.
+
 use binrw::binrw;
 
 #[cfg(feature = "serde")]

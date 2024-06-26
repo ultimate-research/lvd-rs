@@ -1,4 +1,5 @@
 //! The [`CollisionFlags`] type represents the global attributes of a collision.
+
 use binrw::binrw;
 use modular_bitfield::prelude::*;
 

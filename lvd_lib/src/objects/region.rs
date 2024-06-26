@@ -1,4 +1,5 @@
 //! The [`Region`] object stores data representing a two-dimensional rectangle.
+
 use binrw::binrw;
 
 #[cfg(feature = "serde")]

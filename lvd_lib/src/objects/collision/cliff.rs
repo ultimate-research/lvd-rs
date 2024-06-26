@@ -1,4 +1,5 @@
 //! The [`CollisionCliff`] object stores data representing a grabbable edge.
+
 use binrw::binrw;
 
 #[cfg(feature = "serde")]

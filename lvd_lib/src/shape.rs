@@ -2,6 +2,7 @@
 //!
 //! This module contains the [`Shape2`], [`ShapeArray2`] and [`ShapeArrayElement2`] types,
 //! the [`Shape3`] type, the [`LvdPath`] type, and the [`Rect`] type.
+
 use binrw::binrw;
 
 #[cfg(feature = "serde")]

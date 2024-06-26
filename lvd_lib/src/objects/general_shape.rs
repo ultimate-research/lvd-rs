@@ -1,4 +1,5 @@
 //! The [`GeneralShape2`] and [`GeneralShape3`] objects store data representing general-purpose shapes.
+
 use binrw::binrw;
 
 #[cfg(feature = "serde")]
