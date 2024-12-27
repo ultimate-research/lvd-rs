@@ -29,7 +29,7 @@ use crate::version::Version;
 /// When converting from a `Tag` to a string, the underlying binary data should follow these guidelines:
 ///
 /// - Letter values must range from 0 to 26, inclusively.
-/// - Number must range from 0 to 9999, inclusively.
+/// - Number value must range from 0 to 9999, inclusively.
 ///
 /// Likewise, when converting from a string to a `Tag`, the string should follow these guidelines:
 ///
@@ -45,43 +45,46 @@ use crate::version::Version;
 pub struct Tag(u32);
 
 impl Tag {
-    /// The number of characters in a tag.
+    /// The number of characters in the display string.
     const STRING_LEN: usize = 7;
 
-    /// The number of letters in a tag.
+    /// The number of letters in the display string.
     const LETTER_COUNT: usize = 3;
 
-    /// The minimum supported letter character in a tag.
+    /// The minimum supported letter character in the display string.
     const LETTER_CHAR_MIN: u8 = b'A';
 
-    /// The maximum supported letter value in a tag.
+    /// The maximum supported letter value.
     const LETTER_MAX: u8 = 26;
 
-    /// The bitmasks for each letter in a tag.
+    /// The bitmasks for each letter.
     const LETTER_MASK: [u32; Self::LETTER_COUNT] = [
         0b00011111_00000000_00000000_00000000,
         0b00000000_11111000_00000000_00000000,
         0b00000000_00000111_11000000_00000000,
     ];
 
-    /// The bit shift operands for each letter in a tag.
+    /// The bit shift operands for each letter.
     const LETTER_SHIFT: [u32; Self::LETTER_COUNT] = [
         Self::LETTER_MASK[0].trailing_zeros(),
         Self::LETTER_MASK[1].trailing_zeros(),
         Self::LETTER_MASK[2].trailing_zeros(),
     ];
 
-    /// The number of digits in a tag.
+    /// The number of digits in the display string.
     const DIGIT_COUNT: usize = 4;
 
-    /// The minimum supported digit character in a tag.
+    /// The minimum supported digit character in the display string.
     const DIGIT_CHAR_MIN: u8 = b'0';
 
-    /// The maximum supported digit value in a tag.
+    /// The maximum supported digit value.
     const DIGIT_MAX: u8 = 10;
 
-    /// The bitmask for the number in a tag.
+    /// The bitmask for the number.
     const NUMBER_MASK: u32 = 0b00000000_00000000_00111111_11111111;
+
+    /// The maximum supported number value.
+    const NUMBER_MAX: u32 = 10000;
 }
 
 impl FromStr for Tag {
@@ -163,7 +166,7 @@ impl fmt::Display for Tag {
                 0 => '_',
                 c => ((c >> Self::LETTER_SHIFT[i]) as u8 + Self::LETTER_CHAR_MIN - 1) as char,
             });
-        let number = self.0 & Self::NUMBER_MASK;
+        let number = (self.0 & Self::NUMBER_MASK) % Self::NUMBER_MAX;
 
         write!(f, "{}{}{}{:04}", letters[0], letters[1], letters[2], number)
     }
@@ -371,5 +374,11 @@ mod tests {
             Tag::from_str("RNG000D"),
             Err(FromStrError::DigitNotFound('D'))
         );
+    }
+
+    #[test]
+    fn wrap_number() {
+        assert_eq!(Tag(9999).to_string(), "___9999");
+        assert_eq!(Tag(10000).to_string(), "___0000");
     }
 }
