@@ -204,7 +204,7 @@ impl Version for Tag {
 #[derive(Debug, PartialEq, Error)]
 pub enum FromStrError {
     /// The string's length did not equal the expected length.
-    #[error("expected string length {}, found length {0}", Tag::STRING_LEN)]
+    #[error("expected string length {expected}, found length {0}", expected = Tag::STRING_LEN)]
     InvalidStringLength(usize),
 
     /// An unexpected character was found in the alphabetical section of the string.
