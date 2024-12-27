@@ -5,7 +5,7 @@ use binrw::{binrw, BinRead, BinWrite};
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-/// A versioned non-primitive type.
+/// The wrapper type for a versioned, non-primitive type.
 #[binrw]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
@@ -16,17 +16,18 @@ where
     T: for<'a> BinRead<Args<'a> = (u8,)>,
     T: for<'a> BinWrite<Args<'a> = ()>,
 {
+    /// The version number of the wrapped value.
     #[br(temp)]
-    #[bw(calc = data.version())]
+    #[bw(calc = inner.version())]
     version: u8,
 
-    /// The associated data for the type's version.
+    /// The wrapped value.
     #[br(args(version))]
-    pub data: T,
+    pub inner: T,
 }
 
 /// A trait for determining a type's version.
 pub trait Version {
-    /// Returns a type's version.
+    /// Returns the version number from `self`.
     fn version(&self) -> u8;
 }
