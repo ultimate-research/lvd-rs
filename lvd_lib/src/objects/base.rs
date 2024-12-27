@@ -26,7 +26,7 @@ pub enum Base {
         /// The metadata for the object.
         meta_info: Versioned<MetaInfo>,
 
-        /// The name of the object as seen by the game when flagged as dynamic.
+        /// The name of the object as seen by the game when classed as dynamic.
         dynamic_name: Versioned<FixedString64>,
     },
 
@@ -38,10 +38,10 @@ pub enum Base {
         /// The metadata for the object.
         meta_info: Versioned<MetaInfo>,
 
-        /// The name of the object as seen by the game when flagged as dynamic.
+        /// The name of the object as seen by the game when classed as dynamic.
         dynamic_name: Versioned<FixedString64>,
 
-        /// The displacement of the object when flagged as dynamic.
+        /// The displacement of the object when classed as dynamic.
         dynamic_offset: Versioned<Vector3>,
     },
 
@@ -54,22 +54,22 @@ pub enum Base {
         /// The metadata for the object.
         meta_info: Versioned<MetaInfo>,
 
-        /// The name of the object as seen by the game when flagged as dynamic.
+        /// The name of the object as seen by the game when classed as dynamic.
         dynamic_name: Versioned<FixedString64>,
 
-        /// The displacement of the object when flagged as dynamic.
+        /// The displacement of the object when classed as dynamic.
         dynamic_offset: Versioned<Vector3>,
 
-        /// Determines if the object is dynamic.
+        /// Determines if the object is classed as dynamic.
         #[br(map = |b: u8| b != 0)]
         #[bw(map = |b| u8::from(*b))]
         is_dynamic: bool,
 
         /// The numeric ID of the instanced object.
-        /// Must be nonzero for the object to be classified as an instanced object.
+        /// Must be nonzero for the object to be classed as an instanced object.
         instance_id: Versioned<Id>,
 
-        /// The displacement of the object when classified as an instanced object.
+        /// The displacement of the object when classed as an instanced object.
         instance_offset: Versioned<Vector3>,
     },
 
@@ -81,28 +81,28 @@ pub enum Base {
         /// The metadata for the object.
         meta_info: Versioned<MetaInfo>,
 
-        /// The name of the object as seen by the game when flagged as dynamic.
+        /// The name of the object as seen by the game when classed as dynamic.
         dynamic_name: Versioned<FixedString64>,
 
-        /// The displacement of the object when flagged as dynamic.
+        /// The displacement of the object when classed as dynamic.
         dynamic_offset: Versioned<Vector3>,
 
-        /// Determines if the object is dynamic.
+        /// Determines if the object is classed as dynamic.
         #[br(map = |b: u8| b != 0)]
         #[bw(map = |b| u8::from(*b))]
         is_dynamic: bool,
 
-        /// The numeric ID of the instanced object.
-        /// Must be nonzero for the object to be classified as an instanced object.
+        /// The numeric identifier of the instanced object.
+        /// Must be nonzero for the object to be classed as an instanced object.
         instance_id: Versioned<Id>,
 
-        /// The displacement of the object when classified as an instanced object.
+        /// The displacement of the object when classed as an instanced object.
         instance_offset: Versioned<Vector3>,
 
-        /// The index of the target joint from the parent model to parent the dynamic object to.
+        /// The index of the joint from the parent model to parent the object to when classed as dynamic.
         joint_index: i32,
 
-        /// The name of the target joint from the parent model to parent the dynamic object to.
+        /// The name of the joint from the parent model to parent the object to when classed as dynamic.
         joint_name: Versioned<FixedString64>,
     },
 }

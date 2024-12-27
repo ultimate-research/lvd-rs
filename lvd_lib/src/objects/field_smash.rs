@@ -27,7 +27,7 @@ pub enum FsItem {
         /// The common data for the object.
         base: Versioned<Base>,
 
-        /// The shape represented by the object.
+        /// The two-dimensional geometric representation of the object
         shape: Versioned<Shape2>,
 
         /// The identifier for matching and filtering like objects.
@@ -211,7 +211,7 @@ pub enum AreaLight {
         /// The common data for the object.
         base: Versioned<Base>,
 
-        /// The shape represented by the object.
+        /// The two-dimensional geometric representation of the object.
         shape: Versioned<Shape2>,
     },
 
@@ -223,7 +223,7 @@ pub enum AreaLight {
         /// The common data for the object.
         base: Versioned<Base>,
 
-        /// The shape represented by the object.
+        /// The two-dimensional geometric representation of the object.
         shape: Versioned<Shape2>,
 
         // TODO: Field documentation.
@@ -285,7 +285,7 @@ pub enum AreaHint {
         /// The common data for the object.
         base: Versioned<Base>,
 
-        /// The shape represented by the object.
+        /// The three-dimensional geometric representation of the object.
         shape: Versioned<Shape3>,
 
         // TODO: Field documentation.
@@ -310,7 +310,7 @@ pub enum AreaHint {
         /// The common data for the object.
         base: Versioned<Base>,
 
-        /// The shape represented by the object.
+        /// The three-dimensional geometric representation of the object.
         shape: Versioned<Shape3>,
 
         // TODO: Field documentation.
@@ -337,7 +337,7 @@ pub enum AreaHint {
         /// The common data for the object.
         base: Versioned<Base>,
 
-        /// The shape represented by the object.
+        /// The three-dimensional geometric representation of the object.
         shape: Versioned<Shape3>,
 
         // TODO: Field documentation.
@@ -385,7 +385,7 @@ pub enum SplitArea {
         /// The common data for the object.
         base: Versioned<Base>,
 
-        /// The shape represented by the object.
+        /// The three-dimensional geometric representation of the object.
         shape: Versioned<Shape3>,
     },
 }

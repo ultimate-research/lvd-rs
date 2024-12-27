@@ -23,7 +23,7 @@ pub enum DamageShape {
         /// The common data for the object.
         base: Versioned<Base>,
 
-        /// The shape represented by the object.
+        /// The three-dimensional geometric representation of the object.
         shape: Versioned<Shape3>,
 
         /// Determines if the damage shape is an attack collision.

@@ -18,13 +18,13 @@ use serde::{Deserialize, Serialize};
 )]
 #[derive(Debug, Clone, Copy, Default, Eq, PartialEq)]
 pub struct CollisionFlags {
-    /// Determines if the collision can be dropped through.
+    /// Determines if the collision's floor edges can be dropped through
     pub throughable: bool,
 
     #[skip]
     __: B15,
 
-    /// Determines if the collision is dynamic.
+    /// Determines if the collision is classed as dynamic.
     pub dynamic: bool,
 
     #[skip]

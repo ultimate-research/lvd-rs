@@ -27,7 +27,7 @@ pub enum GeneralShape2 {
         /// The identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
 
-        /// The shape represented by the object.
+        /// The two-dimensional geometric representation of the object.
         shape: Versioned<Shape2>,
     },
 }
@@ -55,7 +55,7 @@ pub enum GeneralShape3 {
         /// The identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
 
-        /// The shape represented by the object.
+        /// The three-dimensional geometric representation of the object.
         shape: Versioned<Shape3>,
     },
 }
