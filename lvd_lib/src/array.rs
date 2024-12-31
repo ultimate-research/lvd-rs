@@ -2,7 +2,7 @@
 //!
 //! This module contains the [`LvdArray`] type.
 
-use binrw::{binrw, BinRead, BinWrite};
+use binrw::binrw;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
@@ -14,12 +14,7 @@ use crate::version::{Version, Versioned};
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
-pub enum LvdArray<T: 'static>
-where
-    T: BinRead + BinWrite + Version,
-    T: for<'a> BinRead<Args<'a> = (u8,)>,
-    T: for<'a> BinWrite<Args<'a> = ()>,
-{
+pub enum LvdArray<T: Version + 'static> {
     /// `LvdArray` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
@@ -35,9 +30,7 @@ where
 
 impl<T> Version for LvdArray<T>
 where
-    T: BinRead + BinWrite + Version,
-    T: for<'a> BinRead<Args<'a> = (u8,)>,
-    T: for<'a> BinWrite<Args<'a> = ()>,
+    T: Version,
 {
     fn version(&self) -> u8 {
         match self {

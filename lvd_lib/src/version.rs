@@ -10,12 +10,7 @@ use serde::{Deserialize, Serialize};
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(Debug)]
-pub struct Versioned<T>
-where
-    T: BinRead + BinWrite + Version,
-    T: for<'a> BinRead<Args<'a> = (u8,)>,
-    T: for<'a> BinWrite<Args<'a> = ()>,
-{
+pub struct Versioned<T: Version> {
     /// The version number of the wrapped value.
     #[br(temp)]
     #[bw(calc = inner.version())]
@@ -27,7 +22,12 @@ where
 }
 
 /// A trait for determining a type's version.
-pub trait Version {
+pub trait Version
+where
+    Self: BinRead + BinWrite,
+    Self: for<'a> BinRead<Args<'a> = (u8,)>,
+    Self: for<'a> BinWrite<Args<'a> = ()>,
+{
     /// Returns the version number from `self`.
     fn version(&self) -> u8;
 }
