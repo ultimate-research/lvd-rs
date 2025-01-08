@@ -17,24 +17,24 @@ use crate::{
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum Region {
-    /// `Region` version 1.
+    /// The first version of the `Region` type.
     ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The metadata for the object.
+        /// The metadata of the object.
         meta_info: Versioned<MetaInfo>,
 
         /// The edge coordinates of the region.
         rect: Versioned<Rect>,
     },
 
-    /// `Region` version 2.
+    /// The second version of the `Region` type.
     ///
     /// Replaces [`meta_info`](#variant.V1.field.meta_info) with [`base`](#variant.V2.field.base).
     #[br(pre_assert(version == 2))]
     V2 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The edge coordinates of the region.

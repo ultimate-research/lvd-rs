@@ -30,15 +30,15 @@ pub use spirits_floor::CollisionSpiritsFloor;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum Collision {
-    /// `Collision` version 1.
+    /// The first version of the `Collision` type.
     ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The metadata for the object.
+        /// The metadata of the object.
         meta_info: Versioned<MetaInfo>,
 
-        /// The flags representing the global attributes of the collision.
+        /// The global attributes of the collision.
         flags: CollisionFlags,
 
         /// The collection of vertices forming the geometry of the collision.
@@ -47,19 +47,19 @@ pub enum Collision {
         /// The collection of unit normal vectors defining the tangible side of each edge.
         normals: Versioned<Array<Vector2>>,
 
-        /// The collection of extra data for edges flagged as grabbable.
+        /// The collection of supplementary data for edges flagged as grabbable.
         cliffs: Versioned<Array<CollisionCliff>>,
     },
 
-    /// `Collision` version 2.
+    /// The second version of the `Collision` type.
     ///
     /// Replaces [`meta_info`](#variant.V1.field.meta_info) with [`base`](#variant.V2.field.base).
     #[br(pre_assert(version == 2))]
     V2 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The flags representing the global attributes of the collision.
+        /// The global attributes of the collision.
         flags: CollisionFlags,
 
         /// The collection of vertices forming the geometry of the collision.
@@ -68,19 +68,19 @@ pub enum Collision {
         /// The collection of unit normal vectors defining the tangible side of each edge.
         normals: Versioned<Array<Vector2>>,
 
-        /// The collection of extra data for edges flagged as grabbable.
+        /// The collection of supplementary data for edges flagged as grabbable.
         cliffs: Versioned<Array<CollisionCliff>>,
     },
 
-    /// `Collision` version 3.
+    /// The third version of the `Collision` type.
     ///
     /// Adds [`attributes`](#variant.V3.field.attributes).
     #[br(pre_assert(version == 3))]
     V3 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The flags representing the global attributes of the collision.
+        /// The global attributes of the collision.
         flags: CollisionFlags,
 
         /// The collection of vertices forming the geometry of the collision.
@@ -89,22 +89,22 @@ pub enum Collision {
         /// The collection of unit normal vectors defining the tangible side of each edge.
         normals: Versioned<Array<Vector2>>,
 
-        /// The collection of extra data for edges flagged as grabbable.
+        /// The collection of supplementary data for edges flagged as grabbable.
         cliffs: Versioned<Array<CollisionCliff>>,
 
-        /// The collection of material presets and flags for each edge in the collision.
+        /// The collection of properties and attributes for each edge in the collision.
         attributes: Versioned<Array<CollisionAttribute>>,
     },
 
-    /// `Collision` version 4.
+    /// The fourth version of the `Collision` type.
     ///
     /// Adds [`spirits_floors`](#variant.V4.field.spirits_floors).
     #[br(pre_assert(version == 4))]
     V4 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The flags representing the global attributes of the collision.
+        /// The global attributes of the collision.
         flags: CollisionFlags,
 
         /// The collection of vertices forming the geometry of the collision.
@@ -113,7 +113,7 @@ pub enum Collision {
         /// The collection of unit normal vectors defining the tangible side of each edge.
         normals: Versioned<Array<Vector2>>,
 
-        /// The collection of extra data for edges flagged as grabbable.
+        /// The collection of supplementary data for edges flagged as grabbable.
         cliffs: Versioned<Array<CollisionCliff>>,
 
         /// The collection of properties and attributes for each edge in the collision.

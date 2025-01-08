@@ -19,12 +19,12 @@ use crate::{
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum EnemyGenerator {
-    /// `EnemyGenerator` version 1.
+    /// The first version of the `EnemyGenerator` type.
     ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The collection of shapes where enemies can appear from.
@@ -40,13 +40,13 @@ pub enum EnemyGenerator {
         tag: Versioned<Tag>,
     },
 
-    /// `EnemyGenerator` version 2.
+    /// The second version of the `EnemyGenerator` type.
     ///
     /// Adds [`appear_tags`](#variant.V2.field.appear_tags) and [`unk2`](#variant.V2.field.unk2).
     /// This version is not known to be used.
     #[br(pre_assert(version == 2))]
     V2 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The collection of shapes where enemies can appear from.
@@ -68,12 +68,12 @@ pub enum EnemyGenerator {
         unk2: Versioned<Array<Tag>>,
     },
 
-    /// `EnemyGenerator` version 3.
+    /// The third version of the `EnemyGenerator` type.
     ///
     /// Adds [`trigger_tags`](#variant.V3.field.trigger_tags).
     #[br(pre_assert(version == 3))]
     V3 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The collection of shapes where enemies can appear from.

@@ -20,7 +20,7 @@ use crate::{
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum Shape2 {
-    /// Point shape type.
+    /// The point shape type.
     #[brw(magic = 1u32)]
     Point {
         /// The position along the x-axis.
@@ -35,7 +35,7 @@ pub enum Shape2 {
         path: Versioned<LvdPath>,
     },
 
-    /// Circle shape type.
+    /// The circle shape type.
     #[brw(magic = 2u32)]
     Circle {
         /// The position along the x-axis.
@@ -53,7 +53,7 @@ pub enum Shape2 {
         path: Versioned<LvdPath>,
     },
 
-    /// Rectangle shape type.
+    /// The rectangle shape type.
     #[brw(magic = 3u32)]
     Rect {
         /// The coordinate of the left edge.
@@ -73,7 +73,7 @@ pub enum Shape2 {
         path: Versioned<LvdPath>,
     },
 
-    /// Path shape type.
+    /// The path shape type.
     #[brw(magic = 4u32)]
     Path {
         /// The collection of points forming the path shape.
@@ -95,7 +95,7 @@ impl Version for Shape2 {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum ShapeArray2 {
-    /// `ShapeArray2` version 1.
+    /// The first version of the `ShapeArray2` type.
     #[br(pre_assert(version == 1))]
     V1 {
         /// The collection of two-dimensional shapes.
@@ -132,7 +132,7 @@ impl Version for ShapeArrayElement2 {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum Shape3 {
-    /// Box shape type.
+    /// The box shape type.
     #[brw(magic = 1u32)]
     Box {
         /// The coordinate of the left edge.
@@ -155,7 +155,7 @@ pub enum Shape3 {
         front: f32,
     },
 
-    /// Sphere shape type.
+    /// The sphere shape type.
     #[brw(magic = 2u32)]
     Sphere {
         /// The position along the x-axis.
@@ -172,7 +172,7 @@ pub enum Shape3 {
         radius: f32,
     },
 
-    /// Capsule shape type.
+    /// The capsule shape type.
     #[brw(magic = 3u32)]
     Capsule {
         /// The position of the start point along the x-axis.
@@ -197,7 +197,7 @@ pub enum Shape3 {
         radius: f32,
     },
 
-    /// Point shape type.
+    /// The point shape type.
     #[brw(magic = 4u32)]
     Point {
         /// The position along the x-axis.
@@ -224,7 +224,7 @@ impl Version for Shape3 {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum LvdPath {
-    /// `LvdPath` version 1.
+    /// The first version of the `LvdPath` type.
     #[br(pre_assert(version == 1))]
     V1 {
         /// The collection of two-dimensional points forming the path shape.
@@ -246,7 +246,7 @@ impl Version for LvdPath {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Rect {
-    /// `Rect` version 1.
+    /// The first version of the `Rect` type.
     #[br(pre_assert(version == 1))]
     V1 {
         /// The coordinate of the left edge.

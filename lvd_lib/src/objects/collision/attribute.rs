@@ -1,4 +1,4 @@
-//! The [`CollisionAttribute`] object stores data representing an edge's properties and attributes.
+//! The [`CollisionAttribute`] object stores data representing the properties and attributes of an edge.
 
 use binrw::binrw;
 use modular_bitfield::prelude::*;
@@ -8,19 +8,19 @@ use serde::{Deserialize, Serialize};
 
 use crate::version::Version;
 
-/// An LVD subobject to [`Collision`](crate::objects::collision::Collision) representing an edge's properties and attributes.
+/// The properties and attributes of an edge.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum CollisionAttribute {
-    /// `CollisionAttribute` version 1.
+    /// The first version of the `CollisionAttribute` type.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The material preset representing how an edge is visually, audibly, and physically interacted with.
+        /// The material preset representing how the edge is visually, audibly, and physically interacted with.
         material: MaterialType,
 
-        /// The flags for enabling or disabling the corresponding edge's attributes.
+        /// The attributes of the edge.
         flags: AttributeFlags,
     },
 }
@@ -33,7 +33,7 @@ impl Version for CollisionAttribute {
     }
 }
 
-/// Material presets representing how an edge is visually, audibly, and physically interacted with.
+/// The material presets representing how an edge is visually, audibly, and physically interacted with.
 #[binrw]
 #[brw(repr(u32))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -85,7 +85,7 @@ pub enum MaterialType {
     JackMementoes = 43,
 }
 
-/// Flags for enabling or disabling attributes of an edge.
+/// The attributes of an edge.
 #[bitfield]
 #[binrw]
 #[br(map = |f: u64| Self::from_bytes(f.to_le_bytes()))]

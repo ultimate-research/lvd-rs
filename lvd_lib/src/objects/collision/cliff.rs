@@ -11,13 +11,13 @@ use crate::{
     version::{Version, Versioned},
 };
 
-/// An LVD subobject to [`Collision`](crate::objects::collision::Collision) representing a grabbable edge.
+/// An LVD subobject to a [`Collision`](crate::objects::collision::Collision) representing a grabbable edge.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum CollisionCliff {
-    /// `CollisionCliff` version 1.
+    /// The first version of the `CollisionCliff` type.
     ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
@@ -28,16 +28,17 @@ pub enum CollisionCliff {
         pos: Versioned<Vector2>,
 
         /// The facing direction of the cliff.
-        /// `-1.0` corresponds to the left and `1.0` corresponds to the right.
+        ///
+        /// A value of `-1.0` corresponds to the left and a value of `1.0` corresponds to the right.
         lr: f32,
     },
 
-    /// `CollisionCliff` version 2.
+    /// The second version of the `CollisionCliff` type.
     ///
     /// Adds [`base`](#variant.V2.field.base).
     #[br(pre_assert(version == 2))]
     V2 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The position of the cliff.
@@ -47,16 +48,16 @@ pub enum CollisionCliff {
 
         /// The facing direction of the cliff.
         ///
-        /// `-1.0` corresponds to the left and `1.0` corresponds to the right.
+        /// A value of `-1.0` corresponds to the left and a value of `1.0` corresponds to the right.
         lr: f32,
     },
 
-    /// `CollisionCliff` version 3.
+    /// The third version of the `CollisionCliff` type.
     ///
     /// Adds [`line_index`](#variant.V3.field.line_index).
     #[br(pre_assert(version == 3))]
     V3 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The position of the cliff.
@@ -66,7 +67,7 @@ pub enum CollisionCliff {
 
         /// The facing direction of the cliff.
         ///
-        /// `-1.0` corresponds to the left and `1.0` corresponds to the right.
+        /// A value of `-1.0` corresponds to the left and a value of `1.0` corresponds to the right.
         lr: f32,
 
         /// The index of the edge in the associated collision to link the object with.

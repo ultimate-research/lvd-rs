@@ -17,10 +17,10 @@ use crate::{
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum DamageShape {
-    /// `DamageShape` version 1.
+    /// The first version of the `DamageShape` type.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The three-dimensional geometric representation of the object.

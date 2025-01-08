@@ -76,7 +76,7 @@ impl LvdFile {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum Lvd {
-    /// `Lvd` version 1.
+    /// The first version of the `Lvd` type.
     ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
@@ -89,7 +89,7 @@ pub enum Lvd {
         enemy_generators: Versioned<Array<EnemyGenerator>>,
     },
 
-    /// `Lvd` version 2.
+    /// The second version of the `Lvd` type.
     ///
     /// Adds [`fs_items`](#variant.V2.field.fs_items).
     /// This version is not known to be used.
@@ -104,7 +104,7 @@ pub enum Lvd {
         fs_items: Versioned<Array<FsItem>>,
     },
 
-    /// `Lvd` version 3.
+    /// The third version of the `Lvd` type.
     ///
     /// Adds [`fs_unknown`](#variant.V3.field.fs_unknown), [`fs_area_cams`](#variant.V3.field.fs_area_cams), [`fs_area_locks`](#variant.V3.field.fs_area_locks), and [`fs_cam_limits`](#variant.V3.field.fs_cam_limits).
     /// This version is not known to be used.
@@ -123,7 +123,7 @@ pub enum Lvd {
         fs_cam_limits: Versioned<Array<FsCamLimit>>,
     },
 
-    /// `Lvd` version 4.
+    /// The fourth version of the `Lvd` type.
     ///
     /// Adds [`damage_shapes`](#variant.V4.field.damage_shapes).
     #[br(pre_assert(version == 4))]
@@ -142,7 +142,7 @@ pub enum Lvd {
         damage_shapes: Versioned<Array<DamageShape>>,
     },
 
-    /// `Lvd` version 5.
+    /// The fifth version of the `Lvd` type.
     ///
     /// Adds [`item_popups`](#variant.V5.field.item_popups).
     /// This version is not known to be used.
@@ -163,7 +163,7 @@ pub enum Lvd {
         item_popups: Versioned<Array<ItemPopup>>,
     },
 
-    /// `Lvd` version 6.
+    /// The sixth version of the `Lvd` type.
     ///
     /// Adds [`general_shapes2`](#variant.V6.field.general_shapes2) and [`general_shapes3`](#variant.V6.field.general_shapes3).
     #[br(pre_assert(version == 6))]
@@ -185,7 +185,7 @@ pub enum Lvd {
         general_shapes3: Versioned<Array<GeneralShape3>>,
     },
 
-    /// `Lvd` version 7.
+    /// The seventh version of the `Lvd` type.
     ///
     /// Adds [`area_lights`](#variant.V7.field.area_lights).
     /// This version is not known to be used.
@@ -209,7 +209,7 @@ pub enum Lvd {
         area_lights: Versioned<Array<AreaLight>>,
     },
 
-    /// `Lvd` version 8.
+    /// The eighth version of the `Lvd` type.
     ///
     /// Adds [`fs_start_points`](#variant.V8.field.fs_start_points).
     #[br(pre_assert(version == 8))]
@@ -233,7 +233,7 @@ pub enum Lvd {
         fs_start_points: Versioned<Array<FsStartPoint>>,
     },
 
-    /// `Lvd` version 9.
+    /// The ninth version of the `Lvd` type.
     ///
     /// Adds [`area_hints`](#variant.V9.field.area_hints).
     /// This version is not known to be used.
@@ -259,7 +259,7 @@ pub enum Lvd {
         area_hints: Versioned<Array<AreaHint>>,
     },
 
-    /// `Lvd` version 10.
+    /// The tenth version of the `Lvd` type.
     ///
     /// Adds [`split_areas`](#variant.V10.field.split_areas).
     #[br(pre_assert(version == 10))]
@@ -285,7 +285,7 @@ pub enum Lvd {
         split_areas: Versioned<Array<SplitArea>>,
     },
 
-    /// `Lvd` version 11.
+    /// The eleventh version of the `Lvd` type.
     ///
     /// Adds [`shrinked_camera_regions`](#variant.V11.field.shrinked_camera_regions) and [`shrinked_death_regions`](#variant.V11.field.shrinked_death_regions).
     #[br(pre_assert(version == 11))]
@@ -313,7 +313,7 @@ pub enum Lvd {
         shrinked_death_regions: Versioned<Array<Region>>,
     },
 
-    /// `Lvd` version 12.
+    /// The twelfth version of the `Lvd` type.
     ///
     /// Adds [`ptrainer_ranges`](#variant.V12.field.ptrainer_ranges).
     #[br(pre_assert(version == 12))]
@@ -342,7 +342,7 @@ pub enum Lvd {
         shrinked_death_regions: Versioned<Array<Region>>,
     },
 
-    /// `Lvd` version 13.
+    /// The thirteenth version of the `Lvd` type.
     ///
     /// Adds [`ptrainer_floating_floors`](#variant.V13.field.ptrainer_floating_floors).
     #[br(pre_assert(version == 13))]

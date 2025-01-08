@@ -6,7 +6,7 @@ use modular_bitfield::prelude::*;
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
-/// Flags for a [`Collision`](crate::objects::collision::Collision) representing the global attributes of a collision.
+/// The global attributes of a collision.
 #[bitfield]
 #[binrw]
 #[br(map = |f: u32| Self::from_bytes(f.to_le_bytes()))]

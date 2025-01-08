@@ -21,10 +21,10 @@ use crate::{
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum FsItem {
-    /// `FsItem` version 1.
+    /// The first version of the `FsItem` type.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The two-dimensional geometric representation of the object
@@ -49,11 +49,12 @@ impl Version for FsItem {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum FsUnknown {
-    /// `FsUnknown` version 1.
+    /// The first version of the `FsUnknown` type.
+    ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         // TODO: Field documentation.
@@ -63,13 +64,13 @@ pub enum FsUnknown {
         unk2: Versioned<FsCamLimit>,
     },
 
-    /// `FsUnknown` version 2.
+    /// The second version of the `FsUnknown` type.
     ///
     /// Adds [`unk3`](#variant.V2.field.unk3).
     /// This version is not known to be used.
     #[br(pre_assert(version == 2))]
     V2 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         // TODO: Field documentation.
@@ -98,7 +99,7 @@ impl Version for FsUnknown {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum FsAreaCam {
-    /// `FsAreaCam` version 1.
+    /// The first version of the `FsAreaCam` type.
     #[br(pre_assert(version == 1))]
     V1 {
         // TODO: Field documentation.
@@ -123,12 +124,12 @@ impl Version for FsAreaCam {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum FsAreaLock {
-    /// `FsAreaLock` version 1.
+    /// The first version of the `FsAreaLock` type.
     ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The edge coordinates of the region for restricted camera movement.
@@ -141,12 +142,12 @@ pub enum FsAreaLock {
         unk1: u32,
     },
 
-    /// `FsAreaLock` version 2.
+    /// The second version of the `FsAreaLock` type.
     ///
     /// Adds [`unk2`](#variant.V2.field.unk2).
     #[br(pre_assert(version == 2))]
     V2 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The edge coordinates of the region for restricted camera movement.
@@ -178,10 +179,10 @@ impl Version for FsAreaLock {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum FsCamLimit {
-    /// `FsCamLimit` version 1.
+    /// The first version of the `FsCamLimit` type.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The path shape forming the camera limit region.
@@ -203,24 +204,24 @@ impl Version for FsCamLimit {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum AreaLight {
-    /// `AreaLight` version 1.
+    /// The first version of the `AreaLight` type.
     ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The two-dimensional geometric representation of the object.
         shape: Versioned<Shape2>,
     },
 
-    /// `AreaLight` version 2.
+    /// The second version of the `AreaLight` type.
     ///
     /// Adds [`unk1`](#variant.V2.field.unk1) and [`unk2`](#variant.V2.field.unk2).
     #[br(pre_assert(version == 2))]
     V2 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The two-dimensional geometric representation of the object.
@@ -249,10 +250,10 @@ impl Version for AreaLight {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum FsStartPoint {
-    /// `FsStartPoint` version 1.
+    /// The first version of the `FsStartPoint` type.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The position of the point.
@@ -277,12 +278,12 @@ impl Version for FsStartPoint {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum AreaHint {
-    /// `AreaHint` version 1.
+    /// The first version of the `AreaHint` type.
     ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The three-dimensional geometric representation of the object.
@@ -301,13 +302,13 @@ pub enum AreaHint {
         unk4: i32,
     },
 
-    /// `AreaHint` version 2.
+    /// The second version of the `AreaHint` type.
     ///
     /// Adds [`unk5`](#variant.V2.field.unk5).
     /// This version is not known to be used.
     #[br(pre_assert(version == 2))]
     V2 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The three-dimensional geometric representation of the object.
@@ -329,12 +330,12 @@ pub enum AreaHint {
         unk5: u8,
     },
 
-    /// `AreaHint` version 3.
+    /// The third version of the `AreaHint` type.
     ///
     /// Adds [`unk6`](#variant.V3.field.unk6) and [`unk7`](#variant.V3.field.unk7).
     #[br(pre_assert(version == 3))]
     V3 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The three-dimensional geometric representation of the object.
@@ -379,10 +380,10 @@ impl Version for AreaHint {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum SplitArea {
-    /// `SplitArea` version 1.
+    /// The first version of the `SplitArea` type.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The three-dimensional geometric representation of the object.

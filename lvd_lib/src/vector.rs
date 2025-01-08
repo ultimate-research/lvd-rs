@@ -15,7 +15,7 @@ use crate::version::Version;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Vector2 {
-    /// `Vector2` version 1.
+    /// The first version of the `Vector2` type.
     #[br(pre_assert(version == 1))]
     V1 {
         /// The component along the x-axis.
@@ -40,7 +40,7 @@ impl Version for Vector2 {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Vector3 {
-    /// `Vector3` version 1.
+    /// The first version of the `Vector3` type.
     #[br(pre_assert(version == 1))]
     V1 {
         /// The component along the x-axis.

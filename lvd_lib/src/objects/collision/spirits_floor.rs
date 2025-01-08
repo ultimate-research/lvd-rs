@@ -11,18 +11,18 @@ use crate::{
     version::{Version, Versioned},
 };
 
-/// An LVD subobject to [`Collision`](crate::objects::collision::Collision) representing hazardous floors in spirit battles.
+/// An LVD subobject to a [`Collision`](crate::objects::collision::Collision) representing hazardous floors in spirit battles.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum CollisionSpiritsFloor {
-    /// `CollisionSpiritsFloor` version 1.
+    /// The first version of the `CollisionSpiritsFloor` type.
     ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The index of the edge in the associated collision to link the object with.
@@ -32,13 +32,13 @@ pub enum CollisionSpiritsFloor {
         line_group: Versioned<FixedString64>,
     },
 
-    /// `CollisionSpiritsFloor` version 2.
+    /// The second version of the `CollisionSpiritsFloor` type.
     ///
     /// Adds [`unk1`](#variant.V2.field.unk1), [`unk2`](#variant.V2.field.unk2), [`unk3`](#variant.V2.field.unk3),
     /// [`unk4`](#variant.V2.field.unk4), [`unk5`](#variant.V2.field.unk5), and [`unk6`](#variant.V2.field.unk6).
     #[br(pre_assert(version == 2))]
     V2 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The index of the edge in the associated collision to link the object with.

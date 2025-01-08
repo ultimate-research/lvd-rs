@@ -19,37 +19,37 @@ use crate::{
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum PTrainerRange {
-    /// `PTrainerRange` version 1.
+    /// The first version of the `PTrainerRange` type.
     ///
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The minimum position that a Pokémon Trainer can travel to.
+        /// The minimum position a Pokémon Trainer can move to.
         range_min: Versioned<Vector3>,
 
-        /// The maximum position that a Pokémon Trainer can travel to.
+        /// The maximum position a Pokémon Trainer can move to.
         range_max: Versioned<Vector3>,
 
         /// The collection of starting positions for each Pokémon Trainer in the range.
         trainers: Versioned<Array<Vector3>>,
     },
 
-    /// `PTrainerRange` version 4.
+    /// The fourth version of the `PTrainerRange` type.
     ///
     /// Adds [`parent_model_name`](#variant.V4.field.parent_model_name) and [`parent_joint_name`](#variant.V4.field.parent_joint_name).
-    /// Versions 2 and 3 do not formally exist.
+    /// The second and third versions do not formally exist.
     #[br(pre_assert(version == 4))]
     V4 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The minimum position that a Pokémon Trainer can travel to.
+        /// The minimum position a Pokémon Trainer can move to.
         range_min: Versioned<Vector3>,
 
-        /// The maximum position that a Pokémon Trainer can travel to.
+        /// The maximum position a Pokémon Trainer can move to.
         range_max: Versioned<Vector3>,
 
         /// The collection of starting positions for each Pokémon Trainer in the range.
@@ -72,16 +72,16 @@ impl Version for PTrainerRange {
     }
 }
 
-/// An LVD object representing a Pokémon Trainer's floating platform position.
+/// An LVD object representing a Pokémon Trainer's floating platform.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum PTrainerFloatingFloor {
-    /// `PTrainerFloatingFloor` version 1.
+    /// The first version of the `PTrainerFloatingFloor` type.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The common data for the object.
+        /// The common data of the object.
         base: Versioned<Base>,
 
         /// The position of the floating platform.
