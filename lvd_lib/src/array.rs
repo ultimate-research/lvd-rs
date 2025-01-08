@@ -1,6 +1,6 @@
 //! A fixed-size collection of contiguous versioned elements.
 //!
-//! This module contains the [`LvdArray`] type.
+//! This module contains the [`Array`] type.
 
 use binrw::binrw;
 
@@ -14,8 +14,8 @@ use crate::version::{Version, Versioned};
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
-pub enum LvdArray<T: Version + 'static> {
-    /// `LvdArray` version 1.
+pub enum Array<T: Version + 'static> {
+    /// `Array` version 1.
     #[br(pre_assert(version == 1))]
     V1 {
         #[br(temp)]
@@ -28,7 +28,7 @@ pub enum LvdArray<T: Version + 'static> {
     },
 }
 
-impl<T> Version for LvdArray<T>
+impl<T> Version for Array<T>
 where
     T: Version,
 {

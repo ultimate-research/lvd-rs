@@ -9,7 +9,7 @@ use binrw::binrw;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    array::LvdArray,
+    array::Array,
     vector::Vector2,
     version::{Version, Versioned},
 };
@@ -99,7 +99,7 @@ pub enum ShapeArray2 {
     #[br(pre_assert(version == 1))]
     V1 {
         /// The collection of two-dimensional shapes.
-        shapes: Versioned<LvdArray<ShapeArrayElement2>>,
+        shapes: Versioned<Array<ShapeArrayElement2>>,
     },
 }
 
@@ -228,7 +228,7 @@ pub enum LvdPath {
     #[br(pre_assert(version == 1))]
     V1 {
         /// The collection of two-dimensional points forming the path shape.
-        points: Versioned<LvdArray<Vector2>>,
+        points: Versioned<Array<Vector2>>,
     },
 }
 

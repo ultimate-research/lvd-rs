@@ -6,7 +6,7 @@ use binrw::binrw;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    array::LvdArray,
+    array::Array,
     objects::base::Base,
     string::FixedString64,
     vector::Vector3,
@@ -34,7 +34,7 @@ pub enum PTrainerRange {
         range_max: Versioned<Vector3>,
 
         /// The collection of starting positions for each Pokémon Trainer in the range.
-        trainers: Versioned<LvdArray<Vector3>>,
+        trainers: Versioned<Array<Vector3>>,
     },
 
     /// `PTrainerRange` version 4.
@@ -53,7 +53,7 @@ pub enum PTrainerRange {
         range_max: Versioned<Vector3>,
 
         /// The collection of starting positions for each Pokémon Trainer in the range.
-        trainers: Versioned<LvdArray<Vector3>>,
+        trainers: Versioned<Array<Vector3>>,
 
         /// The name of a model for the range to inherit select transformations from.
         parent_model_name: Versioned<FixedString64>,

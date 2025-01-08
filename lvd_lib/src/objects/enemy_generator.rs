@@ -6,7 +6,7 @@ use binrw::binrw;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    array::LvdArray,
+    array::Array,
     objects::base::Base,
     shape::ShapeArray2,
     tag::Tag,
@@ -62,10 +62,10 @@ pub enum EnemyGenerator {
         tag: Versioned<Tag>,
 
         /// The collection of identifiers for matching and filtering appear regions.
-        appear_tags: Versioned<LvdArray<Tag>>,
+        appear_tags: Versioned<Array<Tag>>,
 
         // TODO: Field documentation.
-        unk2: Versioned<LvdArray<Tag>>,
+        unk2: Versioned<Array<Tag>>,
     },
 
     /// `EnemyGenerator` version 3.
@@ -89,13 +89,13 @@ pub enum EnemyGenerator {
         tag: Versioned<Tag>,
 
         /// The collection of identifiers for matching and filtering appear regions.
-        appear_tags: Versioned<LvdArray<Tag>>,
+        appear_tags: Versioned<Array<Tag>>,
 
         // TODO: Field documentation.
-        unk2: Versioned<LvdArray<Tag>>,
+        unk2: Versioned<Array<Tag>>,
 
         /// The collection of identifiers for matching and filtering trigger regions.
-        trigger_tags: Versioned<LvdArray<Tag>>,
+        trigger_tags: Versioned<Array<Tag>>,
     },
 }
 

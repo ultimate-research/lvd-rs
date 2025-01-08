@@ -8,7 +8,7 @@ use binrw::binrw;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    array::LvdArray,
+    array::Array,
     objects::base::{Base, MetaInfo},
     vector::Vector2,
     version::{Version, Versioned},
@@ -42,13 +42,13 @@ pub enum Collision {
         flags: CollisionFlags,
 
         /// The collection of vertices forming the geometry of the collision.
-        vertices: Versioned<LvdArray<Vector2>>,
+        vertices: Versioned<Array<Vector2>>,
 
         /// The collection of unit normal vectors defining the tangible side of each edge.
-        normals: Versioned<LvdArray<Vector2>>,
+        normals: Versioned<Array<Vector2>>,
 
         /// The collection of extra data for edges flagged as grabbable.
-        cliffs: Versioned<LvdArray<CollisionCliff>>,
+        cliffs: Versioned<Array<CollisionCliff>>,
     },
 
     /// `Collision` version 2.
@@ -63,13 +63,13 @@ pub enum Collision {
         flags: CollisionFlags,
 
         /// The collection of vertices forming the geometry of the collision.
-        vertices: Versioned<LvdArray<Vector2>>,
+        vertices: Versioned<Array<Vector2>>,
 
         /// The collection of unit normal vectors defining the tangible side of each edge.
-        normals: Versioned<LvdArray<Vector2>>,
+        normals: Versioned<Array<Vector2>>,
 
         /// The collection of extra data for edges flagged as grabbable.
-        cliffs: Versioned<LvdArray<CollisionCliff>>,
+        cliffs: Versioned<Array<CollisionCliff>>,
     },
 
     /// `Collision` version 3.
@@ -84,16 +84,16 @@ pub enum Collision {
         flags: CollisionFlags,
 
         /// The collection of vertices forming the geometry of the collision.
-        vertices: Versioned<LvdArray<Vector2>>,
+        vertices: Versioned<Array<Vector2>>,
 
         /// The collection of unit normal vectors defining the tangible side of each edge.
-        normals: Versioned<LvdArray<Vector2>>,
+        normals: Versioned<Array<Vector2>>,
 
         /// The collection of extra data for edges flagged as grabbable.
-        cliffs: Versioned<LvdArray<CollisionCliff>>,
+        cliffs: Versioned<Array<CollisionCliff>>,
 
         /// The collection of material presets and flags for each edge in the collision.
-        attributes: Versioned<LvdArray<CollisionAttribute>>,
+        attributes: Versioned<Array<CollisionAttribute>>,
     },
 
     /// `Collision` version 4.
@@ -108,19 +108,19 @@ pub enum Collision {
         flags: CollisionFlags,
 
         /// The collection of vertices forming the geometry of the collision.
-        vertices: Versioned<LvdArray<Vector2>>,
+        vertices: Versioned<Array<Vector2>>,
 
         /// The collection of unit normal vectors defining the tangible side of each edge.
-        normals: Versioned<LvdArray<Vector2>>,
+        normals: Versioned<Array<Vector2>>,
 
         /// The collection of extra data for edges flagged as grabbable.
-        cliffs: Versioned<LvdArray<CollisionCliff>>,
+        cliffs: Versioned<Array<CollisionCliff>>,
 
         /// The collection of properties and attributes for each edge in the collision.
-        attributes: Versioned<LvdArray<CollisionAttribute>>,
+        attributes: Versioned<Array<CollisionAttribute>>,
 
         /// The collection of entries related to hazardous floors in spirit battles.
-        spirits_floors: Versioned<LvdArray<CollisionSpiritsFloor>>,
+        spirits_floors: Versioned<Array<CollisionSpiritsFloor>>,
     },
 }
 
