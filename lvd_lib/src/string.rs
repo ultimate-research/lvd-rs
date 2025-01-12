@@ -32,6 +32,12 @@ pub struct FixedString<const N: usize> {
 }
 
 impl<const N: usize> FixedString<N> {
+    /// The number of bytes the buffer can hold, excluding the nul byte.
+    pub const CAPACITY: usize = N - 1;
+
+    /// The number of bytes the buffer can hold, including the nul byte.
+    pub const CAPACITY_WITH_NUL: usize = N;
+
     /// Creates a new empty `FixedString`.
     ///
     /// # Examples
@@ -63,7 +69,7 @@ impl<const N: usize> FixedString<N> {
     pub const fn len(&self) -> usize {
         let mut len = 0;
 
-        while len != self.capacity() {
+        while len != Self::CAPACITY_WITH_NUL {
             if self.inner[len] == 0 {
                 break;
             }
@@ -72,22 +78,6 @@ impl<const N: usize> FixedString<N> {
         }
 
         len
-    }
-
-    /// Returns this `FixedString`’s capacity, in bytes.
-    ///
-    /// # Examples
-    ///
-    /// Basic usage:
-    ///
-    /// ```
-    /// use lvd_lib::string::FixedString;
-    ///
-    /// let s = FixedString::<64>::try_from("COL_00_Platform01_through").unwrap();
-    /// assert_eq!(s.capacity(), 64);
-    /// ```
-    pub const fn capacity(&self) -> usize {
-        self.inner.len()
     }
 
     /// Returns `true` if the contained string has a length of zero, and `false` otherwise.
