@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 use crate::{
     id::Id,
     objects::{base::Base, region::Region},
-    shape::{LvdPath, Rect, Shape2, Shape3},
+    shape::{Path, Rect, Shape2, Shape3},
     string::FixedString32,
     tag::Tag,
     vector::Vector2,
@@ -186,7 +186,7 @@ pub enum FsCamLimit {
         base: Versioned<Base>,
 
         /// The path shape forming the camera limit region.
-        path: Versioned<LvdPath>,
+        path: Versioned<Path>,
     },
 }
 

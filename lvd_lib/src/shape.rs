@@ -1,7 +1,7 @@
 //! Basic shape types.
 //!
 //! This module contains the [`Shape2`], [`ShapeArray2`] and [`ShapeArrayElement2`] types,
-//! the [`Shape3`] type, the [`LvdPath`] type, and the [`Rect`] type.
+//! the [`Shape3`] type, the [`Path`] type, and the [`Rect`] type.
 
 use binrw::binrw;
 
@@ -32,7 +32,7 @@ pub enum Shape2 {
         /// The collection of points forming the path shape.
         /// This collection should always be empty.
         #[brw(pad_before = 8)]
-        path: Versioned<LvdPath>,
+        path: Versioned<Path>,
     },
 
     /// The circle shape type.
@@ -50,7 +50,7 @@ pub enum Shape2 {
         /// The collection of points forming the path shape.
         /// This collection should always be empty.
         #[brw(pad_before = 4)]
-        path: Versioned<LvdPath>,
+        path: Versioned<Path>,
     },
 
     /// The rectangle shape type.
@@ -70,7 +70,7 @@ pub enum Shape2 {
 
         /// The collection of points forming the path shape.
         /// This collection should always be empty.
-        path: Versioned<LvdPath>,
+        path: Versioned<Path>,
     },
 
     /// The path shape type.
@@ -78,7 +78,7 @@ pub enum Shape2 {
     Path {
         /// The collection of points forming the path shape.
         #[brw(pad_before = 16)]
-        path: Versioned<LvdPath>,
+        path: Versioned<Path>,
     },
 }
 
@@ -223,8 +223,8 @@ impl Version for Shape3 {
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
-pub enum LvdPath {
-    /// The first version of the `LvdPath` type.
+pub enum Path {
+    /// The first version of the `Path` type.
     #[br(pre_assert(version == 1))]
     V1 {
         /// The collection of two-dimensional points forming the path shape.
@@ -232,7 +232,7 @@ pub enum LvdPath {
     },
 }
 
-impl Version for LvdPath {
+impl Version for Path {
     fn version(&self) -> u8 {
         match self {
             Self::V1 { .. } => 1,
