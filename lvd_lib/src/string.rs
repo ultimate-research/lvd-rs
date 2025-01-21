@@ -139,7 +139,7 @@ impl<const N: usize> Default for FixedString<N> {
 }
 
 impl<const N: usize> FromStr for FixedString<N> {
-    type Err = FromStrError<N>;
+    type Err = ParseFixedStringError<N>;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         if s.len() >= N {
@@ -157,7 +157,7 @@ impl<const N: usize> FromStr for FixedString<N> {
 }
 
 impl<const N: usize> TryFrom<&String> for FixedString<N> {
-    type Error = FromStrError<N>;
+    type Error = ParseFixedStringError<N>;
 
     fn try_from(value: &String) -> Result<Self, Self::Error> {
         Self::from_str(value)
@@ -165,7 +165,7 @@ impl<const N: usize> TryFrom<&String> for FixedString<N> {
 }
 
 impl<const N: usize> TryFrom<&str> for FixedString<N> {
-    type Error = FromStrError<N>;
+    type Error = ParseFixedStringError<N>;
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         Self::from_str(value)
@@ -173,7 +173,7 @@ impl<const N: usize> TryFrom<&str> for FixedString<N> {
 }
 
 impl<const N: usize> TryFrom<String> for FixedString<N> {
-    type Error = FromStrError<N>;
+    type Error = ParseFixedStringError<N>;
 
     fn try_from(value: String) -> Result<Self, Self::Error> {
         Self::from_str(&value)
@@ -261,7 +261,7 @@ impl<const N: usize> Version for FixedString<N> {
 
 /// The error type used when converting a string into a [`FixedString`].
 #[derive(Debug, PartialEq, Error)]
-pub enum FromStrError<const N: usize> {
+pub enum ParseFixedStringError<const N: usize> {
     /// The nul-terminated string exceeds the buffer's capacity.
     #[error("nul-terminated string exceeds buffer capacity of {} bytes", N)]
     BufferOverflow,
@@ -325,7 +325,7 @@ mod tests {
         // Test out-of-bounds string.
         let s = "GeneralPoint3D__tag____0000_Kir";
         let value = FixedString::<24>::from_str(s);
-        assert_eq!(value, Err(FromStrError::<24>::BufferOverflow));
+        assert_eq!(value, Err(ParseFixedStringError::<24>::BufferOverflow));
     }
 
     #[test]
