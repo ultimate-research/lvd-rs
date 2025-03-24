@@ -66,8 +66,8 @@ impl<const N: usize> FixedString<N> {
     /// ```
     /// use lvd_lib::string::FixedString;
     ///
-    /// let s = FixedString::<64>::try_from("COL_00_Floor01").unwrap();
-    /// assert_eq!(s.len(), 14);
+    /// let s = FixedString::<64>::try_from("curve1").unwrap();
+    /// assert_eq!(s.len(), 6);
     /// ```
     pub const fn len(&self) -> usize {
         let mut len = 0;
@@ -95,7 +95,7 @@ impl<const N: usize> FixedString<N> {
     /// let s = FixedString::<64>::new();
     /// assert!(s.is_empty());
     ///
-    /// let s = FixedString::<64>::try_from("curve1").unwrap();
+    /// let s = FixedString::<64>::try_from("transform1").unwrap();
     /// assert!(!s.is_empty());
     /// ```
     pub const fn is_empty(&self) -> bool {
@@ -111,8 +111,8 @@ impl<const N: usize> FixedString<N> {
     /// ```
     /// use lvd_lib::string::FixedString;
     ///
-    /// let s = FixedString::<64>::try_from("curve2").unwrap();
-    /// assert_eq!(s.to_str().unwrap(), "curve2");
+    /// let s = FixedString::<64>::try_from("pPlane1").unwrap();
+    /// assert_eq!(s.to_str().unwrap(), "pPlane1");
     /// ```
     pub fn to_str(&self) -> Result<&str, Utf8Error> {
         str::from_utf8(&self.inner[..self.len()])
@@ -127,8 +127,8 @@ impl<const N: usize> FixedString<N> {
     /// ```
     /// use lvd_lib::string::FixedString;
     ///
-    /// let s = FixedString::<64>::try_from("curve3").unwrap();
-    /// assert_eq!(s.to_string().unwrap(), "curve3".to_string());
+    /// let s = FixedString::<64>::try_from("locator1").unwrap();
+    /// assert_eq!(s.to_string().unwrap(), "locator1".to_string());
     /// ```
     pub fn to_string(&self) -> Result<String, Utf8Error> {
         self.to_str().map(|s| s.to_string())
