@@ -126,9 +126,9 @@ impl FromStr for Tag {
         });
         let digits: [_; Self::DIGIT_COUNT] = array::from_fn(|i| digits[i] - Self::DIGIT_CHAR_MIN);
 
-        let word = (letters[0] as u32) << Self::LETTER_SHIFT[0]
-            | (letters[1] as u32) << Self::LETTER_SHIFT[1]
-            | (letters[2] as u32) << Self::LETTER_SHIFT[2];
+        let word = ((letters[0] as u32) << Self::LETTER_SHIFT[0])
+            | ((letters[1] as u32) << Self::LETTER_SHIFT[1])
+            | ((letters[2] as u32) << Self::LETTER_SHIFT[2]);
         let number = (digits[0] as u32) * 1000
             + (digits[1] as u32) * 100
             + (digits[2] as u32) * 10
