@@ -2,17 +2,17 @@
 name = "lvd_lib"
 version = "0.5.0"
 authors = ["ThatNintendoNerd", "jam1garner <8260240+jam1garner@users.noreply.github.com>"]
-edition = "2021"
+edition = "2024"
 description = "Reading and writing LVD files"
 documentation = "https://docs.rs/smash-lvd"
 repository = "https://github.com/ultimate-research/lvd-rs"
 license = "MIT"
 
 [dependencies]
-binrw = "0.14.1"
-modular-bitfield = "0.11.2"
+binrw = "0.15.0"
+modular-bitfield = "0.12.0"
+serde = { version = "1.0.219", features = ["derive"], optional = true }
 thiserror = "2.0.12"
-serde = { version = "1.0", features = ["derive"], optional = true }
 
 [features]
 serde = ["dep:serde"]

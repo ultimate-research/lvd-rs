@@ -2,9 +2,9 @@
 name = "yamlvd"
 version = "0.5.0"
 authors = ["ThatNintendoNerd", "jam1garner <8260240+jam1garner@users.noreply.github.com>"]
-edition = "2021"
+edition = "2024"
 
 [dependencies]
-clap = { version = "4.5.32", features = ["derive"] }
+clap = { version = "4.5.41", features = ["derive"] }
 lvd_lib = { path = "../lvd_lib", features = ["serde"] }
-serde_yaml = { version = "0.9" }
+serde_yaml = { version = "0.9.34" }
