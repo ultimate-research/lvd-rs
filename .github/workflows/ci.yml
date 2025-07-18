@@ -1,77 +1,32 @@
-name: CI
-
-on: [push, pull_request]
-
+---
+name: Continuous Integration
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 env:
   RUSTFLAGS: -D warnings
   RUSTDOCFLAGS: -D warnings
-
 jobs:
-  check:
-    name: Check cargo-check
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        profile:
+          - dev
+          - release
     steps:
-      - name: Checkout sources
-        uses: actions/checkout@v4
-
-      - name: Install stable Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Run cargo-check
-        run: cargo check
-
-  test:
-    name: Check cargo-test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v4
-
-      - name: Install stable Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Run cargo-test
-        run: cargo test --lib
-
-  doc:
-    name: Check cargo-doc
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v4
-
-      - name: Install stable Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Run cargo-doc
-        run: cargo doc --lib --no-deps
-
-  clippy:
-    name: Check Clippy
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v4
-
-      - name: Install stable Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: clippy
-
-      - name: Run Clippy
-        run: cargo clippy
-
-  fmt:
-    name: Check rustfmt
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v4
-
-      - name: Install stable Rust toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          components: rustfmt
-
-      - name: Run rustfmt
+      - uses: actions/checkout@v4
+      - name: cargo-check
+        run: cargo check --profile ${{matrix.profile}}
+      - name: cargo-test
+        run: cargo test --lib --profile ${{matrix.profile}}
+      - name: cargo-doc
+        run: cargo doc --no-deps --lib --profile ${{matrix.profile}}
+      - name: cargo-clippy
+        run: cargo clippy --no-deps
+      - name: cargo-fmt
         run: cargo fmt --check

@@ -1,93 +1,88 @@
+---
 name: Compile Release
-
-on: 
+on:
   release:
-    types: [created]
-  workflow_dispatch:
-
-env:
-  CARGO_TERM_COLOR: always
-
+    types:
+      - created
+  workflow_dispatch: null
 jobs:
   build-linux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Build
-      run: cargo build --release
-    - name: Create Release Zip
-      run: zip -j yamlvd_linux_x64.zip target/release/yamlvd
-    - name: Upload Zip
-      uses: actions/upload-artifact@v3
-      with:
-        name: yamlvd_linux
-        path: yamlvd_linux_x64.zip
-    - name: Release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: yamlvd_linux_x64.zip
-      env:
-        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
+      - uses: actions/checkout@v4
+      - name: Build
+        run: cargo build --release
+      - name: Create Artifact
+        working-directory: target/release
+        run: zip yamlvd_linux_x64.zip yamlvd
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: yamlvd_linux
+          path: target/release/yamlvd_linux_x64.zip
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: target/release/yamlvd_linux_x64.zip
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   build-windows:
     runs-on: windows-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Build
-      run: cargo build --release
-    - name: Create Release Zip
-      run: |
-        cd target/release
-        Compress-Archive -path yamlvd.exe -destinationPath yamlvd_win_x64.zip
-        cd ../..
-    - name: Upload Zip
-      uses: actions/upload-artifact@v3
-      with:
-        name: yamlvd_win
-        path: target/release/yamlvd_win_x64.zip
-    - name: Release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: target/release/yamlvd_win_x64.zip
-      env:
-        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
+      - uses: actions/checkout@v4
+      - name: Build
+        run: cargo build --release
+      - name: Create Artifact
+        working-directory: target/release
+        run: Compress-Archive -path yamlvd.exe -destinationPath yamlvd_win_x64.zip
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: yamlvd_win
+          path: target/release/yamlvd_win_x64.zip
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: target/release/yamlvd_win_x64.zip
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
   build-macos:
     runs-on: macos-latest
     strategy:
       matrix:
-        target: [x86_64-apple-darwin]
-        desc: [intel]
+        target:
+          - x86_64-apple-darwin
+        desc:
+          - intel
         include:
           - target: aarch64-apple-darwin
             desc: apple_silicon
     steps:
-    - uses: actions/checkout@v3
-    - name: Install Rust Toolchain
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        target: ${{matrix.target}}
-    - name: Build
-      run: cargo build --release --target ${{matrix.target}}
-    - name: Sign Binaries
-      run: codesign -s - target/${{matrix.target}}/release/yamlvd
-    - name: Create Release Zip
-      run: |
-        cd target/${{matrix.target}}/release
-        zip yamlvd_macos_${{matrix.desc}}.zip yamlvd
-        cd ../../..
-    - name: Upload Zip
-      uses: actions/upload-artifact@v3
-      with:
-        name: yamlvd_macos_${{matrix.desc}}
-        path: target/${{matrix.target}}/release/yamlvd_macos_${{matrix.desc}}.zip
-    - name: Release
-      uses: softprops/action-gh-release@v1
-      if: startsWith(github.ref, 'refs/tags/')
-      with:
-        files: target/${{matrix.target}}/release/yamlvd_macos_${{matrix.desc}}.zip
-      env:
-        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - uses: actions/checkout@v4
+      - name: Install Rust Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{matrix.target}}
+      - name: Build
+        run: cargo build --release --target ${{matrix.target}}
+      - name: Sign Binaries
+        working-directory: target/${{matrix.target}}/release
+        run: codesign -s - yamlvd
+      - name: Create Artifact
+        working-directory: target/${{matrix.target}}/release
+        run: zip yamlvd_macos_${{matrix.desc}}.zip yamlvd
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: yamlvd_macos_${{matrix.desc}}
+          path: target/${{matrix.target}}/release/yamlvd_macos_${{matrix.desc}}.zip
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: target/${{matrix.target}}/release/yamlvd_macos_${{matrix.desc}}.zip
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
