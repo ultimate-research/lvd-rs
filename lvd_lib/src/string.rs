@@ -26,6 +26,7 @@ pub type FixedString64 = FixedString<64>;
 #[binrw]
 #[br(import(version: u8), pre_assert(version == 1))]
 #[derive(Debug)]
+#[repr(transparent)]
 pub struct FixedString<const N: usize> {
     #[br(parse_with = read_bytes)]
     inner: [u8; N],
@@ -99,7 +100,7 @@ impl<const N: usize> FixedString<N> {
         self.inner[0] == 0
     }
 
-    /// Converts the underlying buffer to a string slice if it contains valid UTF-8.
+    /// Converts the underlying buffer to a byte slice.
     ///
     /// # Examples
     ///
@@ -109,10 +110,26 @@ impl<const N: usize> FixedString<N> {
     /// use lvd_lib::string::FixedString;
     ///
     /// let s = FixedString::<64>::try_from("pPlane1").unwrap();
-    /// assert_eq!(s.to_str().unwrap(), "pPlane1");
+    /// assert_eq!(s.as_bytes(), b"pPlane1");
+    /// ```
+    pub fn as_bytes(&self) -> &[u8] {
+        &self.inner[..self.len()]
+    }
+
+    /// Converts the underlying buffer to a string slice if it contains valid UTF-8.
+    ///
+    /// # Examples
+    ///
+    /// Basic usage:
+    ///
+    /// ```
+    /// use lvd_lib::string::FixedString;
+    ///
+    /// let s = FixedString::<64>::try_from("locator1").unwrap();
+    /// assert_eq!(s.to_str().unwrap(), "locator1");
     /// ```
     pub fn to_str(&self) -> Result<&str, Utf8Error> {
-        str::from_utf8(&self.inner[..self.len()])
+        str::from_utf8(self.as_bytes())
     }
 
     /// Converts the underlying buffer to a [`String`] if it contains valid UTF-8.
@@ -124,8 +141,8 @@ impl<const N: usize> FixedString<N> {
     /// ```
     /// use lvd_lib::string::FixedString;
     ///
-    /// let s = FixedString::<64>::try_from("locator1").unwrap();
-    /// assert_eq!(s.to_string().unwrap(), "locator1".to_string());
+    /// let s = FixedString::<64>::try_from("locator2").unwrap();
+    /// assert_eq!(s.to_string().unwrap(), "locator2".to_string());
     /// ```
     pub fn to_string(&self) -> Result<String, Utf8Error> {
         self.to_str().map(|s| s.to_string())
@@ -182,53 +199,26 @@ impl<const N: usize> TryFrom<String> for FixedString<N> {
 
 impl<const N: usize> PartialEq for FixedString<N> {
     fn eq(&self, other: &Self) -> bool {
-        self.inner[..self.len()] == other.inner[..other.len()]
+        self.as_bytes() == other.as_bytes()
     }
 }
 
 impl<const N: usize> PartialEq<&String> for FixedString<N> {
     fn eq(&self, other: &&String) -> bool {
-        &self.inner[..self.len()] == other.as_bytes()
+        self.as_bytes() == other.as_bytes()
     }
 }
 
 impl<const N: usize> PartialEq<&str> for FixedString<N> {
     fn eq(&self, other: &&str) -> bool {
-        &self.inner[..self.len()] == other.as_bytes()
+        self.as_bytes() == other.as_bytes()
     }
 }
 
 impl<const N: usize> PartialEq<String> for FixedString<N> {
     fn eq(&self, other: &String) -> bool {
-        &self.inner[..self.len()] == other.as_bytes()
+        self.as_bytes() == other.as_bytes()
     }
-}
-
-#[binrw::parser(reader)]
-fn read_bytes<const N: usize>() -> BinResult<[u8; N]> {
-    use std::io::SeekFrom;
-
-    let pos = reader.stream_position()?;
-    let mut buffer = [0; N];
-    let mut index = 0;
-
-    while index != N {
-        let b = u8::read(reader)?;
-
-        if b == 0 {
-            reader.seek(SeekFrom::Start(pos + N as u64))?;
-
-            return Ok(buffer);
-        }
-
-        buffer[index] = b;
-        index += 1;
-    }
-
-    Err(binrw::Error::AssertFail {
-        pos: reader.stream_position()?,
-        message: "unable to read beyond the end of the buffer".to_string(),
-    })
 }
 
 #[cfg(feature = "serde")]
@@ -265,4 +255,31 @@ pub enum ParseFixedStringError<const N: usize> {
     /// The nul-terminated string exceeds the buffer's capacity.
     #[error("nul-terminated string exceeds buffer capacity of {} bytes", N)]
     BufferOverflow,
+}
+
+#[binrw::parser(reader)]
+fn read_bytes<const N: usize>() -> BinResult<[u8; N]> {
+    use std::io::SeekFrom;
+
+    let pos = reader.stream_position()?;
+    let mut buffer = [0; N];
+    let mut index = 0;
+
+    while index != N {
+        let b = u8::read(reader)?;
+
+        if b == 0 {
+            reader.seek(SeekFrom::Start(pos + N as u64))?;
+
+            return Ok(buffer);
+        }
+
+        buffer[index] = b;
+        index += 1;
+    }
+
+    Err(binrw::Error::AssertFail {
+        pos: reader.stream_position()?,
+        message: "unable to read beyond the end of the buffer".to_string(),
+    })
 }
