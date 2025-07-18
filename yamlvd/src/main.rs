@@ -4,7 +4,7 @@ use std::{
 };
 
 use clap::Parser;
-use lvd_lib::LvdFile;
+use lvd_lib::lvd::LvdFile;
 
 /// Convert LVD files to and from YAML
 #[derive(Parser)]
