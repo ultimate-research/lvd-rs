@@ -6,14 +6,14 @@ use std::{
 use clap::Parser;
 use lvd_lib::lvd::LvdFile;
 
-/// Convert LVD files to and from YAML
+/// Convert LVD files to and from YAML.
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 struct Args {
-    /// The input LVD or YAML file path
+    /// The input LVD or YAML file path.
     input: String,
 
-    /// The output LVD or YAML file path
+    /// The output LVD or YAML file path.
     output: Option<String>,
 }
 

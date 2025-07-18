@@ -1,6 +1,4 @@
-//! Basic vector types.
-//!
-//! This module contains the [`Vector2`] and [`Vector3`] types.
+//! Basic vector utilities.
 
 use binrw::binrw;
 

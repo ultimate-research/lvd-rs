@@ -6,7 +6,7 @@ use std::{
     path::Path,
 };
 
-use binrw::{binrw, BinReaderExt, BinResult, BinWrite};
+use binrw::{BinReaderExt, BinResult, BinWrite, binrw};
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};

@@ -1,4 +1,4 @@
-use binrw::{io::Cursor, BinReaderExt, BinWriterExt};
+use binrw::{BinReaderExt, BinWriterExt, io::Cursor};
 
 use super::*;
 

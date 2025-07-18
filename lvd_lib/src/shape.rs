@@ -1,7 +1,4 @@
-//! Basic shape types.
-//!
-//! This module contains the [`Shape2`], [`ShapeArray2`] and [`ShapeArrayElement2`] types,
-//! the [`Shape3`] type, the [`Path`] type, and the [`Rect`] type.
+//! Basic shape utilities.
 
 use binrw::binrw;
 

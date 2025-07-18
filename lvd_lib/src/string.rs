@@ -1,11 +1,8 @@
 //! A nul-terminated string with a fixed capacity.
-//!
-//! This module contains the [`FixedString`] type, several type aliases for common
-//! capacities, and an error type that may result when converting from a string.
 
 use std::str::{self, FromStr, Utf8Error};
 
-use binrw::{binrw, BinRead, BinResult};
+use binrw::{BinRead, BinResult, binrw};
 use thiserror::Error;
 
 #[cfg(feature = "serde")]

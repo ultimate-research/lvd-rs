@@ -1,6 +1,6 @@
-//! Types and traits for working with versioned types.
+//! Basic type-versioning utilities.
 
-use binrw::{binrw, BinRead, BinWrite};
+use binrw::{BinRead, BinWrite, binrw};
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};

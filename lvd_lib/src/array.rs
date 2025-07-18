@@ -1,6 +1,4 @@
 //! A fixed-size collection of contiguous versioned elements.
-//!
-//! This module contains the [`Array`] type.
 
 use binrw::binrw;
 
