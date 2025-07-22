@@ -33,11 +33,11 @@ pub struct FixedString<const N: usize> {
 }
 
 impl<const N: usize> FixedString<N> {
-    /// The number of bytes the buffer can hold, excluding the nul byte.
-    pub const CAPACITY: usize = N - 1;
-
     /// The number of bytes the buffer can hold, including the nul byte.
-    pub const CAPACITY_WITH_NUL: usize = N;
+    pub const CAPACITY: usize = N;
+
+    /// The number of bytes the buffer can hold, excluding the nul byte.
+    pub const CAPACITY_WITHOUT_NUL: usize = N - 1;
 
     /// Creates a new empty `FixedString`.
     ///
@@ -70,11 +70,7 @@ impl<const N: usize> FixedString<N> {
     pub const fn len(&self) -> usize {
         let mut len = 0;
 
-        while len != Self::CAPACITY_WITH_NUL {
-            if self.inner[len] == 0 {
-                break;
-            }
-
+        while self.inner[len] != 0 {
             len += 1;
         }
 
