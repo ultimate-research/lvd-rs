@@ -6,19 +6,21 @@ use std::{
 use clap::Parser;
 use lvd_lib::lvd::LvdFile;
 
-/// Convert LVD files to and from YAML.
-#[derive(Parser)]
-#[command(author, version, about, long_about = None)]
-struct Args {
-    /// The input LVD or YAML file path.
-    input: String,
+mod cli;
 
-    /// The output LVD or YAML file path.
-    output: Option<String>,
-}
+use cli::{Args, Endian};
 
-fn read_data_write_yaml<P: AsRef<Path> + ToString>(input_path: P, output_path: Option<String>) {
-    match LvdFile::from_file(&input_path) {
+fn read_data_write_yaml<P: AsRef<Path> + ToString>(
+    input_path: P,
+    output_path: Option<String>,
+    endian: Endian,
+) {
+    let result = match endian {
+        Endian::Big => LvdFile::read_be_file(&input_path),
+        Endian::Little => LvdFile::read_le_file(&input_path),
+    };
+
+    match result {
         Ok(lvd) => {
             let output_path = output_path
                 .map(PathBuf::from)
@@ -31,7 +33,11 @@ fn read_data_write_yaml<P: AsRef<Path> + ToString>(input_path: P, output_path: O
     }
 }
 
-fn read_yaml_write_data<P: AsRef<Path>>(input_path: P, output_path: Option<String>) {
+fn read_yaml_write_data<P: AsRef<Path>>(
+    input_path: P,
+    output_path: Option<String>,
+    endian: Endian,
+) {
     let yaml = fs::read_to_string(&input_path).unwrap();
 
     match serde_yaml::from_str::<LvdFile>(&yaml) {
@@ -39,9 +45,12 @@ fn read_yaml_write_data<P: AsRef<Path>>(input_path: P, output_path: Option<Strin
             let output_path = output_path
                 .map(PathBuf::from)
                 .unwrap_or_else(|| input_path.as_ref().with_extension("lvd"));
+            let result = match endian {
+                Endian::Big => lvd.write_be_file(output_path),
+                Endian::Little => lvd.write_le_file(output_path),
+            };
 
-            lvd.write_to_file(output_path)
-                .expect("failed to write LVD file");
+            result.expect("failed to write LVD file");
         }
         Err(error) => eprintln!("{error:?}"),
     }
@@ -56,7 +65,7 @@ fn main() {
         .to_str()
         .unwrap()
     {
-        "yaml" | "yml" => read_yaml_write_data(args.input, args.output),
-        _ => read_data_write_yaml(args.input, args.output),
+        "yaml" | "yml" => read_yaml_write_data(args.input, args.output, args.endian),
+        _ => read_data_write_yaml(args.input, args.output, args.endian),
     }
 }

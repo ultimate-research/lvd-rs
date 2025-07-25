@@ -1,10 +1,6 @@
 //! Essential file format utilities.
 
-use std::{
-    fs,
-    io::{Cursor, Read, Seek, Write},
-    path::Path,
-};
+use std::{fs, io::Cursor, path::Path};
 
 use binrw::{BinReaderExt, BinResult, BinWrite, binrw};
 
@@ -36,28 +32,35 @@ pub struct LvdFile {
 }
 
 impl LvdFile {
-    /// Reads the data from the given file path.
-    pub fn from_file<P: AsRef<Path>>(path: P) -> BinResult<Self> {
+    /// Reads the data from the given file path in big-endian.
+    pub fn read_be_file<P: AsRef<Path>>(path: P) -> BinResult<Self> {
         let mut cursor = Cursor::new(fs::read(path)?);
 
-        Self::read(&mut cursor)
+        cursor.read_be()
     }
 
-    /// Reads the data from the given reader.
-    pub fn read<R: Read + Seek>(reader: &mut R) -> BinResult<Self> {
-        reader.read_be()
+    /// Reads the data from the given file path in little-endian.
+    pub fn read_le_file<P: AsRef<Path>>(path: P) -> BinResult<Self> {
+        let mut cursor = Cursor::new(fs::read(path)?);
+
+        cursor.read_le()
     }
 
-    /// Writes the data to the given writer.
-    pub fn write<W: Write + Seek>(&self, writer: &mut W) -> BinResult<()> {
-        self.write_be(writer)
-    }
-
-    /// Writes the data to the given file path.
-    pub fn write_to_file<P: AsRef<Path>>(&self, path: P) -> BinResult<()> {
+    /// Writes the data to the given file path in big-endian.
+    pub fn write_be_file<P: AsRef<Path>>(&self, path: P) -> BinResult<()> {
         let mut cursor = Cursor::new(Vec::new());
 
-        self.write(&mut cursor)?;
+        self.write_be(&mut cursor)?;
+        fs::write(path, cursor.get_mut())?;
+
+        Ok(())
+    }
+
+    /// Writes the data to the given file path in little-endian.
+    pub fn write_le_file<P: AsRef<Path>>(&self, path: P) -> BinResult<()> {
+        let mut cursor = Cursor::new(Vec::new());
+
+        self.write_le(&mut cursor)?;
         fs::write(path, cursor.get_mut())?;
 
         Ok(())
