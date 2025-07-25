@@ -155,17 +155,17 @@ impl<const N: usize> FromStr for FixedString<N> {
     type Err = ParseFixedStringError<N>;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        if s.len() >= N {
+        if s.len() > Self::CAPACITY_WITHOUT_NUL {
             return Err(Self::Err::BufferOverflow);
         }
 
-        let mut buffer = [0; N];
+        let mut buf = [0; N];
 
         for (index, byte) in s.as_bytes().iter().copied().enumerate() {
-            buffer[index] = byte;
+            buf[index] = byte;
         }
 
-        Ok(Self { inner: buffer })
+        Ok(Self { inner: buf })
     }
 }
 
@@ -258,7 +258,7 @@ fn read_bytes<const N: usize>() -> BinResult<[u8; N]> {
     use std::io::SeekFrom;
 
     let pos = reader.stream_position()?;
-    let mut buffer = [0; N];
+    let mut buf = [0; N];
     let mut index = 0;
 
     while index != N {
@@ -267,10 +267,10 @@ fn read_bytes<const N: usize>() -> BinResult<[u8; N]> {
         if b == 0 {
             reader.seek(SeekFrom::Start(pos + N as u64))?;
 
-            return Ok(buffer);
+            return Ok(buf);
         }
 
-        buffer[index] = b;
+        buf[index] = b;
         index += 1;
     }
 
