@@ -1,42 +1,38 @@
 //! The [`CollisionFlags`] type represents the global attributes of a collision.
 
+use bilge::prelude::*;
 use binrw::binrw;
-use modular_bitfield::prelude::*;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
 
 /// The global attributes of a collision.
-#[bitfield]
+#[bitsize(32)]
 #[binrw]
-#[br(map = |f: u32| Self::from_bytes(f.to_le_bytes()))]
-#[bw(map = |f: &Self| u32::from_le_bytes(f.into_bytes()))]
+#[br(map = u32::into)]
+#[bw(map = |&x| u32::from(x))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(
     feature = "serde",
     serde(from = "CollisionDataFlags", into = "CollisionDataFlags")
 )]
-#[derive(Debug, Clone, Copy, Default, Eq, PartialEq)]
+#[derive(DebugBits, Clone, Copy, DefaultBits, Eq, PartialEq, FromBits)]
 pub struct CollisionFlags {
-    /// Determines if the collision's floor edges can be dropped through
+    /// Determines if the collision's floor edges can be dropped through.
     pub throughable: bool,
 
-    #[skip]
-    __: B15,
+    reserved: u15,
 
     /// Determines if the collision is classed as dynamic.
     pub dynamic: bool,
 
-    #[skip]
-    __: B15,
+    reserved: u15,
 }
 
 #[cfg(feature = "serde")]
 impl From<CollisionDataFlags> for CollisionFlags {
     fn from(value: CollisionDataFlags) -> Self {
-        Self::new()
-            .with_throughable(value.throughable)
-            .with_dynamic(value.dynamic)
+        Self::new(value.throughable, value.dynamic)
     }
 }
 

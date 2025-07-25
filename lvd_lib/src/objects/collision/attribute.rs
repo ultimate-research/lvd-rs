@@ -1,7 +1,7 @@
 //! The [`CollisionAttribute`] object stores data representing the properties and attributes of an edge.
 
+use bilge::prelude::*;
 use binrw::binrw;
-use modular_bitfield::prelude::*;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
@@ -86,16 +86,16 @@ pub enum MaterialType {
 }
 
 /// The attributes of an edge.
-#[bitfield]
+#[bitsize(64)]
 #[binrw]
-#[br(map = |f: u64| Self::from_bytes(f.to_le_bytes()))]
-#[bw(map = |f: &Self| u64::from_le_bytes(f.into_bytes()))]
+#[br(map = u64::into)]
+#[bw(map = |&x| u64::from(x))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(
     feature = "serde",
     serde(from = "AttributeDataFlags", into = "AttributeDataFlags")
 )]
-#[derive(Debug, Clone, Copy, Default, Eq, PartialEq)]
+#[derive(DebugBits, Clone, Copy, DefaultBits, Eq, PartialEq, FromBits)]
 pub struct AttributeFlags {
     pub length0: bool,
     pub packman_final_ignore: bool,
@@ -130,46 +130,46 @@ pub struct AttributeFlags {
     pub virtual_wall_hit_line: bool,
     pub ignore_boss: bool,
 
-    #[skip]
-    __: B32,
+    reserved: u32,
 }
 
 #[cfg(feature = "serde")]
 impl From<AttributeDataFlags> for AttributeFlags {
     fn from(value: AttributeDataFlags) -> Self {
-        Self::new()
-            .with_length0(value.length0)
-            .with_packman_final_ignore(value.packman_final_ignore)
-            .with_fall(value.fall)
-            .with_ignore_ray_check(value.ignore_ray_check)
-            .with_dive(value.dive)
-            .with_unpaintable(value.unpaintable)
-            .with_item(value.item)
-            .with_ignore_fighter_other(value.ignore_fighter_other)
-            .with_right(value.right)
-            .with_left(value.left)
-            .with_upper(value.upper)
-            .with_under(value.under)
-            .with_not_attach(value.not_attach)
-            .with_throughable(value.throughable)
-            .with_hang_l(value.hang_l)
-            .with_hang_r(value.hang_r)
-            .with_ignore_link_from_left(value.ignore_link_from_left)
-            .with_cloud(value.cloud)
-            .with_ignore_link_from_right(value.ignore_link_from_right)
-            .with_not_expand_near_search(value.not_expand_near_search)
-            .with_ignore(value.ignore)
-            .with_breakable(value.breakable)
-            .with_immediate_relanding_ban(value.immediate_relanding_ban)
-            .with_ignore_line_type1(value.ignore_line_type1)
-            .with_pickel_block(value.pickel_block)
-            .with_deceleration(value.deceleration)
-            .with_virtual_hit_line_up(value.virtual_hit_line_up)
-            .with_virtual_hit_line_left(value.virtual_hit_line_left)
-            .with_virtual_hit_line_right(value.virtual_hit_line_right)
-            .with_virtual_hit_line_down(value.virtual_hit_line_down)
-            .with_virtual_wall_hit_line(value.virtual_wall_hit_line)
-            .with_ignore_boss(value.ignore_boss)
+        Self::new(
+            value.length0,
+            value.packman_final_ignore,
+            value.fall,
+            value.ignore_ray_check,
+            value.dive,
+            value.unpaintable,
+            value.item,
+            value.ignore_fighter_other,
+            value.right,
+            value.left,
+            value.upper,
+            value.under,
+            value.not_attach,
+            value.throughable,
+            value.hang_l,
+            value.hang_r,
+            value.ignore_link_from_left,
+            value.cloud,
+            value.ignore_link_from_right,
+            value.not_expand_near_search,
+            value.ignore,
+            value.breakable,
+            value.immediate_relanding_ban,
+            value.ignore_line_type1,
+            value.pickel_block,
+            value.deceleration,
+            value.virtual_hit_line_up,
+            value.virtual_hit_line_left,
+            value.virtual_hit_line_right,
+            value.virtual_hit_line_down,
+            value.virtual_wall_hit_line,
+            value.ignore_boss,
+        )
     }
 }
 
