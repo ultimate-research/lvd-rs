@@ -43,8 +43,25 @@ collisions: !V1
 
 ## Usage
 
-The latest executable for Windows is available in the [Releases](https://github.com/ultimate-research/lvd-rs/releases/latest).
+The latest version is available in [Releases](https://github.com/ultimate-research/lvd-rs/releases/latest).
 
-`yamlvd <input> [output]`<br>
-`yamlvd battlefield_00.lvd battlefield_00.yaml`<br>
-`yamlvd battlefield_00.yaml battlefield_00.lvd`<br>
+```
+yamlvd <input> [output]
+```
+
+```
+yamlvd battlefield_00.lvd battlefield_00.yaml
+yamlvd battlefield_00.yaml battlefield_00.lvd
+```
+
+Optionally, an LVD file can be read or written under the specified endianness.
+
+```
+yamlvd <input> [output] -e <endian>
+yamlvd <input> [output] --endian <endian>
+```
+
+```
+yamlvd end_00.lvd end_00.yaml -e big
+yamlvd end_00.yaml end_00.lvd --endian little
+```

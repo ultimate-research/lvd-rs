@@ -5,6 +5,6 @@ authors = ["ThatNintendoNerd", "jam1garner <8260240+jam1garner@users.noreply.git
 edition = "2024"
 
 [dependencies]
-clap = { version = "4.5.41", features = ["derive"] }
+clap = { version = "4.5.42", features = ["derive"] }
 lvd_lib = { path = "../lvd_lib", features = ["serde"] }
 serde_yaml = { version = "0.9.34" }

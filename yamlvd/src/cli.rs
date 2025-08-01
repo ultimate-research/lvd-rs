@@ -11,7 +11,7 @@ pub struct Args {
     pub output: Option<String>,
 
     /// The endianness of the LVD file.
-    #[arg(short, long, default_value_t = Default::default(), value_enum)]
+    #[arg(short, long, default_value_t, value_enum)]
     pub endian: Endian,
 }
 

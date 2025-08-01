@@ -61,7 +61,7 @@ fn main() {
 
     match Path::new(&args.input)
         .extension()
-        .expect("input file extension should exist")
+        .expect("input file path should contain an extension")
         .to_str()
         .unwrap()
     {
