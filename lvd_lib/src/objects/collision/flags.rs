@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(
     feature = "serde",
-    serde(from = "CollisionDataFlags", into = "CollisionDataFlags")
+    serde(from = "ExpandedCollisionFlags", into = "ExpandedCollisionFlags")
 )]
 #[derive(DebugBits, Clone, Copy, DefaultBits, Eq, PartialEq, FromBits)]
 pub struct CollisionFlags {
@@ -30,21 +30,21 @@ pub struct CollisionFlags {
 }
 
 #[cfg(feature = "serde")]
-impl From<CollisionDataFlags> for CollisionFlags {
-    fn from(value: CollisionDataFlags) -> Self {
+impl From<ExpandedCollisionFlags> for CollisionFlags {
+    fn from(value: ExpandedCollisionFlags) -> Self {
         Self::new(value.throughable, value.dynamic)
     }
 }
 
 #[cfg(feature = "serde")]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-struct CollisionDataFlags {
+struct ExpandedCollisionFlags {
     throughable: bool,
     dynamic: bool,
 }
 
 #[cfg(feature = "serde")]
-impl From<CollisionFlags> for CollisionDataFlags {
+impl From<CollisionFlags> for ExpandedCollisionFlags {
     fn from(value: CollisionFlags) -> Self {
         Self {
             throughable: value.throughable(),

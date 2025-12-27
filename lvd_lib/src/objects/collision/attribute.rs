@@ -93,7 +93,7 @@ pub enum MaterialType {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(
     feature = "serde",
-    serde(from = "AttributeDataFlags", into = "AttributeDataFlags")
+    serde(from = "ExpandedAttributeFlags", into = "ExpandedAttributeFlags")
 )]
 #[derive(DebugBits, Clone, Copy, DefaultBits, Eq, PartialEq, FromBits)]
 pub struct AttributeFlags {
@@ -134,8 +134,8 @@ pub struct AttributeFlags {
 }
 
 #[cfg(feature = "serde")]
-impl From<AttributeDataFlags> for AttributeFlags {
-    fn from(value: AttributeDataFlags) -> Self {
+impl From<ExpandedAttributeFlags> for AttributeFlags {
+    fn from(value: ExpandedAttributeFlags) -> Self {
         Self::new(
             value.length0,
             value.packman_final_ignore,
@@ -175,7 +175,7 @@ impl From<AttributeDataFlags> for AttributeFlags {
 
 #[cfg(feature = "serde")]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-struct AttributeDataFlags {
+struct ExpandedAttributeFlags {
     length0: bool,
     packman_final_ignore: bool,
     fall: bool,
@@ -211,7 +211,7 @@ struct AttributeDataFlags {
 }
 
 #[cfg(feature = "serde")]
-impl From<AttributeFlags> for AttributeDataFlags {
+impl From<AttributeFlags> for ExpandedAttributeFlags {
     fn from(value: AttributeFlags) -> Self {
         Self {
             length0: value.length0(),
