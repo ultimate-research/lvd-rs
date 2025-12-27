@@ -9,10 +9,10 @@ repository = "https://github.com/ultimate-research/lvd-rs"
 license = "MIT"
 
 [dependencies]
-bilge = "0.2.0"
+bilge = "0.3.0"
 binrw = "0.15.0"
-serde = { version = "1.0.219", features = ["derive"], optional = true }
-thiserror = "2.0.12"
+serde = { version = "1.0.228", features = ["derive"], optional = true }
+thiserror = "2.0.17"
 
 [features]
 serde = ["dep:serde"]
