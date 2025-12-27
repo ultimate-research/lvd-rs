@@ -19,13 +19,14 @@ jobs:
           - dev
           - release
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: cargo-check
-        run: cargo check --profile ${{matrix.profile}}
+        run: cargo check --profile ${{ matrix.profile }}
       - name: cargo-test
-        run: cargo test --lib --profile ${{matrix.profile}}
+        run: cargo test --lib --profile ${{ matrix.profile }}
       - name: cargo-doc
-        run: cargo doc --no-deps --lib --profile ${{matrix.profile}}
+        run: cargo doc --no-deps --lib --profile ${{ matrix.profile }}
       - name: cargo-clippy
         run: cargo clippy --no-deps
       - name: cargo-fmt
