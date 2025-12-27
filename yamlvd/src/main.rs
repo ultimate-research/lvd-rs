@@ -24,7 +24,7 @@ fn read_data_write_yaml<P: AsRef<Path> + ToString>(
         Ok(lvd) => {
             let output_path = output_path
                 .map(PathBuf::from)
-                .unwrap_or_else(|| PathBuf::from(input_path.to_string() + ".yaml"));
+                .unwrap_or_else(|| input_path.as_ref().with_added_extension("yaml"));
             let yaml = serde_yaml::to_string(&lvd).unwrap();
 
             fs::write(output_path, yaml).expect("failed to write YAML file");
