@@ -28,7 +28,7 @@ pub type FixedString64 = FixedString<64>;
 #[derive(Debug)]
 #[repr(transparent)]
 pub struct FixedString<const N: usize> {
-    #[br(parse_with = read_bytes)]
+    #[br(parse_with = read_bytes_until_nul)]
     inner: [u8; N],
 }
 
@@ -223,7 +223,9 @@ impl<const N: usize> Serialize for FixedString<N> {
     where
         S: Serializer,
     {
-        serializer.serialize_str(self.to_str().unwrap())
+        let string = self.to_str().map_err(serde::ser::Error::custom)?;
+
+        serializer.serialize_str(string)
     }
 }
 
@@ -254,7 +256,7 @@ pub enum ParseFixedStringError<const N: usize> {
 }
 
 #[binrw::parser(reader)]
-fn read_bytes<const N: usize>() -> BinResult<[u8; N]> {
+fn read_bytes_until_nul<const N: usize>() -> BinResult<[u8; N]> {
     use std::io::SeekFrom;
 
     let pos = reader.stream_position()?;
