@@ -15,4 +15,4 @@ serde = { version = "1.0.228", features = ["derive"], optional = true }
 thiserror = "2.0.17"
 
 [features]
-serde = ["dep:serde"]
+serde = ["dep:serde", "bilge/serde"]
