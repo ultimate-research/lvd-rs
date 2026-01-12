@@ -27,9 +27,11 @@ fn read_data_write_yaml<P: AsRef<Path> + ToString>(
                 .unwrap_or_else(|| input_path.as_ref().with_added_extension("yaml"));
             let yaml = serde_yaml::to_string(&lvd).unwrap();
 
-            fs::write(output_path, yaml).expect("failed to write YAML file");
+            if let Err(error) = fs::write(output_path, yaml) {
+                eprintln!("Failed to write YAML file: {error}");
+            }
         }
-        Err(error) => eprintln!("{error:?}"),
+        Err(error) => eprintln!("{error}"),
     }
 }
 
@@ -50,9 +52,11 @@ fn read_yaml_write_data<P: AsRef<Path>>(
                 Endian::Little => lvd.write_le_file(output_path),
             };
 
-            result.expect("failed to write LVD file");
+            if let Err(error) = result {
+                eprintln!("Failed to write LVD file: {error}");
+            }
         }
-        Err(error) => eprintln!("{error:?}"),
+        Err(error) => eprintln!("{error}"),
     }
 }
 
