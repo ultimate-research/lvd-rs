@@ -5,84 +5,76 @@ on:
     types:
       - created
   workflow_dispatch: null
+env:
+  BUILD_PROFILE: release-lto
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build
-        run: cargo build --release
-      - name: Create Artifact
-        working-directory: target/release
-        run: zip yamlvd_linux_x64.zip yamlvd
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: yamlvd_linux
-          path: target/release/yamlvd_linux_x64.zip
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: target/release/yamlvd_linux_x64.zip
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build
-        run: cargo build --release
-      - name: Create Artifact
-        working-directory: target/release
-        run: Compress-Archive -path yamlvd.exe -destinationPath yamlvd_win_x64.zip
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: yamlvd_win
-          path: target/release/yamlvd_win_x64.zip
-      - name: Release
-        uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: target/release/yamlvd_win_x64.zip
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-  build-macos:
-    runs-on: macos-latest
+  build:
     strategy:
       matrix:
-        target:
-          - x86_64-apple-darwin
-        desc:
-          - intel
         include:
-          - target: aarch64-apple-darwin
-            desc: apple_silicon
+          - name: linux-x86_64
+            platform: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            build: build
+          - name: linux-arm64
+            platform: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            build: zigbuild
+          - name: windows-x86_64
+            platform: windows-latest
+            target: x86_64-pc-windows-msvc
+            build: build
+          - name: windows-arm64
+            platform: windows-latest
+            target: aarch64-pc-windows-msvc
+            build: build
+          - name: macos-x86_64
+            platform: macos-latest
+            target: x86_64-apple-darwin
+            build: build
+          - name: macos-arm64
+            platform: macos-latest
+            target: aarch64-apple-darwin
+            build: build
+      fail-fast: false
+    runs-on: ${{ matrix.platform }}
+    env:
+      ARTIFACT_DIR: target/${{ matrix.target }}/release-lto
+      ARTIFACT_NAME: yamlvd-${{ matrix.name }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Install Rust Toolchain
-        uses: actions-rs/toolchain@v1
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: stable
-          target: ${{matrix.target}}
+          targets: ${{ matrix.target }}
+      - name: Install cargo-zigbuild
+        if: matrix.build == 'zigbuild'
+        run: pip install cargo-zigbuild
       - name: Build
-        run: cargo build --release --target ${{matrix.target}}
-      - name: Sign Binaries
-        working-directory: target/${{matrix.target}}/release
+        run: cargo ${{ matrix.build }} --profile ${{ env.BUILD_PROFILE }} --target ${{ matrix.target }}
+      - name: Sign
+        if: startsWith(matrix.platform, 'macos')
         run: codesign -s - yamlvd
-      - name: Create Artifact
-        working-directory: target/${{matrix.target}}/release
-        run: zip yamlvd_macos_${{matrix.desc}}.zip yamlvd
+        working-directory: ${{ env.ARTIFACT_DIR }}
+      - name: Create Artifact (Unix)
+        if: ${{ !startsWith(matrix.platform, 'windows') }}
+        run: zip ${{ env.ARTIFACT_NAME }}.zip yamlvd
+        working-directory: ${{ env.ARTIFACT_DIR }}
+      - name: Create Artifact (Windows)
+        if: startsWith(matrix.platform, 'windows')
+        run: Compress-Archive -path yamlvd.exe -destinationPath ${{ env.ARTIFACT_NAME }}.zip
+        working-directory: ${{ env.ARTIFACT_DIR }}
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: yamlvd_macos_${{matrix.desc}}
-          path: target/${{matrix.target}}/release/yamlvd_macos_${{matrix.desc}}.zip
-      - name: Release
+          name: ${{ env.ARTIFACT_NAME }}
+          path: ${{ env.ARTIFACT_DIR }}/${{ env.ARTIFACT_NAME }}.zip
+          if-no-files-found: error
+      - name: Release Artifact
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: target/${{matrix.target}}/release/yamlvd_macos_${{matrix.desc}}.zip
+          files: ${{ env.ARTIFACT_DIR }}/${{ env.ARTIFACT_NAME }}.zip
         env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
