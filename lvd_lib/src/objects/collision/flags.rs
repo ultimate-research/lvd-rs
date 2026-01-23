@@ -7,7 +7,7 @@ use binrw::binrw;
 #[bitsize(32)]
 #[binrw]
 #[cfg_attr(feature = "serde", derive(SerializeBits, DeserializeBits))]
-#[derive(DebugBits, Clone, Copy, DefaultBits, Eq, PartialEq, FromBits)]
+#[derive(DebugBits, Clone, Copy, DefaultBits, FromBits, PartialEq, Eq)]
 #[repr(transparent)]
 pub struct CollisionFlags {
     /// Determines if all the edges can be dropped through.

@@ -37,8 +37,9 @@ impl Version for CollisionAttribute {
 #[binrw]
 #[brw(repr(u32))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq)]
 pub enum MaterialType {
+    #[default]
     None = 0,
     Rock = 1,
     Grass = 2,
@@ -89,7 +90,7 @@ pub enum MaterialType {
 #[bitsize(64)]
 #[binrw]
 #[cfg_attr(feature = "serde", derive(SerializeBits, DeserializeBits))]
-#[derive(DebugBits, Clone, Copy, DefaultBits, Eq, PartialEq, FromBits)]
+#[derive(DebugBits, Clone, Copy, DefaultBits, FromBits, PartialEq, Eq)]
 #[repr(transparent)]
 pub struct AttributeFlags {
     pub length0: bool,

@@ -45,7 +45,7 @@ use crate::version::Version;
 /// conversion methods will return an error.
 #[binrw]
 #[br(import(version: u8), pre_assert(version == 1))]
-#[derive(Debug, Clone, Copy, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
+#[derive(Debug, Clone, Copy, Default, Hash, PartialEq, Eq, PartialOrd, Ord)]
 pub struct Tag(u32);
 
 impl Tag {
