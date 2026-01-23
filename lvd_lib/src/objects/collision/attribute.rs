@@ -1,4 +1,4 @@
-//! The [`CollisionAttribute`] object stores data representing the properties and attributes of an edge.
+//! The [`CollisionAttribute`] type stores data representing the properties of an edge.
 
 use bilge::prelude::*;
 use binrw::binrw;
@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::version::Version;
 
-/// The properties and attributes of an edge.
+/// The properties of an edge.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -17,10 +17,10 @@ pub enum CollisionAttribute {
     /// The first version of the `CollisionAttribute` type.
     #[br(pre_assert(version == 1))]
     V1 {
-        /// The material preset representing how the edge is visually, audibly, and physically interacted with.
+        /// The preset for the configuration of sensory collision parameters.
         material: MaterialType,
 
-        /// The attributes of the edge.
+        /// The collection of packed Boolean collision properties.
         flags: AttributeFlags,
     },
 }
@@ -33,7 +33,7 @@ impl Version for CollisionAttribute {
     }
 }
 
-/// The material presets representing how an edge is visually, audibly, and physically interacted with.
+/// A preset for the configuration of sensory collision parameters.
 #[binrw]
 #[brw(repr(u32))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -85,7 +85,7 @@ pub enum MaterialType {
     JackMementoes = 43,
 }
 
-/// The attributes of an edge.
+/// A collection of packed Boolean collision properties.
 #[bitsize(64)]
 #[binrw]
 #[cfg_attr(feature = "serde", derive(SerializeBits, DeserializeBits))]
@@ -95,22 +95,51 @@ pub struct AttributeFlags {
     pub length0: bool,
     pub packman_final_ignore: bool,
     pub fall: bool,
+
+    // TODO: Used on Spring Stadium.
     pub ignore_ray_check: bool,
+
     pub dive: bool,
+
+    /// Determines if an edge cannot be inked.
     pub unpaintable: bool,
+
     pub item: bool,
     pub ignore_fighter_other: bool,
+
+    /// Determines if an edge will always register as a right-facing wall.
     pub right: bool,
+
+    /// Determines if an edge will always register as a left-facing wall.
     pub left: bool,
+
+    /// Determines if an edge will always register as a ceiling.
     pub upper: bool,
+
+    /// Determines if an edge will always register as a floor.
     pub under: bool,
+
+    /// Determines if an edge cannot be jumped off or clung to.
     pub not_attach: bool,
+
+    /// Determines if an edge can be dropped through.
     pub throughable: bool,
+
+    /// Determines if an edge can be grabbed from the left.
     pub hang_l: bool,
+
+    /// Determines if an edge can be grabbed from the right.
     pub hang_r: bool,
+
+    // TODO: Used on Moray Towers.
     pub ignore_link_from_left: bool,
+
+    /// Determines if the edge can be passed through when launched at high speeds.
     pub cloud: bool,
+
+    // TODO: Used on Moray Towers.
     pub ignore_link_from_right: bool,
+
     pub not_expand_near_search: bool,
     pub ignore: bool,
     pub breakable: bool,

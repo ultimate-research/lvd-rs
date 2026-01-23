@@ -1,4 +1,4 @@
-//! The [`CollisionCliff`] object stores data representing a grabbable edge.
+//! The [`CollisionCliff`] type stores data representing a grabbable edge.
 
 use binrw::binrw;
 
@@ -11,7 +11,7 @@ use crate::{
     version::{Version, Versioned},
 };
 
-/// An LVD subobject to a [`Collision`](crate::objects::collision::Collision) representing a grabbable edge.
+/// An LVD subobject to a [`Collision`](crate::objects::Collision) representing a grabbable edge.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -70,7 +70,7 @@ pub enum CollisionCliff {
         /// A value of `-1.0` corresponds to the left and a value of `1.0` corresponds to the right.
         lr: f32,
 
-        /// The index of the edge in the associated collision to link the object with.
+        /// The index of the edge in the associated object to link with.
         line_index: u32,
     },
 }

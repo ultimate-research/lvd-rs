@@ -1,6 +1,4 @@
 //! The [`Collision`] object stores data representing a two-dimensional polygonal collision.
-//!
-//! Extra data is stored to define properties of each edge in the collision.
 
 use binrw::binrw;
 
@@ -38,10 +36,10 @@ pub enum Collision {
         /// The metadata of the object.
         meta_info: Versioned<MetaInfo>,
 
-        /// The global attributes of the collision.
+        /// The global properties of the object.
         flags: CollisionFlags,
 
-        /// The collection of vertices forming the geometry of the collision.
+        /// The collection of vertices forming the geometry of the object.
         vertices: Versioned<Array<Vector2>>,
 
         /// The collection of unit normal vectors defining the tangible side of each edge.
@@ -59,10 +57,10 @@ pub enum Collision {
         /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The global attributes of the collision.
+        /// The global properties of the object.
         flags: CollisionFlags,
 
-        /// The collection of vertices forming the geometry of the collision.
+        /// The collection of vertices forming the geometry of the object.
         vertices: Versioned<Array<Vector2>>,
 
         /// The collection of unit normal vectors defining the tangible side of each edge.
@@ -80,10 +78,10 @@ pub enum Collision {
         /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The global attributes of the collision.
+        /// The global properties of the object.
         flags: CollisionFlags,
 
-        /// The collection of vertices forming the geometry of the collision.
+        /// The collection of vertices forming the geometry of the object.
         vertices: Versioned<Array<Vector2>>,
 
         /// The collection of unit normal vectors defining the tangible side of each edge.
@@ -92,7 +90,7 @@ pub enum Collision {
         /// The collection of supplementary data for edges flagged as grabbable.
         cliffs: Versioned<Array<CollisionCliff>>,
 
-        /// The collection of properties and attributes for each edge in the collision.
+        /// The collection of properties for each edge in the object.
         attributes: Versioned<Array<CollisionAttribute>>,
     },
 
@@ -104,10 +102,10 @@ pub enum Collision {
         /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The global attributes of the collision.
+        /// The global properties of the object.
         flags: CollisionFlags,
 
-        /// The collection of vertices forming the geometry of the collision.
+        /// The collection of vertices forming the geometry of the object.
         vertices: Versioned<Array<Vector2>>,
 
         /// The collection of unit normal vectors defining the tangible side of each edge.
@@ -116,7 +114,7 @@ pub enum Collision {
         /// The collection of supplementary data for edges flagged as grabbable.
         cliffs: Versioned<Array<CollisionCliff>>,
 
-        /// The collection of properties and attributes for each edge in the collision.
+        /// The collection of properties for each edge in the object.
         attributes: Versioned<Array<CollisionAttribute>>,
 
         /// The collection of entries related to hazardous floors in spirit battles.

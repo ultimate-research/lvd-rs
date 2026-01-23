@@ -60,7 +60,7 @@ pub enum Base {
         /// The displacement of the object when classed as dynamic.
         dynamic_offset: Versioned<Vector3>,
 
-        /// Determines if the object is classed as dynamic.
+        /// Determines if the object can assume additional privileges.
         #[br(map = |b: u8| b != 0)]
         #[bw(map = |b| u8::from(*b))]
         is_dynamic: bool,
@@ -88,7 +88,7 @@ pub enum Base {
         /// The displacement of the object when classed as dynamic.
         dynamic_offset: Versioned<Vector3>,
 
-        /// Determines if the object is classed as dynamic.
+        /// Determines if the object can assume additional privileges.
         #[br(map = |b: u8| b != 0)]
         #[bw(map = |b| u8::from(*b))]
         is_dynamic: bool,

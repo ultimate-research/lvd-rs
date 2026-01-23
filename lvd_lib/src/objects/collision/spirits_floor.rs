@@ -1,4 +1,4 @@
-//! The [`CollisionSpiritsFloor`] object stores data representing hazardous floors in spirit battles.
+//! The [`CollisionSpiritsFloor`] type stores data representing hazardous floors in spirit battles.
 
 use binrw::binrw;
 
@@ -11,7 +11,7 @@ use crate::{
     version::{Version, Versioned},
 };
 
-/// An LVD subobject to a [`Collision`](crate::objects::collision::Collision) representing hazardous floors in spirit battles.
+/// An LVD subobject to a [`Collision`](crate::objects::Collision) representing hazardous floors in spirit battles.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -25,7 +25,7 @@ pub enum CollisionSpiritsFloor {
         /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The index of the edge in the associated collision to link the object with.
+        /// The index of the edge in the associated object to link with.
         line_index: u32,
 
         /// The name of the line group that the object is associated with.
@@ -41,7 +41,7 @@ pub enum CollisionSpiritsFloor {
         /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The index of the edge in the associated collision to link the object with.
+        /// The index of the edge in the associated object to link with.
         line_index: u32,
 
         /// The name of the line group that the object is associated with.
