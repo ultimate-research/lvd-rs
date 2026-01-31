@@ -67,10 +67,36 @@ impl LvdFile {
     }
 }
 
+/// A signature for serializing an LVD file.
+#[binrw]
+#[br(import(version: u8), assert(self == Self::LVD1))]
+#[derive(Debug, PartialEq)]
+enum LvdFileSignature {
+    /// The first version of the `LvdFileSignature` type.
+    #[br(pre_assert(version == 1))]
+    V1 {
+        magic: [u8; 4],
+    }
+}
+
+impl LvdFileSignature {
+    /// The magic number identifying LVD files.
+    const LVD1: Self = Self::V1 {
+        magic: *b"LVD1",
+    };
+}
+
+impl Version for LvdFileSignature {
+    fn version(&self) -> u8 {
+        match self {
+            Self::V1 { .. } => 1,
+        }
+    }
+}
+
 /// The associated data for each LVD file format version.
 #[binrw]
 #[br(import(version: u8))]
-#[brw(magic = b"\x01LVD1")]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum Lvd {
@@ -79,6 +105,10 @@ pub enum Lvd {
     /// This version is not known to be used.
     #[br(pre_assert(version == 1))]
     V1 {
+        #[br(temp)]
+        #[bw(calc = Versioned::new(LvdFileSignature::LVD1))]
+        _signature: Versioned<LvdFileSignature>,
+
         collisions: Versioned<Array<Collision>>,
         start_positions: Versioned<Array<Point>>,
         restart_positions: Versioned<Array<Point>>,
@@ -93,6 +123,10 @@ pub enum Lvd {
     /// This version is not known to be used.
     #[br(pre_assert(version == 2))]
     V2 {
+        #[br(temp)]
+        #[bw(calc = Versioned::new(LvdFileSignature::LVD1))]
+        _signature: Versioned<LvdFileSignature>,
+
         collisions: Versioned<Array<Collision>>,
         start_positions: Versioned<Array<Point>>,
         restart_positions: Versioned<Array<Point>>,
@@ -108,6 +142,10 @@ pub enum Lvd {
     /// This version is not known to be used.
     #[br(pre_assert(version == 3))]
     V3 {
+        #[br(temp)]
+        #[bw(calc = Versioned::new(LvdFileSignature::LVD1))]
+        _signature: Versioned<LvdFileSignature>,
+
         collisions: Versioned<Array<Collision>>,
         start_positions: Versioned<Array<Point>>,
         restart_positions: Versioned<Array<Point>>,
@@ -126,6 +164,10 @@ pub enum Lvd {
     /// Adds [`damage_shapes`](#variant.V4.field.damage_shapes).
     #[br(pre_assert(version == 4))]
     V4 {
+        #[br(temp)]
+        #[bw(calc = Versioned::new(LvdFileSignature::LVD1))]
+        _signature: Versioned<LvdFileSignature>,
+
         collisions: Versioned<Array<Collision>>,
         start_positions: Versioned<Array<Point>>,
         restart_positions: Versioned<Array<Point>>,
@@ -146,6 +188,10 @@ pub enum Lvd {
     /// This version is not known to be used.
     #[br(pre_assert(version == 5))]
     V5 {
+        #[br(temp)]
+        #[bw(calc = Versioned::new(LvdFileSignature::LVD1))]
+        _signature: Versioned<LvdFileSignature>,
+
         collisions: Versioned<Array<Collision>>,
         start_positions: Versioned<Array<Point>>,
         restart_positions: Versioned<Array<Point>>,
@@ -166,6 +212,10 @@ pub enum Lvd {
     /// Adds [`general_shapes2`](#variant.V6.field.general_shapes2) and [`general_shapes3`](#variant.V6.field.general_shapes3).
     #[br(pre_assert(version == 6))]
     V6 {
+        #[br(temp)]
+        #[bw(calc = Versioned::new(LvdFileSignature::LVD1))]
+        _signature: Versioned<LvdFileSignature>,
+
         collisions: Versioned<Array<Collision>>,
         start_positions: Versioned<Array<Point>>,
         restart_positions: Versioned<Array<Point>>,
@@ -189,6 +239,10 @@ pub enum Lvd {
     /// This version is not known to be used.
     #[br(pre_assert(version == 7))]
     V7 {
+        #[br(temp)]
+        #[bw(calc = Versioned::new(LvdFileSignature::LVD1))]
+        _signature: Versioned<LvdFileSignature>,
+
         collisions: Versioned<Array<Collision>>,
         start_positions: Versioned<Array<Point>>,
         restart_positions: Versioned<Array<Point>>,
@@ -212,6 +266,10 @@ pub enum Lvd {
     /// Adds [`fs_start_points`](#variant.V8.field.fs_start_points).
     #[br(pre_assert(version == 8))]
     V8 {
+        #[br(temp)]
+        #[bw(calc = Versioned::new(LvdFileSignature::LVD1))]
+        _signature: Versioned<LvdFileSignature>,
+
         collisions: Versioned<Array<Collision>>,
         start_positions: Versioned<Array<Point>>,
         restart_positions: Versioned<Array<Point>>,
@@ -237,6 +295,10 @@ pub enum Lvd {
     /// This version is not known to be used.
     #[br(pre_assert(version == 9))]
     V9 {
+        #[br(temp)]
+        #[bw(calc = Versioned::new(LvdFileSignature::LVD1))]
+        _signature: Versioned<LvdFileSignature>,
+
         collisions: Versioned<Array<Collision>>,
         start_positions: Versioned<Array<Point>>,
         restart_positions: Versioned<Array<Point>>,
@@ -262,6 +324,10 @@ pub enum Lvd {
     /// Adds [`split_areas`](#variant.V10.field.split_areas).
     #[br(pre_assert(version == 10))]
     V10 {
+        #[br(temp)]
+        #[bw(calc = Versioned::new(LvdFileSignature::LVD1))]
+        _signature: Versioned<LvdFileSignature>,
+
         collisions: Versioned<Array<Collision>>,
         start_positions: Versioned<Array<Point>>,
         restart_positions: Versioned<Array<Point>>,
@@ -288,6 +354,10 @@ pub enum Lvd {
     /// Adds [`shrinked_camera_regions`](#variant.V11.field.shrinked_camera_regions) and [`shrinked_death_regions`](#variant.V11.field.shrinked_death_regions).
     #[br(pre_assert(version == 11))]
     V11 {
+        #[br(temp)]
+        #[bw(calc = Versioned::new(LvdFileSignature::LVD1))]
+        _signature: Versioned<LvdFileSignature>,
+
         collisions: Versioned<Array<Collision>>,
         start_positions: Versioned<Array<Point>>,
         restart_positions: Versioned<Array<Point>>,
@@ -316,6 +386,10 @@ pub enum Lvd {
     /// Adds [`ptrainer_ranges`](#variant.V12.field.ptrainer_ranges).
     #[br(pre_assert(version == 12))]
     V12 {
+        #[br(temp)]
+        #[bw(calc = Versioned::new(LvdFileSignature::LVD1))]
+        _signature: Versioned<LvdFileSignature>,
+
         collisions: Versioned<Array<Collision>>,
         start_positions: Versioned<Array<Point>>,
         restart_positions: Versioned<Array<Point>>,
@@ -345,6 +419,10 @@ pub enum Lvd {
     /// Adds [`ptrainer_floating_floors`](#variant.V13.field.ptrainer_floating_floors).
     #[br(pre_assert(version == 13))]
     V13 {
+        #[br(temp)]
+        #[bw(calc = Versioned::new(LvdFileSignature::LVD1))]
+        _signature: Versioned<LvdFileSignature>,
+
         collisions: Versioned<Array<Collision>>,
         start_positions: Versioned<Array<Point>>,
         restart_positions: Versioned<Array<Point>>,
