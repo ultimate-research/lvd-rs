@@ -1,4 +1,4 @@
-//! The [`CollisionAttribute`] type stores data representing the properties of an edge.
+//! The [`CollisionAttribute`] type stores data representing the attributes of an edge.
 
 use bilge::prelude::*;
 use binrw::binrw;
@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::version::Version;
 
-/// The properties of an edge.
+/// The attributes of an edge.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -20,7 +20,7 @@ pub enum CollisionAttribute {
         /// The preset for the configuration of sensory collision parameters.
         material: MaterialType,
 
-        /// The collection of packed Boolean collision properties.
+        /// The collection of packed Boolean collision attributes.
         flags: AttributeFlags,
     },
 }
@@ -86,7 +86,7 @@ pub enum MaterialType {
     JackMementoes = 43,
 }
 
-/// A collection of packed Boolean collision properties.
+/// A collection of packed Boolean collision attributes.
 #[bitsize(64)]
 #[binrw]
 #[cfg_attr(feature = "serde", derive(SerializeBits, DeserializeBits))]

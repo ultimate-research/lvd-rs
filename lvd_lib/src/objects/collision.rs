@@ -36,7 +36,7 @@ pub enum Collision {
         /// The metadata of the object.
         meta_info: Versioned<MetaInfo>,
 
-        /// The global properties of the object.
+        /// The global attributes of the object.
         flags: CollisionFlags,
 
         /// The collection of vertices forming the geometry of the object.
@@ -57,7 +57,7 @@ pub enum Collision {
         /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The global properties of the object.
+        /// The global attributes of the object.
         flags: CollisionFlags,
 
         /// The collection of vertices forming the geometry of the object.
@@ -78,7 +78,7 @@ pub enum Collision {
         /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The global properties of the object.
+        /// The global attributes of the object.
         flags: CollisionFlags,
 
         /// The collection of vertices forming the geometry of the object.
@@ -90,7 +90,7 @@ pub enum Collision {
         /// The collection of supplementary data for edges flagged as grabbable.
         cliffs: Versioned<Array<CollisionCliff>>,
 
-        /// The collection of properties for each edge in the object.
+        /// The collection of attributes for each edge in the object.
         attributes: Versioned<Array<CollisionAttribute>>,
     },
 
@@ -102,7 +102,7 @@ pub enum Collision {
         /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The global properties of the object.
+        /// The global attributes of the object.
         flags: CollisionFlags,
 
         /// The collection of vertices forming the geometry of the object.
@@ -114,7 +114,7 @@ pub enum Collision {
         /// The collection of supplementary data for edges flagged as grabbable.
         cliffs: Versioned<Array<CollisionCliff>>,
 
-        /// The collection of properties for each edge in the object.
+        /// The collection of attributes for each edge in the object.
         attributes: Versioned<Array<CollisionAttribute>>,
 
         /// The collection of entries related to hazardous floors in spirit battles.

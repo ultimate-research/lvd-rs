@@ -1,9 +1,9 @@
-//! The [`CollisionFlags`] type represents the global properties of a [`Collision`](crate::objects::Collision).
+//! The [`CollisionFlags`] type represents the global attributes of a [`Collision`](crate::objects::Collision).
 
 use bilge::prelude::*;
 use binrw::binrw;
 
-/// The global properties of a [`Collision`](crate::objects::Collision).
+/// The global attributes of a [`Collision`](crate::objects::Collision).
 #[bitsize(32)]
 #[binrw]
 #[cfg_attr(feature = "serde", derive(SerializeBits, DeserializeBits))]
