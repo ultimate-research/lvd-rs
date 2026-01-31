@@ -46,11 +46,14 @@ use crate::version::Version;
 #[binrw]
 #[br(import(version: u8), pre_assert(version == 1))]
 #[derive(Debug, Clone, Copy, Default, Hash, PartialEq, Eq, PartialOrd, Ord)]
-pub struct Tag(u32);
+#[repr(transparent)]
+pub struct Tag {
+    inner: u32,
+}
 
 impl Tag {
     /// The number of characters in the display string.
-    const STRING_LEN: usize = 7;
+    const STRING_LEN: usize = Self::LETTER_COUNT + Self::DIGIT_COUNT;
 
     /// The number of letters in the display string.
     const LETTER_COUNT: usize = 3;
@@ -58,21 +61,30 @@ impl Tag {
     /// The minimum supported letter character in the display string.
     const LETTER_CHAR_MIN: u8 = b'A';
 
-    /// The maximum supported letter value.
-    const LETTER_MAX: u8 = 26;
+    /// The maximum supported letter character in the display string.
+    const LETTER_CHAR_MAX: u8 = b'Z';
 
-    /// The bitmasks for each letter.
-    const LETTER_MASK: [u32; Self::LETTER_COUNT] = [
-        0b00011111_00000000_00000000_00000000,
-        0b00000000_11111000_00000000_00000000,
-        0b00000000_00000111_11000000_00000000,
+    /// The maximum exclusive letter value.
+    const LETTER_MAX: u8 = (Self::LETTER_CHAR_MAX - Self::LETTER_CHAR_MIN) + 1;
+
+    /// The bitmask for a letter value.
+    const LETTER_MASK: u32 = u32::MAX >> (u32::BITS - Self::LETTER_WIDTH);
+
+    /// The number of bits required to represent each letter value.
+    const LETTER_WIDTH: u32 = u32::BITS - (Self::LETTER_MAX as u32).leading_zeros();
+
+    /// The bitmasks for each letter value, in descending order.
+    const LETTER_MASKS: [u32; Self::LETTER_COUNT] = [
+        Self::LETTER_MASK << Self::LETTER_SHIFTS[0],
+        Self::LETTER_MASK << Self::LETTER_SHIFTS[1],
+        Self::LETTER_MASK << Self::LETTER_SHIFTS[2],
     ];
 
-    /// The bit shift operands for each letter.
-    const LETTER_SHIFT: [u32; Self::LETTER_COUNT] = [
-        Self::LETTER_MASK[0].trailing_zeros(),
-        Self::LETTER_MASK[1].trailing_zeros(),
-        Self::LETTER_MASK[2].trailing_zeros(),
+    /// The bit shift operands for each letter value, in descending order.
+    const LETTER_SHIFTS: [u32; Self::LETTER_COUNT] = [
+        Self::NUMBER_WIDTH + Self::LETTER_WIDTH + Self::LETTER_WIDTH,
+        Self::NUMBER_WIDTH + Self::LETTER_WIDTH,
+        Self::NUMBER_WIDTH,
     ];
 
     /// The number of digits in the display string.
@@ -81,14 +93,29 @@ impl Tag {
     /// The minimum supported digit character in the display string.
     const DIGIT_CHAR_MIN: u8 = b'0';
 
-    /// The maximum supported digit value.
-    const DIGIT_MAX: u8 = 10;
+    /// The maximum supported digit character in the display string.
+    const DIGIT_CHAR_MAX: u8 = b'9';
 
-    /// The bitmask for the number.
-    const NUMBER_MASK: u32 = 0b00000000_00000000_00111111_11111111;
+    /// The maximum exclusive digit value.
+    const DIGIT_MAX: u8 = (Self::DIGIT_CHAR_MAX - Self::DIGIT_CHAR_MIN) + 1;
 
-    /// The maximum supported number value.
+    /// The place value for each digit value, in descending order.
+    const DIGIT_PLACE_VALUES: [u32; Self::DIGIT_COUNT] =
+        [10u32.pow(3), 10u32.pow(2), 10u32.pow(1), 10u32.pow(0)];
+
+    /// The maximum exclusive number value.
     const NUMBER_MAX: u32 = 10000;
+
+    /// The bitmask for the number value.
+    const NUMBER_MASK: u32 = u32::MAX >> (u32::BITS - Self::NUMBER_WIDTH);
+
+    /// The number of bits required to represent the number value.
+    const NUMBER_WIDTH: u32 = u32::BITS - Self::NUMBER_MAX.leading_zeros();
+
+    /// Creates a new `Tag` from a raw tag.
+    const fn from_raw(tag: u32) -> Self {
+        Self { inner: tag }
+    }
 }
 
 impl FromStr for Tag {
@@ -127,15 +154,17 @@ impl FromStr for Tag {
         });
         let digits: [_; Self::DIGIT_COUNT] = array::from_fn(|i| digits[i] - Self::DIGIT_CHAR_MIN);
 
-        let word = ((letters[0] as u32) << Self::LETTER_SHIFT[0])
-            | ((letters[1] as u32) << Self::LETTER_SHIFT[1])
-            | ((letters[2] as u32) << Self::LETTER_SHIFT[2]);
-        let number = (digits[0] as u32) * 1000
-            + (digits[1] as u32) * 100
-            + (digits[2] as u32) * 10
-            + digits[3] as u32;
+        let word = letters
+            .iter()
+            .zip(Self::LETTER_SHIFTS.iter())
+            .fold(0, |acc, (lhs, rhs)| acc | (*lhs as u32) << rhs);
+        let number = digits
+            .iter()
+            .zip(Self::DIGIT_PLACE_VALUES.iter())
+            .map(|(lhs, rhs)| (*lhs as u32) * rhs)
+            .sum::<u32>();
 
-        Ok(Self(word | number))
+        Ok(Self::from_raw(word | number))
     }
 }
 
@@ -166,11 +195,11 @@ impl TryFrom<String> for Tag {
 impl fmt::Display for Tag {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let letters: [_; Self::LETTER_COUNT] =
-            array::from_fn(|i| match self.0 & Self::LETTER_MASK[i] {
+            array::from_fn(|i| match self.inner & Self::LETTER_MASKS[i] {
                 0 => '_',
-                c => ((c >> Self::LETTER_SHIFT[i]) as u8 + Self::LETTER_CHAR_MIN - 1) as char,
+                c => ((c >> Self::LETTER_SHIFTS[i]) as u8 + Self::LETTER_CHAR_MIN - 1) as char,
             });
-        let number = (self.0 & Self::NUMBER_MASK) % Self::NUMBER_MAX;
+        let number = (self.inner & Self::NUMBER_MASK) % Self::NUMBER_MAX;
 
         write!(f, "{}{}{}{:04}", letters[0], letters[1], letters[2], number)
     }

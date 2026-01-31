@@ -2,38 +2,38 @@ use super::*;
 
 #[test]
 fn label_to_id() {
-    assert_eq!(Tag::from_str("IPP0001"), Ok(Tag(159645697)));
-    assert_eq!(Tag::from_str("IPP0002"), Ok(Tag(159645698)));
-    assert_eq!(Tag::from_str("FSP0010"), Ok(Tag(110886922)));
-    assert_eq!(Tag::from_str("FSP0011"), Ok(Tag(110886923)));
-    assert_eq!(Tag::from_str("PAL0101"), Ok(Tag(269156453)));
-    assert_eq!(Tag::from_str("PAL0102"), Ok(Tag(269156454)));
-    assert_eq!(Tag::from_str("SLD1001"), Ok(Tag(325125097)));
-    assert_eq!(Tag::from_str("SLD1002"), Ok(Tag(325125098)));
-    assert_eq!(Tag::from_str("AAA0000"), Ok(Tag(17317888)));
-    assert_eq!(Tag::from_str("ZZZ9999"), Ok(Tag(450275087)));
-    assert_eq!(Tag::from_str("C_Y0001"), Ok(Tag(50741249)));
-    assert_eq!(Tag::from_str("SE_0001"), Ok(Tag(321388545)));
-    assert_eq!(Tag::from_str("___0000"), Ok(Tag(0)));
-    assert_eq!(Tag::from_str("___0001"), Ok(Tag(1)));
+    assert_eq!(Tag::from_str("IPP0001"), Ok(Tag::from_raw(159645697)));
+    assert_eq!(Tag::from_str("IPP0002"), Ok(Tag::from_raw(159645698)));
+    assert_eq!(Tag::from_str("FSP0010"), Ok(Tag::from_raw(110886922)));
+    assert_eq!(Tag::from_str("FSP0011"), Ok(Tag::from_raw(110886923)));
+    assert_eq!(Tag::from_str("PAL0101"), Ok(Tag::from_raw(269156453)));
+    assert_eq!(Tag::from_str("PAL0102"), Ok(Tag::from_raw(269156454)));
+    assert_eq!(Tag::from_str("SLD1001"), Ok(Tag::from_raw(325125097)));
+    assert_eq!(Tag::from_str("SLD1002"), Ok(Tag::from_raw(325125098)));
+    assert_eq!(Tag::from_str("AAA0000"), Ok(Tag::from_raw(17317888)));
+    assert_eq!(Tag::from_str("ZZZ9999"), Ok(Tag::from_raw(450275087)));
+    assert_eq!(Tag::from_str("C_Y0001"), Ok(Tag::from_raw(50741249)));
+    assert_eq!(Tag::from_str("SE_0001"), Ok(Tag::from_raw(321388545)));
+    assert_eq!(Tag::from_str("___0000"), Ok(Tag::from_raw(0)));
+    assert_eq!(Tag::from_str("___0001"), Ok(Tag::from_raw(1)));
 }
 
 #[test]
 fn id_to_label() {
-    assert_eq!(Tag(159645697).to_string(), "IPP0001");
-    assert_eq!(Tag(159645698).to_string(), "IPP0002");
-    assert_eq!(Tag(110886922).to_string(), "FSP0010");
-    assert_eq!(Tag(110886923).to_string(), "FSP0011");
-    assert_eq!(Tag(269156453).to_string(), "PAL0101");
-    assert_eq!(Tag(269156454).to_string(), "PAL0102");
-    assert_eq!(Tag(325125097).to_string(), "SLD1001");
-    assert_eq!(Tag(325125098).to_string(), "SLD1002");
-    assert_eq!(Tag(17317888).to_string(), "AAA0000");
-    assert_eq!(Tag(450275087).to_string(), "ZZZ9999");
-    assert_eq!(Tag(50741249).to_string(), "C_Y0001");
-    assert_eq!(Tag(321388545).to_string(), "SE_0001");
-    assert_eq!(Tag(0).to_string(), "___0000");
-    assert_eq!(Tag(1).to_string(), "___0001");
+    assert_eq!(Tag::from_raw(159645697).to_string(), "IPP0001");
+    assert_eq!(Tag::from_raw(159645698).to_string(), "IPP0002");
+    assert_eq!(Tag::from_raw(110886922).to_string(), "FSP0010");
+    assert_eq!(Tag::from_raw(110886923).to_string(), "FSP0011");
+    assert_eq!(Tag::from_raw(269156453).to_string(), "PAL0101");
+    assert_eq!(Tag::from_raw(269156454).to_string(), "PAL0102");
+    assert_eq!(Tag::from_raw(325125097).to_string(), "SLD1001");
+    assert_eq!(Tag::from_raw(325125098).to_string(), "SLD1002");
+    assert_eq!(Tag::from_raw(17317888).to_string(), "AAA0000");
+    assert_eq!(Tag::from_raw(450275087).to_string(), "ZZZ9999");
+    assert_eq!(Tag::from_raw(50741249).to_string(), "C_Y0001");
+    assert_eq!(Tag::from_raw(321388545).to_string(), "SE_0001");
+    assert_eq!(Tag::from_raw(0).to_string(), "___0000");
+    assert_eq!(Tag::from_raw(1).to_string(), "___0001");
 }
 
 #[test]
@@ -158,6 +158,6 @@ fn use_unsupported_character_digit() {
 
 #[test]
 fn wrap_number() {
-    assert_eq!(Tag(9999).to_string(), "___9999");
-    assert_eq!(Tag(10000).to_string(), "___0000");
+    assert_eq!(Tag::from_raw(9999).to_string(), "___9999");
+    assert_eq!(Tag::from_raw(10000).to_string(), "___0000");
 }
