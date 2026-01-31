@@ -75,9 +75,7 @@ impl<T: Version> Default for Array<T> {
 
 impl<T: Version> From<Vec<Versioned<T>>> for Array<T> {
     fn from(vec: Vec<Versioned<T>>) -> Self {
-        Self::V1 {
-            elements: vec,
-        }
+        Self::V1 { elements: vec }
     }
 }
 

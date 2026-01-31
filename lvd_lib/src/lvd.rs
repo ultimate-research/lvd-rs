@@ -74,16 +74,12 @@ impl LvdFile {
 enum LvdFileSignature {
     /// The first version of the `LvdFileSignature` type.
     #[br(pre_assert(version == 1))]
-    V1 {
-        magic: [u8; 4],
-    }
+    V1 { magic: [u8; 4] },
 }
 
 impl LvdFileSignature {
     /// The magic number identifying LVD files.
-    const LVD1: Self = Self::V1 {
-        magic: *b"LVD1",
-    };
+    const LVD1: Self = Self::V1 { magic: *b"LVD1" };
 }
 
 impl Version for LvdFileSignature {
