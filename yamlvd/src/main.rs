@@ -10,7 +10,7 @@ mod cli;
 
 use cli::{Args, Endian};
 
-fn read_data_write_yaml<P: AsRef<Path> + ToString>(
+fn read_data_write_yaml<P: AsRef<Path>>(
     input_path: P,
     output_path: Option<String>,
     endian: Endian,
