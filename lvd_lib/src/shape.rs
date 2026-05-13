@@ -50,7 +50,7 @@ pub enum Shape2 {
         path: Versioned<Path>,
     },
 
-    /// The rectangle shape type.
+    /// The axis-aligned rectangle shape type.
     #[brw(magic = 3u32)]
     Rect {
         /// The coordinate of the left edge.
@@ -129,9 +129,9 @@ impl Version for ShapeArrayElement2 {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug)]
 pub enum Shape3 {
-    /// The box shape type.
+    /// The axis-aligned rectangular cuboid shape type.
     #[brw(magic = 1u32)]
-    Box {
+    Aabb {
         /// The coordinate of the left edge.
         left: f32,
 
