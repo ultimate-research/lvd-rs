@@ -10,7 +10,7 @@ license = "MIT"
 
 [dependencies]
 bilge = "0.3.0"
-binrw = "0.15.0"
+binrw = "0.15.1"
 serde = { version = "1.0.228", features = ["derive"], optional = true }
 thiserror = "2.0.18"
 
