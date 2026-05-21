@@ -11,7 +11,7 @@ use crate::{
     version::{Version, Versioned},
 };
 
-/// An LVD object representing a two-dimensional rectangle.
+/// An object representing a two-dimensional rectangle.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -25,7 +25,7 @@ pub enum Region {
         /// The metadata of the object.
         meta_info: Versioned<MetaInfo>,
 
-        /// The edge coordinates of the region.
+        /// The edge coordinates of the rectangle.
         rect: Versioned<Rect>,
     },
 
@@ -37,7 +37,7 @@ pub enum Region {
         /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The edge coordinates of the region.
+        /// The edge coordinates of the rectangle.
         rect: Versioned<Rect>,
     },
 }

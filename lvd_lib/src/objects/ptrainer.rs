@@ -13,7 +13,7 @@ use crate::{
     version::{Version, Versioned},
 };
 
-/// An LVD object representing the range in which one or more Pokémon Trainers can move around within.
+/// An object representing the range in which one or more Pokémon Trainers can move around within.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -72,7 +72,7 @@ impl Version for PTrainerRange {
     }
 }
 
-/// An LVD object representing a Pokémon Trainer's floating platform.
+/// An object representing a Pokémon Trainer's floating platform.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

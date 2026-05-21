@@ -22,7 +22,7 @@ pub use cliff::CollisionCliff;
 pub use flags::CollisionFlags;
 pub use line_group::CollisionLineGroup;
 
-/// An LVD object representing a two-dimensional polygonal collision.
+/// An object representing a two-dimensional polygonal collision.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

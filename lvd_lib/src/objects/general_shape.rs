@@ -12,7 +12,7 @@ use crate::{
     version::{Version, Versioned},
 };
 
-/// An LVD object representing a general-purpose two-dimensional shape.
+/// An object representing a general-purpose two-dimensional shape.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -40,7 +40,7 @@ impl Version for GeneralShape2 {
     }
 }
 
-/// An LVD object representing a general-purpose three-dimensional shape.
+/// An object representing a general-purpose three-dimensional shape.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

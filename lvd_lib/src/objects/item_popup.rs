@@ -1,4 +1,4 @@
-//! The [`ItemPopup`] object stores data representing a collection of shapes where items will appear from.
+//! The [`ItemPopup`] object stores data representing a collection of shapes where items can appear from.
 
 use binrw::binrw;
 
@@ -12,7 +12,7 @@ use crate::{
     version::{Version, Versioned},
 };
 
-/// An LVD object representing a collection of shapes where items will appear from.
+/// An object representing a collection of shapes where items can appear from.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -27,7 +27,7 @@ pub enum ItemPopup {
         /// The identifier for matching and filtering like objects.
         tag: Versioned<Tag>,
 
-        /// The collection of shapes where items will appear from.
+        /// The collection of shapes where items can appear from.
         shapes: Versioned<ShapeArray2>,
     },
 }

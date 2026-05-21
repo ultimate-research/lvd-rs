@@ -15,7 +15,7 @@ use crate::{
     version::{Version, Versioned},
 };
 
-/// An LVD object representing a two-dimensional shape where a stat boost or item can appear when in view.
+/// An object representing a two-dimensional shape where a stat boost or item can appear from.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -27,7 +27,7 @@ pub enum FsItem {
         /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The two-dimensional geometric representation of the object
+        /// The two-dimensional geometric representation of the object.
         shape: Versioned<Shape2>,
 
         /// The identifier for matching and filtering like objects.
@@ -118,7 +118,7 @@ impl Version for FsAreaCam {
     }
 }
 
-/// An LVD object representing a region to restrict camera movement within on entrance of a trigger.
+/// An object representing a region to limit the screen within upon collision with a trigger.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -132,10 +132,10 @@ pub enum FsAreaLock {
         /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The edge coordinates of the region for restricted camera movement.
+        /// The edge coordinates of the region for limiting camera movement.
         camera_region: Versioned<Rect>,
 
-        /// The edge coordinates of the trigger region for activating the restricted camera movement.
+        /// The edge coordinates of the trigger region for activating the limited screen.
         trigger_region: Versioned<Rect>,
 
         // TODO: Field documentation.
@@ -150,10 +150,10 @@ pub enum FsAreaLock {
         /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The edge coordinates of the region for restricted camera movement.
+        /// The edge coordinates of the region for limiting camera movement.
         camera_region: Versioned<Rect>,
 
-        /// The edge coordinates of the trigger region for activating the restricted camera movement.
+        /// The edge coordinates of the trigger region for activating the limited screen.
         trigger_region: Versioned<Rect>,
 
         // TODO: Field documentation.
@@ -173,7 +173,7 @@ impl Version for FsAreaLock {
     }
 }
 
-/// An LVD object representing a region to restrict camera movement within.
+/// An object representing a region to limit camera movement within.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -185,7 +185,7 @@ pub enum FsCamLimit {
         /// The common data of the object.
         base: Versioned<Base>,
 
-        /// The path shape forming the camera limit region.
+        /// The line forming the camera limit region.
         path: Versioned<Path>,
     },
 }
@@ -244,7 +244,7 @@ impl Version for AreaLight {
     }
 }
 
-/// An LVD object representing a two-dimensional point where a fighter can start and restart from.
+/// An object representing a two-dimensional point where a fighter can enter and recover from.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

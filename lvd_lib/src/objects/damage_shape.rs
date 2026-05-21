@@ -11,7 +11,7 @@ use crate::{
     version::{Version, Versioned},
 };
 
-/// An LVD object representing a three-dimensional damage or attack collision shape.
+/// An object representing a three-dimensional damage or attack collision shape.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

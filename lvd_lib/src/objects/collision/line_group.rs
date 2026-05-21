@@ -11,7 +11,7 @@ use crate::{
     version::{Version, Versioned},
 };
 
-/// An LVD subobject to a [`Collision`](crate::objects::Collision) representing a reference to an edge group.
+/// A subobject to a [`Collision`](crate::objects::Collision) representing a reference to an edge group.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]

@@ -11,7 +11,7 @@ use crate::{
     version::{Version, Versioned},
 };
 
-/// An LVD object representing a two-dimensional point.
+/// An object representing a two-dimensional point.
 #[binrw]
 #[br(import(version: u8))]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
