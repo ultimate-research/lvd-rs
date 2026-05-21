@@ -15,12 +15,12 @@ use crate::{
 pub mod attribute;
 pub mod cliff;
 pub mod flags;
-pub mod spirits_floor;
+pub mod line_group;
 
 pub use attribute::CollisionAttribute;
 pub use cliff::CollisionCliff;
 pub use flags::CollisionFlags;
-pub use spirits_floor::CollisionSpiritsFloor;
+pub use line_group::CollisionLineGroup;
 
 /// An LVD object representing a two-dimensional polygonal collision.
 #[binrw]
@@ -96,7 +96,7 @@ pub enum Collision {
 
     /// The fourth version of the `Collision` type.
     ///
-    /// Adds [`spirits_floors`](#variant.V4.field.spirits_floors).
+    /// Adds [`line_groups`](#variant.V4.field.line_groups).
     #[br(pre_assert(version == 4))]
     V4 {
         /// The common data of the object.
@@ -117,8 +117,8 @@ pub enum Collision {
         /// The collection of attributes for each edge in the object.
         attributes: Versioned<Array<CollisionAttribute>>,
 
-        /// The collection of entries related to hazardous floors in spirit battles.
-        spirits_floors: Versioned<Array<CollisionSpiritsFloor>>,
+        /// The collection of references to edge groups.
+        line_groups: Versioned<Array<CollisionLineGroup>>,
     },
 }
 
